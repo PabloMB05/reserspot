@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { useTranslations } from "@/hooks/use-translations";
 import { useForm } from "@tanstack/react-form";
 import type { AnyFieldApi } from "@tanstack/react-form";
+import { AiOutlineUser,AiTwotoneMail,AiFillLock,AiOutlineSave,AiOutlineClose  } from "react-icons/ai";
 
 interface UserFormProps {
     initialData?: {
@@ -89,6 +90,19 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
     };
 
     return (
+        <div>
+            <div className="mb-4">
+                <div style={{ marginBottom: "10px", display: "flex", alignItems: "center" }}>
+                    <AiOutlineUser className="text-blue-500" size={30} />
+                    <Label style={{ fontSize:"25px", marginLeft: "8px" }}>{t("ui.header.titulo")}</Label>
+                </div>
+                    
+                <div>
+                <Label style={{ marginLeft: "8px" }}>{t("ui.header.string")}</Label>
+                </div>
+                <hr></hr>
+            </div>
+            
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
             {/* Name field */}
             <div>
@@ -107,7 +121,11 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
                 >
                     {(field) => (
                         <>
-                            <Label htmlFor={field.name}>{t("ui.users.fields.name")}</Label>
+                            <div style={{ marginBottom: "10px", display: "flex", alignItems: "center" }}>
+                                <AiOutlineUser size={20} />
+                                <Label htmlFor={field.name} style={{ marginLeft: "8px" }}>{t("ui.users.fields.name")}
+                                </Label>
+                            </div>
                             <Input
                                 id={field.name}
                                 name={field.name}
@@ -142,7 +160,10 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
                 >
                     {(field) => (
                         <>
-                            <Label htmlFor={field.name}>{t("ui.users.fields.email")}</Label>
+                            <div style={{ marginBottom: "10px", display: "flex", alignItems: "center" }}>
+                                <AiTwotoneMail size={20} />
+                                <Label htmlFor={field.name} style={{ marginLeft: "8px" }}>{t("ui.users.fields.email")}</Label>
+                            </div>
                             <Input
                                 id={field.name}
                                 name={field.name}
@@ -172,7 +193,7 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
                                 return t("ui.validation.required", { attribute: t("ui.users.fields.password").toLowerCase() });
                             }
                             if (value && value.length > 0 && value.length < 8) {
-                                return t("ui.validation.min.string", { attribute: t("ui.users.fields.password").toLowerCase(), min: "8" });
+                                return t("ui.validation.min.string", { attribute: t("ui.users.fields.password").toLowerCase(), min: "8" })+" , "+t("ui.Stringcreados.pwd");
                             }
                             return undefined;
                         },
@@ -180,11 +201,14 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
                 >
                     {(field) => (
                         <>
-                            <Label htmlFor={field.name}>
-                                {initialData
-                                    ? t("ui.users.fields.password_optional")
-                                    : t("ui.users.fields.password")}
-                            </Label>
+                            <div style={{ marginBottom: "10px", display: "flex", alignItems: "center" }}>
+                                <AiFillLock size={20} />
+                                <Label htmlFor={field.name} style={{ marginLeft: "8px" }}>
+                                    {initialData
+                                        ? t("ui.users.fields.password_optional")
+                                        : t("ui.users.fields.password")}
+                                </Label>
+                            </div>
                             <Input
                                 id={field.name}
                                 name={field.name}
@@ -204,8 +228,10 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
             </div>
 
             {/* Form buttons */}
-            <div className="flex justify-end gap-4">
+            <div className="flex justify-between w-full gap-4">
+            
                 <Button
+                    className="text-white"
                     type="button"
                     variant="outline"
                     onClick={() => {
@@ -220,6 +246,7 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
                     }}
                     disabled={form.state.isSubmitting}
                 >
+                    <AiOutlineClose  size={20} />
                     {t("ui.users.buttons.cancel")}
                 </Button>
 
@@ -227,7 +254,9 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
                     selector={(state) => [state.canSubmit, state.isSubmitting]}
                 >
                     {([canSubmit, isSubmitting]) => (
-                        <Button type="submit" disabled={!canSubmit}>
+                        
+                        <Button className="bg-blue-500 text-white" type="submit" disabled={!canSubmit}>
+                            <AiOutlineSave size={20} />
                             {isSubmitting
                                 ? t("ui.users.buttons.saving")
                                 : initialData
@@ -238,5 +267,6 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
                 </form.Subscribe>
             </div>
         </form>
+        </div>
     );
 }

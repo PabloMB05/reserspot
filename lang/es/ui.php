@@ -81,6 +81,13 @@ return [
             'unique' => 'El campo :attribute ya ha sido tomado.',
             'confirmed' => 'El campo :attribute no coincide.',
     ],
+    'Stringcreados' => [
+        'pwd' => 'incluyendo letras y números.'
+    ],
+    'header' => [
+        'titulo' => 'Crear Nuevo Usuario',
+        'string' => 'Ingresa la información para crear un nuevo usuario',
+    ],
     'common' => [
         'buttons' => [
             'cancel' => 'Cancelar',
@@ -128,9 +135,9 @@ return [
             'email' => 'Email del usuario',
         ],
         'placeholders' => [
-            'name' => 'Nombre del usuario',
-            'email' => 'Email del usuario',
-            'password' => 'Contraseña del usuario',
+            'name' => 'Nombre completo del usuario',
+            'email' => 'correo@ejemplo.com',
+            'password' => 'Contraseña Segura',
             'search' => 'Buscar usuarios...',
         ],
         'buttons' => [

@@ -21,7 +21,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-
+    $this->command([
+        \App\Console\Comands\MigratePulseCommand::class,
+    ]);
+    
+    //Estar siempre logeado decomentar
 //        if (app()->environment('local')) {
 //            // Verificar si no hay usuario autenticado
 //            if (!Auth::check()) {

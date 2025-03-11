@@ -80,6 +80,13 @@ return [
             'unique' => 'The :attribute has already been taken.',
             'confirmed' => 'The :attribute confirmation does not match.',
     ],
+    'Stringcreados' => [
+        'pwd' => ' including characters and numbers.'
+    ],
+    'header' => [
+        'titulo' => 'Create New User',
+        'string' => 'Enter the information to create a new user',
+    ],
     'common' => [
         'buttons' => [
             'cancel' => 'Cancel',
