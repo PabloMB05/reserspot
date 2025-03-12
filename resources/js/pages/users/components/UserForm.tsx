@@ -231,7 +231,6 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
             <div className="flex justify-between w-full gap-4">
             
                 <Button
-                    className="text-white"
                     type="button"
                     variant="outline"
                     onClick={() => {

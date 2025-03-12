@@ -21,7 +21,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-    $this->command([
+    $this->commands([
         \App\Console\Comands\MigratePulseCommand::class,
     ]);
     

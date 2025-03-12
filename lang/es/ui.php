@@ -88,6 +88,43 @@ return [
         'titulo' => 'Crear Nuevo Usuario',
         'string' => 'Ingresa la información para crear un nuevo usuario',
     ],
+    'headerpermits' => [
+        'title' => 'Rol Principal',
+        'rol' => 'Selecciona un rol',
+        'role1' => 'Administrador',
+        'role2' => 'Usuario',
+        'role3' => 'Visualización',
+        'string' => 'El rol determina el nivel de acceso general',
+    ],
+    'specificpermits' => [
+        'permits' => 'Permisos Específicos',
+        'users' => [  
+            'user' => 'Usuarios',
+            'seeuser' => 'Ver usuarios',
+            'createusers' => 'Crear usuarios',
+            'editusers' => 'Editar usuarios',
+            'deleteusers' => 'Borrar usuarios',
+        ],
+        'reports'=> [
+            'reports' => 'Reportes',
+            'seereports'=> 'Ver reportes',
+            'exportreport' => 'Exportar reportes ',
+            'printreport' => 'Imprimir reportes',
+        ],
+        'products'=>[
+            'products' => 'Productos',
+            'seeproduct' => 'Ver productos',
+            'createproduct' => 'Crear productos',
+            'editproduct' => 'Editar productos',
+            'deleteproducts' => 'Borrar products',
+        ],
+        'configs'=>[
+            'configs'=> 'Configuración',
+            'accesssettings' => 'Acceso a configuración',
+            'modifysettings'=> 'Modificar configuración',
+
+        ],
+    ],
     'common' => [
         'buttons' => [
             'cancel' => 'Cancelar',
