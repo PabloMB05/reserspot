@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { useTranslations } from "@/hooks/use-translations";
 import { useForm } from "@tanstack/react-form";
 import type { AnyFieldApi } from "@tanstack/react-form";
-import { AiOutlineUser,AiTwotoneMail,AiFillLock,AiOutlineSave,AiOutlineClose  } from "react-icons/ai";
+import { User, Mail, Lock, Save, X } from "lucide-react";
 
 interface UserFormProps {
     initialData?: {
@@ -93,7 +93,7 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
         <div>
             <div className="mb-4">
                 <div style={{ marginBottom: "10px", display: "flex", alignItems: "center" }}>
-                    <AiOutlineUser className="text-blue-500" size={30} />
+                    <User className="text-blue-500" size={30} />
                     <Label style={{ fontSize:"25px", marginLeft: "8px" }}>{t("ui.header.titulo")}</Label>
                 </div>
                     
@@ -122,7 +122,7 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
                     {(field) => (
                         <>
                             <div style={{ marginBottom: "10px", display: "flex", alignItems: "center" }}>
-                                <AiOutlineUser size={20} />
+                                <User size={20} />
                                 <Label htmlFor={field.name} style={{ marginLeft: "8px" }}>{t("ui.users.fields.name")}
                                 </Label>
                             </div>
@@ -161,7 +161,7 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
                     {(field) => (
                         <>
                             <div style={{ marginBottom: "10px", display: "flex", alignItems: "center" }}>
-                                <AiTwotoneMail size={20} />
+                                <Mail size={20} />
                                 <Label htmlFor={field.name} style={{ marginLeft: "8px" }}>{t("ui.users.fields.email")}</Label>
                             </div>
                             <Input
@@ -202,7 +202,7 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
                     {(field) => (
                         <>
                             <div style={{ marginBottom: "10px", display: "flex", alignItems: "center" }}>
-                                <AiFillLock size={20} />
+                                <Lock size={20} />
                                 <Label htmlFor={field.name} style={{ marginLeft: "8px" }}>
                                     {initialData
                                         ? t("ui.users.fields.password_optional")
@@ -245,7 +245,7 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
                     }}
                     disabled={form.state.isSubmitting}
                 >
-                    <AiOutlineClose  size={20} />
+                    <X  size={20} />
                     {t("ui.users.buttons.cancel")}
                 </Button>
 
@@ -255,7 +255,7 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
                     {([canSubmit, isSubmitting]) => (
                         
                         <Button className="bg-blue-500 text-white" type="submit" disabled={!canSubmit}>
-                            <AiOutlineSave size={20} />
+                            <Save size={20} />
                             {isSubmitting
                                 ? t("ui.users.buttons.saving")
                                 : initialData

@@ -6,8 +6,7 @@ import { router } from "@inertiajs/react";
 import { toast } from "sonner";
 import { useTranslations } from "@/hooks/use-translations";
 import { useForm } from "@tanstack/react-form";
-import { AiOutlineUser, AiTwotoneMail, AiFillLock, AiOutlineSave, AiOutlineClose, AiOutlineProduct } from "react-icons/ai";
-import { BoxIcon, Shield, UserCircleIcon, PackageOpen, FileText, Settings } from "lucide-react";
+import { BoxIcon, Shield, UserCircleIcon, PackageOpen, FileText, Settings, Save, X } from "lucide-react";
 
 const RoleForm = () => {
     const { t } = useTranslations();
@@ -93,13 +92,13 @@ const RoleForm = () => {
             {/* Form Buttons */}
             <div className="flex justify-between w-full gap-4 mt-4">
                 <Button type="button" variant="outline" onClick={() => router.visit("/users")}>
-                    <AiOutlineClose size={20} />
+                    <X size={20} />
                     {t("ui.users.buttons.cancel")}
                 </Button>
                 <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
                     {([canSubmit, isSubmitting]) => (
                         <Button className="bg-blue-500 text-white" type="submit" disabled={!canSubmit}>
-                            <AiOutlineSave size={20} />
+                            <Save size={20} />
                             {isSubmitting ? t("ui.users.buttons.saving") : t("ui.users.buttons.save")}
                         </Button>
                     )}
