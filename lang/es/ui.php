@@ -87,6 +87,8 @@ return [
     'header' => [
         'titulo' => 'Crear Nuevo Usuario',
         'string' => 'Ingresa la información para crear un nuevo usuario',
+        'tabtitle1' => 'Información Básica',
+        'tabtitle2' => 'Roles y permisos',
     ],
     'headerpermits' => [
         'title' => 'Rol Principal',

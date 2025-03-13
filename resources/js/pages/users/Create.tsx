@@ -10,10 +10,8 @@ export default function CreateUser() {
 
   return (
     <UserLayout title={t("ui.users.create")}>
-      <div className="p-6">
-        <div className="max-w-xl">
-          <UserForm />
-          <RoleForm></RoleForm>
+      <div className="px-6 py-1">
+        <div className="max-w-x2 w-full">
           <Tabsuser></Tabsuser>
         </div>
       </div>

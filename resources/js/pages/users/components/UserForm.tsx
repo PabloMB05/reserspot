@@ -91,17 +91,7 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
 
     return (
         <div>
-            <div className="mb-4">
-                <div style={{ marginBottom: "10px", display: "flex", alignItems: "center" }}>
-                    <User className="text-blue-500" size={30} />
-                    <Label style={{ fontSize:"25px", marginLeft: "8px" }}>{t("ui.header.titulo")}</Label>
-                </div>
-                    
-                <div>
-                <Label style={{ marginLeft: "8px" }}>{t("ui.header.string")}</Label>
-                </div>
-                <hr></hr>
-            </div>
+            
             
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
             {/* Name field */}
@@ -228,6 +218,7 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
             </div>
 
             {/* Form buttons */}
+            <hr/>
             <div className="flex justify-between w-full gap-4">
             
                 <Button

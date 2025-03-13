@@ -86,6 +86,8 @@ return [
     'header' => [
         'titulo' => 'Create New User',
         'string' => 'Enter the information to create a new user',
+        'tabtitle1' => 'Basic information',
+        'tabtitle2' => 'Roles and Permissions',
     ],
     'headerpermits' => [
         'title' => 'Main Role',
