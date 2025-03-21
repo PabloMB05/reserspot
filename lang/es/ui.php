@@ -94,8 +94,8 @@ return [
         'title' => 'Rol Principal',
         'rol' => 'Selecciona un rol',
         'role1' => 'Administrador',
-        'role2' => 'Usuario',
-        'role3' => 'Visualización',
+        'role2' => 'Visualizador',
+        'role3' => 'Editor',
         'string' => 'El rol determina el nivel de acceso general',
     ],
     'specificpermits' => [

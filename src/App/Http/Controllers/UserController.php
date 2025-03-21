@@ -7,6 +7,7 @@ use Domain\Users\Actions\UserIndexAction;
 use Domain\Users\Actions\UserStoreAction;
 use Domain\Users\Actions\UserUpdateAction;
 use Domain\Users\Models\User;
+use Domain\Roles\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -22,7 +23,19 @@ class UserController extends Controller
 
     public function create()
     {
-        return Inertia::render('users/Create');
+        $role=Role::all();
+
+        $arrayPermissions=[];
+        foreach($role as $rol){
+            foreach($rol->permissions as $perm){
+                array_push($arrayPermissions, [$rol->name, $perm->name]);
+            }
+        }
+        return Inertia::render('users/Create',[
+            'permits' => $arrayPermissions,
+            'role' => $role
+        ]);
+        
     }
 
     public function store(Request $request, UserStoreAction $action)
@@ -38,7 +51,8 @@ class UserController extends Controller
         }
 
         $action($validator->validated());
-
+        $arrayPermisiion = [];
+        
         return redirect()->route('users.index')
             ->with('success', __('messages.users.created'));
     }

@@ -12,9 +12,11 @@ interface EditUserProps extends PageProps {
   };
   page?: string;
   perPage?: string;
+  permits?: string[];
+  role?: string[];
 }
 
-export default function EditUser({ user, page, perPage }: EditUserProps) {
+export default function EditUser({ user, page, perPage,permits,role }: EditUserProps) {
   const { t } = useTranslations();
 
   return (
@@ -25,6 +27,8 @@ export default function EditUser({ user, page, perPage }: EditUserProps) {
             user={user}
             page={page}
             perPage={perPage}
+            permits={permits}
+            role={role}
           />
         </div>
       </div>

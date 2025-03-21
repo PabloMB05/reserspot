@@ -22,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
     $this->commands([
-        \App\Console\Comands\MigratePulseCommand::class,
+        \App\Console\Commands\MigratePulseCommand::class,
     ]);
     
     //Estar siempre logeado decomentar

@@ -106,8 +106,8 @@ return [
             'editusers' => 'edit users',
             'deleteusers' => 'deleteusers',
         ],
-        'Reports'=> [
-            'repots' => 'Reports',
+        'reports'=> [
+            'reports' => 'Reports',
             'seereports'=> 'See reports',
             'exportreport' => 'Export reports ',
             'printreport' => 'Print reports',
