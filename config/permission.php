@@ -13,6 +13,7 @@ return [
          * `Spatie\Permission\Contracts\Permission` contract.
          */
 
+//        'permission' => Spatie\Permission\Models\Permission::class,
         'permission' => \Domain\Permissions\Models\Permission::class,
 
         /*
@@ -24,6 +25,7 @@ return [
          * `Spatie\Permission\Contracts\Role` contract.
          */
 
+//        'role' => Spatie\Permission\Models\Role::class,
         'role' => \Domain\Roles\Models\Role::class,
 
     ],

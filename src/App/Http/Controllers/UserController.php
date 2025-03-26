@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
-use Domain\Roles\Models\Role;
 
 class UserController extends Controller
 {
@@ -23,50 +22,33 @@ class UserController extends Controller
 
     public function create()
     {
-         $role = Role::all();
-         $arrayRolePermissions=[];
-        foreach($role as $rol){
-            foreach($rol->permissions as $perm){
-                array_push($arrayRolePermissions, [$rol->name, $perm->name]);
-            }
-        }
-        return Inertia::render('users/Create',["arrayRolePermissions"=> $arrayRolePermissions]);
+        return Inertia::render('users/Create');
     }
-    
 
-    
     public function store(Request $request, UserStoreAction $action)
     {
-        dd($request);
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8'],
-            'permissions' => ['array'],
         ]);
 
         if ($validator->fails()) {
             return back()->withErrors($validator);
         }
-        
+
         $action($validator->validated());
-        
 
         return redirect()->route('users.index')
             ->with('success', __('messages.users.created'));
-
-
-
     }
 
     public function edit(Request $request, User $user)
     {
-
         return Inertia::render('users/Edit', [
             'user' => $user,
             'page' => $request->query('page'),
             'perPage' => $request->query('perPage'),
-            //'userPermissions' => $user->permissions->pluck('name'),
         ]);
     }
 
@@ -82,7 +64,6 @@ class UserController extends Controller
                 Rule::unique('users')->ignore($user->id),
             ],
             'password' => ['nullable', 'string', 'min:8'],
-            'permissions' => ['array']
         ]);
 
         if ($validator->fails()) {
@@ -90,13 +71,9 @@ class UserController extends Controller
         }
 
         $action($user, $validator->validated());
-        
-        if ($request->has('permissions')) {
-            $user->syncPermissions($request->permissions);
-        }
 
         $redirectUrl = route('users.index');
-        
+
         // Añadir parámetros de página a la redirección si existen
         if ($request->has('page')) {
             $redirectUrl .= "?page=" . $request->query('page');

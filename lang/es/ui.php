@@ -7,6 +7,7 @@ return [
         'items' => [
             'dashboard' => 'Panel',
             'users' => 'Usuarios',
+            'floor' => 'Pisos,'
             'repository' => 'Repositorio',
             'documentation' => 'Documentación',
         ],
@@ -81,52 +82,6 @@ return [
             'unique' => 'El campo :attribute ya ha sido tomado.',
             'confirmed' => 'El campo :attribute no coincide.',
     ],
-    'Stringcreados' => [
-        'pwd' => 'incluyendo letras y números.'
-    ],
-    'header' => [
-        'titulo' => 'Crear Nuevo Usuario',
-        'string' => 'Ingresa la información para crear un nuevo usuario',
-        'tabtitle1' => 'Información Básica',
-        'tabtitle2' => 'Roles y permisos',
-    ],
-    'headerpermits' => [
-        'title' => 'Rol Principal',
-        'rol' => 'Selecciona un rol',
-        'role1' => 'Administrador',
-        'role2' => 'Visualizador',
-        'role3' => 'Editor',
-        'string' => 'El rol determina el nivel de acceso general',
-    ],
-    'specificpermits' => [
-        'permits' => 'Permisos Específicos',
-        'users' => [  
-            'user' => 'Usuarios',
-            'seeuser' => 'Ver usuarios',
-            'createusers' => 'Crear usuarios',
-            'editusers' => 'Editar usuarios',
-            'deleteusers' => 'Borrar usuarios',
-        ],
-        'reports'=> [
-            'reports' => 'Reportes',
-            'seereports'=> 'Ver reportes',
-            'exportreport' => 'Exportar reportes ',
-            'printreport' => 'Imprimir reportes',
-        ],
-        'products'=>[
-            'products' => 'Productos',
-            'seeproduct' => 'Ver productos',
-            'createproduct' => 'Crear productos',
-            'editproduct' => 'Editar productos',
-            'deleteproducts' => 'Borrar products',
-        ],
-        'configs'=>[
-            'configs'=> 'Configuración',
-            'accesssettings' => 'Acceso a configuración',
-            'modifysettings'=> 'Modificar configuración',
-
-        ],
-    ],
     'common' => [
         'buttons' => [
             'cancel' => 'Cancelar',
@@ -161,12 +116,60 @@ return [
             'password_optional' => 'Contraseña (opcional)',
             'created_at' => 'Fecha de creación',
             'actions' => 'Acciones',
+            'rolPpal' => 'Rol Principal',
+            'permisos' => 'Permisos Específicos'
         ],
         'columns' => [
             'name' => 'Nombre',
             'email' => 'Email',
             'created_at' => 'Fecha de creación',
             'actions' => 'Acciones',
+        ],
+        'gridelements' => [
+            'users' => 'Usuarios',
+            'products' => 'Productos',
+            'reports' => 'Reportes',
+            'configurations' => 'Configuración',
+        ],
+        'permisos' => [
+            'Users' => [
+                'users' => [
+                    'view' => 'Ver usuarios',
+                    'create' => 'Crear usuarios',
+                    'edit' => 'Editar usuarios',
+                    'delete' => 'Eliminar usuarios'
+                ],
+            ],
+            'Products' => [
+                'products' => [
+                    'view' => 'Ver productos',
+                    'create' => 'Crear productos',
+                    'edit' => 'Editar productos',
+                    'delete' => 'Eliminar productos'
+                ],
+
+            ],
+            'Reports' => [
+                'reports' => [
+                    'view' => 'Ver reportes',
+                    'export' => 'Exportar reportes',
+                    'print' => 'Imprimir reportes'
+                ],
+
+            ],
+            'Config' => [
+                'config' => [
+                    'access' => 'Acceso a configuración',
+                    'modify' => 'Modificar configuración'
+                ],
+
+            ],
+        ],
+        'roles' => [
+            'default' => 'Selecciona un Rol',
+            'admin' => 'Administrador',
+            'advanced' => 'Usuario Avanzado',
+            'usuario' => 'Usuario Básico'
         ],
         'filters' => [
             'search' => 'Buscar',
@@ -176,8 +179,17 @@ return [
         'placeholders' => [
             'name' => 'Nombre completo del usuario',
             'email' => 'correo@ejemplo.com',
-            'password' => 'Contraseña Segura',
+            'password' => 'Contraseña segura',
             'search' => 'Buscar usuarios...',
+            'passRulings' => 'La contraseña debe tener al menos 8 caracteres, incluyendo letras y números'
+        ],
+        'tabs' => [
+            'userForm' => 'Información Básica',
+            'permissionsForm' => 'Roles y Permisos'
+        ],
+        'cards' => [
+            'title' => 'Crear Nuevo Usuario',
+            'description' => 'Ingresa la información para crear un nuevo usuario en el sistema'
         ],
         'buttons' => [
             'new' => 'Nuevo Usuario',

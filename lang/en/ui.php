@@ -6,6 +6,7 @@ return [
         'items' => [
             'dashboard' => 'Dashboard',
             'users' => 'Users',
+            'floor' => 'Floor',
             'repository' => 'Repository',
             'documentation' => 'Documentation',
         ],
@@ -80,53 +81,6 @@ return [
             'unique' => 'The :attribute has already been taken.',
             'confirmed' => 'The :attribute confirmation does not match.',
     ],
-    'Stringcreados' => [
-        'pwd' => ' including characters and numbers.'
-    ],
-    'header' => [
-        'titulo' => 'Create New User',
-        'string' => 'Enter the information to create a new user',
-        'tabtitle1' => 'Basic information',
-        'tabtitle2' => 'Roles and Permissions',
-    ],
-    'headerpermits' => [
-        'title' => 'Main Role',
-        'rol' => 'Select one role',
-        'role1' => 'Admin',
-        'role2' => 'User',
-        'role3' => 'Visual',
-        'string' => 'The role determines the user`s general access level',
-    ],
-    'specificpermits' => [
-        'permits' => 'Specific Permission',
-        'users' => [    
-            'user' => 'Users',
-            'seeuser' => 'See users',
-            'createusers' => 'createusers',
-            'editusers' => 'edit users',
-            'deleteusers' => 'deleteusers',
-        ],
-        'reports'=> [
-            'reports' => 'Reports',
-            'seereports'=> 'See reports',
-            'exportreport' => 'Export reports ',
-            'printreport' => 'Print reports',
-        ],
-        'products'=>[
-            'products' => 'Products',
-            'seeproduct' => 'See products',
-            'createproduct' => 'Create products',
-            'editproduct' => 'Edit products',
-            'deleteproducts' => 'Borrar products',
-        ],
-        'configs'=>[
-            'configs'=> 'Configuration',
-            'accesssettings' => 'access to settings',
-            'modifysettings'=> 'Modify settings'
-
-        ],
-    ],
-    
     'common' => [
         'buttons' => [
             'cancel' => 'Cancel',
@@ -161,6 +115,8 @@ return [
             'password_optional' => 'Password (optional)',
             'created_at' => 'Created at',
             'actions' => 'Actions',
+            'rolPpal' => 'Main Role',
+            'permisos' => 'Specific Permissions'
         ],
         'columns' => [
             'name' => 'Name',
@@ -168,16 +124,78 @@ return [
             'created_at' => 'Created at',
             'actions' => 'Actions',
         ],
+        'gridelements' => [
+            'users' => 'Usuarios',
+            'products' => 'Productos',
+            'reports' => 'Reportes',
+            'configurations' => 'Configuración',
+        ],
+        'permisos' => [
+            'Users' => [
+                'users' => [
+                    'view' => 'View users',
+                    'create' => 'Create users',
+                    'edit' => 'Edit users',
+                    'delete' => 'Delete users'
+                ],
+            ],
+            'Products' => [
+                'products' => [
+                    'view' => 'View products',
+                    'create' => 'Create products',
+                    'edit' => 'Edit products',
+                    'delete' => 'Delete products'
+                ],
+
+            ],
+            'Reports' => [
+                'reports' => [
+                    'view' => 'View reports',
+                    'export' => 'Export reports',
+                    'print' => 'Print reports'
+                ],
+
+            ],
+            'Config' => [
+                'config' => [
+                    'access' => 'Access configuration',
+                    'modify' => 'Modify configuration'
+                ],
+
+            ],
+        ],
+        'gridelements' => [
+            'users' => 'Users',
+            'products' => 'Products',
+            'reports' => 'Reports',
+            'configurations' => 'Configuration',
+
+        ],
+        'roles' => [
+            'default' => 'Select a Role',
+            'admin' => 'Administrator',
+            'advanced' => 'Advanced User',
+            'usuario' => 'Basic User'
+        ],
         'filters' => [
             'search' => 'Search',
             'name' => 'User name',
             'email' => 'User email',
         ],
         'placeholders' => [
-            'name' => 'User name',
-            'email' => 'User email',
-            'password' => 'User password',
+            'name' => 'Complete user name',
+            'email' => 'email@example.com',
+            'password' => 'Secure user password',
             'search' => 'Search users...',
+            'passRulings' => 'The password must be at least 8 characters long, including nubers and letters'
+        ],
+        'tabs' => [
+            'userForm' => 'Basic Information',
+            'permissionsForm' => 'Roles and Permissions'
+        ],
+        'cards' => [
+            'title' => 'Create New User',
+            'description' => 'Input the information to create a new user in the system.'
         ],
         'buttons' => [
             'new' => 'New User',

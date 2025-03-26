@@ -19,6 +19,11 @@ const mainNavItems = (t: (key: string) => string): NavItem[] => [
         url: '/users',
         icon: Users,
     },
+    {
+        title: t('ui.navigation.items.floor'),
+        url: '/floors',
+        icon: Users,
+    },
 ];
 
 const footerNavItems = (t: (key: string) => string): NavItem[] => [

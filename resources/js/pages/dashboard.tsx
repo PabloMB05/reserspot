@@ -25,7 +25,12 @@ export default function Dashboard() {
                     href="/users"
                     icon={Users}
                 />
-
+                <DashboardCard
+                    title="Floor"
+                    description="Gestiona los usuarios del sistema"
+                    href="/floors"
+                    icon={Users}
+                />
                 <CardFlip
                     contentFront={
                         <div className="flex items-center gap-4">
