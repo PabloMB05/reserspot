@@ -12,10 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('zones', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->string('name');
+            $table->uuid('id')->primary()->unique();
+            $table->integer('number');
+            $table->string('genre_name');
+            $table->foreign('genre_name')->references('name')->on('genres')->cascadeOnDelete();
             $table->integer('capacity');
-            $table->foreignUuid('floor_uuid')->references('id')->on('floors')->onDelete('cascade');
+            $table->foreignUuid('floor_id')->constrained(table:'floors', indexName:'id')->cascadeOnDelete();
             $table->timestamps();
         });
     }

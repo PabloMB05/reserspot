@@ -1,15 +1,17 @@
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "../../lib/axios";
 
-// Interfaz para los datos del piso
+// Define a Floor type
 export interface Floor {
   id: string;
-  floor_number: number;
+  name: string;
+  floor_number :number;
   capacity: number;
+  buildingId: string;
   created_at: string;
 }
 
-// Interfaz para la respuesta de la API con paginación
+// Interface representing the actual API response structure
 export interface ApiPaginatedResponse<T> {
   current_page: number;
   data: T[];
@@ -30,7 +32,7 @@ export interface ApiPaginatedResponse<T> {
   total: number;
 }
 
-// Interfaz para la respuesta esperada en el componente de tabla
+// Interface representing the expected format for the Table component
 export interface PaginatedResponse<T> {
   data: T[];
   meta: {
@@ -47,26 +49,27 @@ interface UseFloorsParams {
   search?: string;
   page?: number;
   perPage?: number;
+  buildingId?: string;
 }
 
-// Hook para obtener los pisos
-export function useFloors({ search, page = 1, perPage = 10 }: UseFloorsParams = {}) {
+export function useFloors({ search, page = 1, perPage = 10, buildingId }: UseFloorsParams = {}) {
   return useQuery({
-    queryKey: ["floors", { search, page, perPage }],
+    queryKey: ["floors", { search, page, perPage, buildingId }],
     queryFn: async () => {
       const { data: apiResponse } = await axios.get<ApiPaginatedResponse<Floor>>("/api/floors", {
         params: {
           search,
           page,
           per_page: perPage,
+          building_id: buildingId,
         },
         headers: {
           'Accept': 'application/json',
           'X-Requested-With': 'XMLHttpRequest',
-        },
+        }
       });
 
-      // Transformamos la respuesta de la API al formato esperado
+      // Transform the API response to the expected format
       return {
         data: apiResponse.data,
         meta: {
@@ -79,41 +82,37 @@ export function useFloors({ search, page = 1, perPage = 10 }: UseFloorsParams = 
         },
       } as PaginatedResponse<Floor>;
     },
-    // Puedes agregar opciones como `onError`, `onSuccess`, etc., si lo necesitas
   });
 }
 
-// Hook para crear un nuevo piso
 export function useCreateFloor() {
   return useMutation({
-    mutationFn: async (data: { floor_number: number; capacity: number }) => {
+    mutationFn: async (data: { name: string; buildingId: string }) => {
       const response = await axios.post("/api/floors", data, {
         headers: {
           'Accept': 'application/json',
           'X-Requested-With': 'XMLHttpRequest',
-        },
+        }
       });
       return response.data;
     },
   });
 }
 
-// Hook para actualizar un piso existente
 export function useUpdateFloor(floorId: string) {
   return useMutation({
-    mutationFn: async (data: { floor_number: number; capacity: number }) => {
+    mutationFn: async (data: { name: string; buildingId: string }) => {
       const response = await axios.put(`/api/floors/${floorId}`, data, {
         headers: {
           'Accept': 'application/json',
           'X-Requested-With': 'XMLHttpRequest',
-        },
+        }
       });
       return response.data;
     },
   });
 }
 
-// Hook para eliminar un piso
 export function useDeleteFloor() {
   return useMutation({
     mutationFn: async (floorId: string) => {
@@ -121,7 +120,7 @@ export function useDeleteFloor() {
         headers: {
           'Accept': 'application/json',
           'X-Requested-With': 'XMLHttpRequest',
-        },
+        }
       });
     },
   });

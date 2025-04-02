@@ -6,10 +6,25 @@ return [
         'items' => [
             'dashboard' => 'Dashboard',
             'users' => 'Users',
-            'floor' => 'Floor',
+            'floors' => 'Floors',
+            'books' => 'Books',
             'repository' => 'Repository',
             'documentation' => 'Documentation',
         ],
+    ],
+    'dashboard' => [
+        'users' => 'Users',
+        'floors' => 'Floors',
+        'books' => 'Books',
+        'zones' => 'Zones',
+        'bookcases' => 'Bookcases',
+        'description' => [
+            'users' => 'Manage all users in the system',
+            'floors' => 'Manage all floors and sections in the system',
+            'books' => 'Manage all books in the system',
+            'zones' => 'Manage all zones in the system',
+            'bookcases' => 'Manage all bookcases in the system',
+        ]
     ],
     'user_menu' => [
         'settings' => 'Settings',
@@ -103,6 +118,31 @@ return [
         ],
         'per_page' => 'Per page',
         'no_results' => 'No results',
+    ],
+    'floors' => [
+        'title' => 'Floors',
+        'create' => 'Create Floor',
+        'buttons' => [
+            'new' => 'New Floor',
+        ],
+    ],
+    'bookcases' => [
+        'title' => 'Bookcases',
+        'create' => 'Create Bookcase',
+        'buttons' => [
+            'new' => 'New Bookcase',
+        ],
+    ],
+    'zones' => [
+        'title' => 'Zones',
+        'create' => 'Create Zone',
+        'buttons' => [
+            'new' => 'New Zone',
+        ],
+        'create' => [
+            'title' => 'title',
+            'desc' => 'desc'
+        ],
     ],
     'users' => [
         'title' => 'Users',
@@ -224,6 +264,210 @@ return [
         'pagination' => [
             'previous' => 'Previous',
             'next' => 'Next',
+        ],
+    ],
+    'floors' => [
+        'title' => 'Floors',
+        'filters' => [
+            'floor_number' => 'Search by title',
+            'capacity' => 'Search by capacity',
+        ],
+        'columns' => [
+            'floor_number' => 'Number floor',
+            'capacity' => 'Capacity',
+            'created_at' => 'Date created',
+            'actions' => 'Actions',
+        ],
+        'buttons' => [
+            'new' => 'Create new floor',
+        ],
+        'placeholders' =>[
+            'floor_number' => 'Number of floor',
+            'capacity' => 'capacity quantity',
+        ],
+        
+    ],
+    'floor' => [
+        'create' => 'Create Floor',
+        'edit' => 'Edit Floor',
+        'create_description' => 'Fill out the form to register a new floor in the system',
+        'edit_description' => 'Update the floor information',
+        'number' => 'Floor Number',
+        'capacity' => 'Capacity',
+        'createdAt' => 'Created At',
+        'actions' => 'Actions',
+        
+        'validation' => [
+            'number_required' => 'The floor number is required',
+            'number_integer' => 'The floor number must be an integer',
+            'number_unique' => 'This floor number already exists',
+            'capacity_required' => 'The capacity is required',
+            'capacity_integer' => 'The capacity must be a number',
+            'capacity_min' => 'The capacity must be at least :min',
+        ],
+        
+        'messages' => [
+            'created' => 'Floor created successfully',
+            'updated' => 'Floor updated successfully',
+            'deleted' => 'Floor deleted successfully',
+            'error' => [
+                'create' => 'Error creating floor',
+                'update' => 'Error updating floor',
+                'delete' => 'Error deleting floor',
+            ],
+        ],
+        
+        'buttons' => [
+            'create' => 'Create Floor',
+            'save' => 'Save',
+            'update' => 'Update',
+            'cancel' => 'Cancel',
+            'edit' => 'Edit',
+            'delete' => 'Delete',
+        ],
+        
+        'titles' => [
+            'list' => 'Floors List',
+            'management' => 'Floor Management',
+            'details' => 'Floor Details',
+        ],
+        
+        'placeholders' => [
+            'number' => 'Enter floor number',
+            'capacity' => 'Enter capacity',
+            'search' => 'Search floors...',
+        ],
+        
+        'filters' => [
+            'all' => 'All Floors',
+            'active' => 'Active Floors',
+        ],
+        
+        'empty' => [
+            'title' => 'No floors found',
+            'description' => 'Start by creating a new floor',
+        ],
+    
+    ],
+    'books' => [
+        'title' => 'Books',
+        'create' => 'Create Book',
+        'edit' => 'Edit Book',
+        'fields' => [
+            'title' => 'Title',
+            'email' => 'Email',
+            'password' => 'Contraseña',
+            'password_optional' => 'Contraseña (opcional)',
+            'created_at' => 'Fecha de creación',
+            'actions' => 'Acciones',
+            'rolPpal' => 'Rol Principal',
+            'permisos' => 'Permisos Específicos'
+        ],
+        'columns' => [
+            'title' => 'Title',
+            'author' => 'Author',
+            'genres' => 'Genres',
+            'editor' => 'Publisher',
+            'length' => 'Pages',
+            'bookcase' => 'Bookcase',
+            'zone' => 'Zone',
+            'floor' => 'Floor',
+            'created_at' => 'Creation at',
+            'actions' => 'Actions',
+        ],
+        'gridelements' => [
+            'users' => 'Usuarios',
+            'products' => 'Productos',
+            'reports' => 'Reportes',
+            'configurations' => 'Configuración',
+        ],
+        'permisos' => [
+            'Users' => [
+                'users' => [
+                    'view' => 'Ver usuarios',
+                    'create' => 'Crear usuarios',
+                    'edit' => 'Editar usuarios',
+                    'delete' => 'Eliminar usuarios'
+                ],
+            ],
+            'Products' => [
+                'products' => [
+                    'view' => 'Ver productos',
+                    'create' => 'Crear productos',
+                    'edit' => 'Editar productos',
+                    'delete' => 'Eliminar productos'
+                ],
+
+            ],
+            'Reports' => [
+                'reports' => [
+                    'view' => 'Ver reportes',
+                    'export' => 'Exportar reportes',
+                    'print' => 'Imprimir reportes'
+                ],
+
+            ],
+            'Config' => [
+                'config' => [
+                    'access' => 'Acceso a configuración',
+                    'modify' => 'Modificar configuración'
+                ],
+
+            ],
+        ],
+        'roles' => [
+            'default' => 'Selecciona un Rol',
+            'admin' => 'Administrador',
+            'advanced' => 'Usuario Avanzado',
+            'usuario' => 'Usuario Básico'
+        ],
+        'filters' => [
+            'search' => 'Buscar',
+            'title' => "Book's Title...",
+            'author' => "Book's Author...",
+        ],
+        'placeholders' => [
+            'title' => 'Title...',
+            'author' => 'Author...',
+            'password' => 'Contraseña segura',
+            'search' => 'Search books...',
+            'passRulings' => 'La contraseña debe tener al menos 8 caracteres, incluyendo letras y números'
+        ],
+        'tabs' => [
+            'userForm' => 'Información Básica',
+            'permissionsForm' => 'Roles y Permisos'
+        ],
+        'cards' => [
+            'title' => 'Crear Nuevo Usuario',
+            'description' => 'Ingresa la información para crear un nuevo usuario en el sistema'
+        ],
+        'buttons' => [
+            'new' => 'Nuevo Usuario',
+            'edit' => 'Editar',
+            'save' => 'Guardar',
+            'update' => 'Actualizar',
+            'cancel' => 'Cancelar',
+            'delete' => 'Eliminar',
+            'deleting' => 'Eliminando...',
+            'saving' => 'Guardando...',
+            'retry' => 'Reintentar',
+        ],
+        'delete' => [
+            'title' => '¿Estás seguro?',
+            'description' => 'Esta acción no se puede deshacer. Se eliminará permanentemente el usuario del sistema.',
+        ],
+        'delete_dialog' => [
+            'title' => '¿Estás seguro?',
+            'description' => 'Esta acción no se puede deshacer. Se eliminará permanentemente el usuario del sistema.',
+            'success' => 'Eliminado correctamente ;)',
+        ],
+        'deleted_error' => 'Error al eliminar el usuario',
+        'no_results' => 'No hay resultados.',
+        'error_loading' => 'Error al cargar los usuarios. Por favor, inténtalo de nuevo.',
+        'showing_results' => 'Mostrando :from a :to de :total resultados',
+        'pagination' => [
+            'previous' => 'Anterior',
+            'next' => 'Siguiente',
         ],
     ],
 ];

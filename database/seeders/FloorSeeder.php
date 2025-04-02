@@ -3,12 +3,12 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Domain\Models\floors\floor;
+use Domain\Models\floors\Floor;
 
 class FloorSeeder extends Seeder
 {
     public function run(): void
     {
-        floor::factory(5)->create();
+        Floor::factory(5)->create();
     }
 }

@@ -3,12 +3,12 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Domain\Models\floors\floor;
+use Domain\Models\floors\Floor;
 
 
 class FloorFactory extends Factory
 {
-    protected $model = floor::class;
+    protected $model = Floor::class;
 
     public function definition(): array
     {

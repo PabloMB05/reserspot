@@ -12,11 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('floors', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->uuid('id')->primary()->unique();
             $table->integer('floor_number')->unique();
             $table->integer('capacity');
             $table->timestamps();
-            
         });
     }
 
@@ -26,6 +25,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('floors');
-       
     }
 };

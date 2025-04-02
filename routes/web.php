@@ -14,6 +14,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('users', \App\Users\Controllers\UserController::class);
     Route::resource('floors', \App\Floors\Controller\FloorController::class);
+    Route::resource('zones', \App\Zones\Controllers\ZoneController::class);
+    Route::resource('bookcases', \App\Bookcases\Controllers\BookcaseController::class);
+    Route::resource('books', \App\Books\Controllers\BookController::class);
 });
 
 

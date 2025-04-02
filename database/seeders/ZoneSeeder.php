@@ -2,13 +2,16 @@
 
 namespace Database\Seeders;
 
+use Domain\Models\floors\Floor;
+use Domain\Zones\Models\Zone;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Domain\Models\zones\zone;
 
 class ZoneSeeder extends Seeder
 {
-    public function run(): void
+    public function run()
     {
-        zone::factory(5)->create();
+        Zone::factory(50)->create();
+
     }
 }
