@@ -16,13 +16,7 @@ class BookcaseApiController extends Controller
 {
     public function index(Request $request, BookcaseIndexAction $action)
     {
-        return response()->json(
-            $action(
-                $request->search,
-                $request->integer('per_page', 10),
-                $request->zone_id
-            )
-        );
+        return response()->json($action($request->search, $request->integer('per_page', 10)));
     }
 
     public function show(Bookcase $bookcase)

@@ -24,7 +24,7 @@ class ZoneController extends Controller
     // Mostrar el formulario de creación de una nueva zona
     public function create()
     {
-        return Inertia::render('zones/create');
+        return Inertia::render('zones/Create');
     }
 
     // Almacenar una nueva zona
@@ -108,4 +108,5 @@ class ZoneController extends Controller
         return redirect()->route('zones.index')
             ->with('success', __('messages.zones.deleted'));
     }
+    
 }

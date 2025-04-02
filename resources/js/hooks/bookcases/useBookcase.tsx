@@ -1,14 +1,14 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "../../lib/axios";
 
+// Updated Bookcase type to match the database schema
 export interface Bookcase {
-  id: string;
-  number: string;
+  id: string; // UUID
+  number: number;
   capacity: number;
-  zone_id: string;
-  zone_number?: string;
-  floor_number?: string;
+  zone_number: number; // UUID reference to zones table
   created_at: string;
+  updated_at: string;
 }
 
 // Interface representing the actual API response structure
@@ -32,7 +32,6 @@ export interface ApiPaginatedResponse<T> {
   total: number;
 }
 
-// Interface representing the expected format for the Table component
 export interface PaginatedResponse<T> {
   data: T[];
   meta: {
@@ -45,31 +44,28 @@ export interface PaginatedResponse<T> {
   };
 }
 
-interface UseBookcaseParams {
-  number?: string;
-  zone_id?: string;
+interface UseBookcasesParams {
+  search?: string;
   page?: number;
   perPage?: number;
 }
 
-export function useBookcases({ number, zone_id, page = 1, perPage = 10 }: UseBookcaseParams = {}) {
+export function useBookcases({ search, page = 1, perPage = 10 }: UseBookcasesParams = {}) {
   return useQuery({
-    queryKey: ["bookcases", { number, zone_id, page, perPage }],
+    queryKey: ["bookcases", { search, page, perPage }],
     queryFn: async () => {
       const { data: apiResponse } = await axios.get<ApiPaginatedResponse<Bookcase>>("/api/bookcases", {
         params: {
-          number,
-          zone_id,
+          search,
           page,
           per_page: perPage,
         },
         headers: {
           'Accept': 'application/json',
-          'X-Requested-With': 'XMLHttpRequest'
+          'X-Requested-With': 'XMLHttpRequest',
         }
       });
 
-      // Transform the API response to the expected format
       return {
         data: apiResponse.data,
         meta: {
@@ -78,8 +74,8 @@ export function useBookcases({ number, zone_id, page = 1, perPage = 10 }: UseBoo
           last_page: apiResponse.last_page,
           per_page: apiResponse.per_page,
           to: apiResponse.to,
-          total: apiResponse.total
-        }
+          total: apiResponse.total,
+        },
       } as PaginatedResponse<Bookcase>;
     },
   });
@@ -87,11 +83,11 @@ export function useBookcases({ number, zone_id, page = 1, perPage = 10 }: UseBoo
 
 export function useCreateBookcase() {
   return useMutation({
-    mutationFn: async (data: { number: string; capacity: number; zone_id: string }) => {
+    mutationFn: async (data: { number: number; capacity: number; zone_id: string }) => {
       const response = await axios.post("/api/bookcases", data, {
         headers: {
           'Accept': 'application/json',
-          'X-Requested-With': 'XMLHttpRequest'
+          'X-Requested-With': 'XMLHttpRequest',
         }
       });
       return response.data;
@@ -101,11 +97,11 @@ export function useCreateBookcase() {
 
 export function useUpdateBookcase(bookcaseId: string) {
   return useMutation({
-    mutationFn: async (data: { number: string; capacity: number; zone_id: string }) => {
+    mutationFn: async (data: { number: number; capacity: number; zone_id: string }) => {
       const response = await axios.put(`/api/bookcases/${bookcaseId}`, data, {
         headers: {
           'Accept': 'application/json',
-          'X-Requested-With': 'XMLHttpRequest'
+          'X-Requested-With': 'XMLHttpRequest',
         }
       });
       return response.data;
@@ -119,7 +115,7 @@ export function useDeleteBookcase() {
       await axios.delete(`/api/bookcases/${bookcaseId}`, {
         headers: {
           'Accept': 'application/json',
-          'X-Requested-With': 'XMLHttpRequest'
+          'X-Requested-With': 'XMLHttpRequest',
         }
       });
     },

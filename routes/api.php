@@ -30,7 +30,7 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::put('/zones/{zone}', [ZoneApiController::class, 'update']);  
     Route::delete('/zones/{zone}', [ZoneApiController::class, 'destroy']); 
 
-    // Rutas de Libros
+    // Rutas de Estanterias
     Route::get('/bookcases', [BookcaseApiController::class, 'index']);  
     Route::get('/bookcases/{bookcase}', [BookcaseApiController::class, 'show']); 
     Route::post('/bookcases', [BookcaseApiController::class, 'store']);  

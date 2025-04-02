@@ -8,17 +8,16 @@ import { router } from '@inertiajs/react';
 import type { AnyFieldApi } from '@tanstack/react-form';
 import { useForm } from '@tanstack/react-form';
 import { useQueryClient } from '@tanstack/react-query';
-import { Bookmark, Save, X } from 'lucide-react';
+import { MapPin, Save, X } from 'lucide-react';
 import { FormEvent } from 'react';
 import { toast } from 'sonner';
 
 interface ZoneFormProps {
     initialData?: {
         id: string;
-        title: string;
-        genre_name: string;
+        number: string;
         capacity: string;
-        floor_number: string;
+        genre_name: string;
     };
     page?: string;
     perPage?: string;
@@ -43,16 +42,14 @@ export function ZoneForm({ initialData, page, perPage }: ZoneFormProps) {
 
     const form = useForm({
         defaultValues: {
-            title: initialData?.title ?? '',
-            genre_name: initialData?.genre_name ?? '',
+            number: initialData?.number ?? '',
             capacity: initialData?.capacity ?? '',
-            floor_number: initialData?.floor_number ?? '',
+            genre_name: initialData?.genre_name ?? '',
         },
         onSubmit: async ({ value }) => {
             const zoneData = {
                 ...value,
                 capacity: Number(value.capacity),
-                floor_number: Number(value.floor_number),
             };
 
             const options = {
@@ -88,72 +85,42 @@ export function ZoneForm({ initialData, page, perPage }: ZoneFormProps) {
             <Card>
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2">
-                        <Bookmark className="h-5 w-5" />
+                        <MapPin className="h-5 w-5" />
                         {initialData ? t('ui.zone.edit') : t('ui.zone.create')}
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                    {/* Title field */}
+                    {/* Zone number field */}
                     <div>
                         <form.Field
-                            name="title"
+                            name="number"
                             validators={{
                                 onChangeAsync: async ({ value }) => {
                                     await new Promise((resolve) => setTimeout(resolve, 500));
                                     return !value
-                                        ? t('ui.validation.required', { attribute: t('ui.zone.title').toLowerCase() })
-                                        : undefined;
+                                        ? t('ui.validation.required', { attribute: t('ui.zone.number').toLowerCase() })
+                                        : isNaN(Number(value))
+                                          ? t('ui.validation.number', { attribute: t('ui.zone.number').toLowerCase() })
+                                          : undefined;
                                 },
                             }}
                         >
                             {(field) => (
                                 <>
                                     <Label htmlFor={field.name}>
-                                        {t('ui.zone.title')}
+                                        {t('ui.zone.number')}
                                     </Label>
                                     <Input
                                         id={field.name}
                                         name={field.name}
+                                        type="number"
                                         value={field.state.value}
                                         onChange={(e) => field.handleChange(e.target.value)}
                                         onBlur={field.handleBlur}
-                                        placeholder={t('ui.zone.title')}
+                                        placeholder={t('ui.zone.number')}
                                         disabled={form.state.isSubmitting}
                                         required
-                                    />
-                                    <FieldInfo field={field} />
-                                </>
-                            )}
-                        </form.Field>
-                    </div>
-
-                    {/* Genre field */}
-                    <div>
-                        <form.Field
-                            name="genre_name"
-                            validators={{
-                                onChangeAsync: async ({ value }) => {
-                                    await new Promise((resolve) => setTimeout(resolve, 500));
-                                    return !value
-                                        ? t('ui.validation.required', { attribute: t('ui.zone.genre').toLowerCase() })
-                                        : undefined;
-                                },
-                            }}
-                        >
-                            {(field) => (
-                                <>
-                                    <Label htmlFor={field.name}>
-                                        {t('ui.zone.genre')}
-                                    </Label>
-                                    <Input
-                                        id={field.name}
-                                        name={field.name}
-                                        value={field.state.value}
-                                        onChange={(e) => field.handleChange(e.target.value)}
-                                        onBlur={field.handleBlur}
-                                        placeholder={t('ui.zone.genre')}
-                                        disabled={form.state.isSubmitting}
-                                        required
+                                        min="1"
                                     />
                                     <FieldInfo field={field} />
                                 </>
@@ -174,8 +141,7 @@ export function ZoneForm({ initialData, page, perPage }: ZoneFormProps) {
                                           ? t('ui.validation.number', { attribute: t('ui.zone.capacity').toLowerCase() })
                                           : Number(value) <= 0
                                             ? t('ui.validation.min.numeric', { 
-                                                attribute: t('ui.zone.capacity').toLowerCase(),
-                                                
+                                                attribute: t('ui.zone.capacity').toLowerCase()
                                               })
                                             : undefined;
                                 },
@@ -204,34 +170,31 @@ export function ZoneForm({ initialData, page, perPage }: ZoneFormProps) {
                         </form.Field>
                     </div>
 
-                    {/* Floor story field */}
+                    {/* Genre name field */}
                     <div>
                         <form.Field
-                            name="floor_number"
+                            name="genre_name"
                             validators={{
                                 onChangeAsync: async ({ value }) => {
                                     await new Promise((resolve) => setTimeout(resolve, 500));
                                     return !value
-                                        ? t('ui.validation.required', { attribute: t('ui.zone.floor_number').toLowerCase() })
-                                        : isNaN(Number(value))
-                                          ? t('ui.validation.number', { attribute: t('ui.zone.floor_number').toLowerCase() })
-                                          : undefined;
+                                        ? t('ui.validation.required', { attribute: t('ui.zone.genre').toLowerCase() })
+                                        : undefined;
                                 },
                             }}
                         >
                             {(field) => (
                                 <>
                                     <Label htmlFor={field.name}>
-                                        {t('ui.zone.floor_number')}
+                                        {t('ui.zone.genre')}
                                     </Label>
                                     <Input
                                         id={field.name}
                                         name={field.name}
-                                        type="number"
                                         value={field.state.value}
                                         onChange={(e) => field.handleChange(e.target.value)}
                                         onBlur={field.handleBlur}
-                                        placeholder={t('ui.zone.floor_number')}
+                                        placeholder={t('ui.zone.genre')}
                                         disabled={form.state.isSubmitting}
                                         required
                                     />
