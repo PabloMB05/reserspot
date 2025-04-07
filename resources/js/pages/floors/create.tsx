@@ -11,6 +11,7 @@ interface FloorFormProps {
         floor_number: string;
         capacity: string;
     };
+    zone_count: number;
     page?: string;
     perPage?: string;
 }

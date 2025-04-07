@@ -10,9 +10,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Book extends Model
+class Book extends Model implements HasMedia
 {
+    use InteractsWithMedia;
     /**
      * Create a new factory instance for the model.
      */
@@ -33,7 +36,8 @@ class Book extends Model
         'bookcase_id',
     ];
 
-    public function bookcase(): BelongsTo
+
+    public function bookcase()
     {
         return $this->belongsTo(Bookcase::class);
     }

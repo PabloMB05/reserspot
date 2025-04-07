@@ -6,37 +6,35 @@ import { ZoneForm } from '@/pages/zones/components/ZoneForm';
 import { MapPin } from 'lucide-react';
 
 interface ZoneFormProps {
-    initialData?: {
-        id: string;
-        name: string;
-        description: string;
-        floor_id: string;
-    };
-    page?: string;
-    perPage?: string;
+    floors: {
+        id:string,
+        floor_number: number,
+        capacity: number,
+        zones_count:number,
+    }[];
+    genre:any[];
 }
 
-export default function CreateZone() {
+export default function CreateZone({ floors,genre}: ZoneFormProps) {
     const { t } = useTranslations();
-
     return (
-        <ZoneLayout title={t('ui.zone.create')}>
+        <ZoneLayout title={t('ui.zones.cards.create.title')}>
             <div className="flex max-w-screen items-center self-center">
                 <Card className="w-full m-4 p-4 shadow-lg dark:shadow-xs dark:shadow-white">
                     <CardHeader>
                         <CardTitle>
                             <div className="flex items-center gap-1">
                                 <MapPin color="#2762c2" />
-                                {t('ui.zone.create')}
+                                {t('ui.zones.cards.create.title')}
                             </div>
                         </CardTitle>
                         <CardDescription>
-                            {t('ui.zone.create_description')}
+                            {t('ui.zones.cards.create.description')}
                         </CardDescription>
                     </CardHeader>
                     <Separator />
                     <CardContent className="pt-4">
-                        <ZoneForm />
+                        <ZoneForm floors={floors} genres={genre}  />
                     </CardContent>
                 </Card>
             </div>

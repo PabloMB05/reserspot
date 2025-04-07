@@ -12,6 +12,17 @@ return [
             'documentation' => 'Documentation',
         ],
     ],
+    'buttons' => [
+        'new' => 'Nuevo Usuario',
+        'edit' => 'Editar',
+        'save' => 'Guardar',
+        'update' => 'Actualizar',
+        'cancel' => 'Cancelar',
+        'delete' => 'Eliminar',
+        'deleting' => 'Eliminando...',
+        'saving' => 'Guardando...',
+        'retry' => 'Reintentar',
+    ],
     'dashboard' => [
         'users' => 'Users',
         'floors' => 'Floors',
@@ -128,20 +139,104 @@ return [
     ],
     'bookcases' => [
         'title' => 'Bookcases',
-        'create' => 'Create Bookcase',
+        "cards" => [
+            "create"=>[
+                "title"=> "Create bookcase", 
+                "description"=> "Fill out the form below to add a new bookcase to the collection."
+            ],
+            "edit"=>[
+                    "title" => "Edit bookcase",
+                    "description"=> "Fill out the form below to update a bookcase to the collection.",
+                ],
+        ],
         'buttons' => [
             'new' => 'New Bookcase',
+        ],
+        'filters' => [
+            'title'=> 'Title',
+            'genres' => 'Genre',
+            'author' => 'Author',
+            'pages' => 'Pages',
+            'publisher'=> 'Editorial',
+            'floor'=> 'Floor Number',
+            'zone'=> 'Zone Number',
+            'bookcase'=>'Bookcase Number',
+            'capacity' => 'Capacity',
+            
+        ],
+        'fields'=>[
+            'bookcase'=> 'Bookcase Number',
+            'capacity' => 'Capacity',
+            'floor'=> 'Floor Number',
+            'zone'=> 'Zone Number',
+            'zoneGenre'=> 'Genre',
+        ],
+        'columns'=>[
+            'bookcase'=> 'Bookcase Number',
+            'capacity' => 'Capacity',
+            'floor'=> 'Floor Number',
+            'zone'=> 'Zone Number',
+            'zoneGenre'=> 'Genre',
+            'created_at'=> 'Create at',
+            'actions'=> 'Actions'
+        ],
+        'placeholders' => [
+            'title'=> 'Enter a title...',
+            'genres' =>'Enter a genre...',
+            'author'=> 'Enter a author...',
+            'pages'=> 'Enter a pages...',
+            'publisher'=> 'Enter a editorial...',
+            'floor'=> 'Enter a floor...',
+            'zone' => 'Enter a zone...',
+            'bookcase' => 'Enter a bookcase...',
+            'capacity' => 'Enter a capacity...'
         ],
     ],
     'zones' => [
         'title' => 'Zones',
-        'create' => 'Create Zone',
+        "cards" => [
+            "create"=>[
+                "title"=> "Create Zones", 
+                "description"=> "Fill out the form below to add a new zone to the collection."
+            ],
+            "edit"=>[
+                    "title" => "Edit Zone",
+                    "description"=> "Fill out the form below to update a zones to the collection.",
+                ],
+        ],
         'buttons' => [
             'new' => 'New Zone',
+        ],
+        'filters'=>[
+            'number'=> 'Zone Number',
+            'capacity'=> 'Capacity'
+        ],
+        'placeholders'=>[
+            'number'=> 'Enter a number...',
+            'capacity'=> 'Enter a capacity...',
+        ],
+        'columns'=> [
+            'number' => 'Zone Number',
+            'capacity' => 'Capacity',
+            'genre' => 'Genre',
+            'created_ad'=>'Created_at',
+            'actions'=> 'Actions'
+        ],
+        'fields'=>[
+            'number' => 'Zone Number',
+            'capacity' => 'Capacity',
+            'genre' => 'Genre',
         ],
         'create' => [
             'title' => 'title',
             'desc' => 'desc'
+        ],
+        'validation' => [
+            'number_required' => 'The zone number is required',
+            'number_integer' => 'The zone number must be an number',
+            'capacity_required' => 'The capacity is required',
+            'capacity_integer' => 'The capacity must be a number',
+            'capacity_min' => 'The capacity must be at least :min',
         ],
     ],
     'users' => [
@@ -218,7 +313,6 @@ return [
             'usuario' => 'Basic User'
         ],
         'filters' => [
-            'search' => 'Search',
             'name' => 'User name',
             'email' => 'User email',
         ],
@@ -470,4 +564,92 @@ return [
             'next' => 'Siguiente',
         ],
     ],
+  "books"=> [
+    'title' => 'Books',
+    "tabs"=> [
+      "basic"=> "Basic Info",
+      "location"=> "Location"
+    ],
+    "cards" => [
+        "create"=>[
+            "title"=> "Create book", 
+            "description"=> "Fill out the form below to add a new book to the collection."
+        ],
+        "edit"=>[
+                "title" => "Edit book",
+                "description"=> "Fill out the form below to update a book to the collection.",
+            ],
+    ],
+    'columns'=>[
+        'title'=> 'Title',
+        'genres' => 'Genre',
+        'author' => 'Author',
+        'length' => 'Pages',
+        'editor'=> 'Editorial',
+        'floor'=> 'Floor Number',
+        'zone'=> 'Zone Number',
+        'bookcase'=>'Bookcase Number',
+        'created_at' => 'Create at',
+        'actions' => 'Actions'
+    ],
+    "fields"=> [
+      "title"=> "Title",
+      "author"=> "Author",
+      "editor"=> "Publisher",
+      "length"=> "Page Count",
+      "genres"=> "Genres",
+      "selgenres"=> "Selected genres",
+      "floors" => "Floor",
+      "floor" => "Floor: ",
+      "zones" => "Zone",
+      "zone" => "Zone: ",
+      "bookcases" => "Bookcase",
+      "bookcase" => "Bookcase: "
+    ],
+    "placeholders"=> [
+      "title"=> "Enter the book title",
+      "author"=> "Enter the author's name",
+      "editor"=> "Enter the publisher",
+      "length"=> "Number of pages",
+      "genres"=> "Select up to 3 genres"
+    ],
+    "buttons"=> [
+      "cancel"=> "Cancel",
+      "save"=> "Save",
+      "saving"=> "Saving...",
+      "update"=> "Update",
+      'new'=> 'New Book'
+    ],
+    "error"=> [
+      "create"=> "There was an error creating the book.",
+      "update"=> "There was an error updating the book."
+    ],
+    
+],
+"genres" => [
+    "names" => [
+        "Fantasy" => "Fantasy",
+        "Drama" => "Drama",
+        "Historical" => "Historical",
+        "Science Fiction" => "Science Fiction",
+        "Horror" => "Horror",
+        "Mystery" => "Mystery",
+        "Thriller" => "Thriller",
+        "Romance" => "Romance",
+        "Adventure" => "Adventure",
+        "Dystopian" => "Dystopian",
+        "Gothic" => "Gothic",
+        "Magical Realism" => "Magical Realism",
+        "Satire" => "Satire",
+        "Comedy" => "Comedy",
+        "Tragedy" => "Tragedy",
+        "Crime Fiction" => "Crime Fiction",
+        "Mythology" => "Mythology",
+        "Western" => "Western",
+        "Cyberpunk" => "Cyberpunk",
+        "Poetry" => "Poetry",
+    ],
+],
+
+
 ];

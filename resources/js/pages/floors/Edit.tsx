@@ -23,12 +23,12 @@ export default function EditFloor({ floor, page, perPage }: EditFloorProps) {
 
     return (
         <FloorLayout title={t('ui.floor.edit')}>
-            <div className="flex max-w-screen items-center self-center">
+            <div className="flex max-w-screen-lg items-center self-center">
                 <Card className="w-full m-4 p-4 shadow-lg dark:shadow-xs dark:shadow-white">
                     <CardHeader>
                         <CardTitle>
                             <div className="flex items-center gap-1">
-                                <Building color="#2762c2" />
+                                <Building className="text-blue-600" />
                                 {t('ui.floor.edit_title')}
                             </div>
                         </CardTitle>
@@ -37,7 +37,7 @@ export default function EditFloor({ floor, page, perPage }: EditFloorProps) {
                     <Separator />
                     <CardContent>
                         <FloorForm
-                            initialData={floor}
+                            initialData={floor ?? { id: '', floor_number: '', capacity: '' }}
                             page={page}
                             perPage={perPage}
                         />

@@ -1,25 +1,28 @@
 <?php
 
-namespace Domain\Zones\Actions;
+namespace Domain\Books\Actions;
 
-use Domain\Zones\Data\Resources\ZoneResource;
-use Domain\Zones\Models\Zone;
-use Illuminate\Support\Facades\DB;
+use Domain\Books\Data\Resources\BookResource;
+use Domain\Books\Models\Book;
+use Illuminate\Support\Facades\Hash;
 
-class ZoneStoreAction
+class BookStoreAction
 {
-    public function __invoke(array $data): ZoneResource
+    public function __invoke(array $data): BookResource
     {
-        return DB::transaction(function () use ($data) {
-            $zone = Zone::create([
-                'number' => $data['number'],
-                'genre' => $data['genre'], // UUID del género
-                'genreName' => $data['genreName'], // Nombre del género
-                'capacity' => $data['capacity'],
-                'floor_id' => $data['floor_id'], // UUID del piso
-            ]);
 
-            return ZoneResource::fromModel($zone);
-        });
+
+        $generos = implode(', ', $data['generos']);
+
+        $book = Book::create([
+            'title' => $data['title'],
+            'author' => $data['author'],
+            'editor' => $data['editor'],
+            'length' => $data['length'],
+            'bookcase_id' => $data['bookcase_id'],
+            'genres' => $generos,
+        ]);
+
+        return BookResource::fromModel($book);
     }
 }

@@ -7,7 +7,7 @@ use Domain\Models\floors\Actions\FloorDestroyAction;
 use Domain\Models\floors\Actions\FloorIndexAction;
 use Domain\Models\floors\Actions\FloorStoreAction;
 use Domain\Models\floors\Actions\FloorUpdateAction;
-use Domain\Models\floors\floor;
+use Domain\Models\floors\Floor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;

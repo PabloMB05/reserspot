@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids; 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany; 
-use Domain\Zones\Models\zone; 
+use Domain\Zones\Models\Zone; 
 
 class Floor extends Model
 {

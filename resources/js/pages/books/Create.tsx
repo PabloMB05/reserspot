@@ -8,14 +8,33 @@ import { Book } from 'lucide-react';
 interface BookFormProps {
     initialData?: {
         id: string;
-        name: string;
-        email: string;
-
-    },
-    authors: {value: string, label: string}[];
+        title: string;
+        author: string;
+        editor: string;
+        length: number;
+        genre: string;
+    };
+    floors: {
+        id: string;
+        floor_number: number;
+    }[];
+    zones: {
+        id: string;
+        number: number;
+        genre_name: string;
+        floor_id: string;
+    }[];
+    bookcases: {
+        id: string;
+        number: number;
+        books_count: number;
+        capacity: number;
+        zone_id: string;
+    }[];
+    genres: { value: string; label: string }[];
 }
 
-export default function CreateBook({authors}:BookFormProps) {
+export default function CreateBook({genres, floors, zones, bookcases}:BookFormProps) {
     const { t } = useTranslations();
 
     return (
@@ -33,7 +52,7 @@ export default function CreateBook({authors}:BookFormProps) {
                     </CardHeader>
                     <Separator />
                     <CardContent>
-                        <BookForm authors={authors}/>
+                        <BookForm genres={genres} floors={floors} zones={zones} bookcases={bookcases}/>
                     </CardContent>
                 </Card>
             </div>

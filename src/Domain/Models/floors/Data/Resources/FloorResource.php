@@ -1,6 +1,6 @@
 <?php
 
-namespace Domain\Models\Floors\Data\Resources;
+namespace Domain\Models\floors\Data\Resources;
 
 use Domain\Models\floors\Floor;
 use Spatie\LaravelData\Data;

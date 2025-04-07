@@ -374,4 +374,37 @@ return [
             'next' => 'Siguiente',
         ],
     ],
+  "books"=> [
+    "tabs"=> [
+      "basic"=> "Datos básicos",
+      "location"=> "Ubicación"
+    ],
+    "fields"=> [
+      "title"=> "Título",
+      "author"=> "Autor",
+      "editor"=> "Editorial",
+      "length"=> "Número de páginas",
+      "genres"=> "Géneros",
+      "selgenres"=> "Géneros seleccionados"
+    ],
+    "placeholders"=> [
+      "title"=> "Introduce el título del libro",
+      "author"=> "Introduce el nombre del autor",
+      "editor"=> "Introduce la editorial",
+      "length"=> "Número de páginas",
+      "genres"=> "Selecciona hasta 3 géneros"
+    ],
+    "buttons"=> [
+      "cancel"=> "Cancelar",
+      "save"=> "Guardar",
+      "saving"=> "Guardando...",
+      "update"=> "Actualizar"
+    ],
+    "error"=> [
+      "create"=> "Hubo un error al crear el libro.",
+      "update"=> "Hubo un error al actualizar el libro."
+    ],
+],
+
+
 ];

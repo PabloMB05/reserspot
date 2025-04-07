@@ -29,10 +29,13 @@ class Bookcase extends Model
         'zone_id',
     ];
 
-    public function books(): HasMany
+
+
+    public function books()
     {
         return $this->hasMany(Book::class);
     }
+
 
     public function zone(): BelongsTo
     {

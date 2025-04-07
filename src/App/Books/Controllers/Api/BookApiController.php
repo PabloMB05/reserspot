@@ -64,10 +64,14 @@ class BookApiController extends Controller
 
     public function destroy(Book $book, BookDestroyAction $action)
     {
+        if (!$book) {
+            return response()->json(['error' => 'Book not found'], 404);
+        }
+    
         $action($book);
-
         return response()->json([
             'message' => __('messages.books.deleted')
         ]);
     }
+    
 }

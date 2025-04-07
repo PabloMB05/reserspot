@@ -19,50 +19,46 @@ class BookcaseApiController extends Controller
         return response()->json($action($request->search, $request->integer('per_page', 10)));
     }
 
-    public function show(Bookcase $bookcase)
+    public function show(Bookcase $book)
     {
-        return response()->json([
-            'bookcase' => $bookcase->load(['zone', 'books'])
-        ]);
+        return response()->json(['book' => $book]);
     }
 
     public function store(Request $request, BookcaseStoreAction $action)
     {
         $validator = Validator::make($request->all(), [
-            'number' => ['required', 'string', 'max:255', 'unique:bookcases'],
-            'capacity' => ['required', 'integer', 'min:1'],
-            'zone_id' => ['required', 'exists:zones,id'],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:books'],
+            'password' => ['required', 'string', 'min:8'],
         ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $bookcase = $action($validator->validated());
+        $book = $action($validator->validated());
 
         return response()->json([
-            'message' => __('messages.bookcases.created'),
-            'bookcase' => $bookcase
-        ], 201);
+            'message' => __('messages.books.created'),
+            'book' => $book
+        ]);
     }
 
-    public function update(Request $request, Bookcase $bookcase, BookcaseUpdateAction $action)
+    public function update(Request $request, Bookcase $book, BookcaseUpdateAction $action)
     {
         $validator = Validator::make($request->all(), [
-            'number' => ['required', 'string', 'max:255', Rule::unique('bookcases')->ignore($bookcase->id)],
-            'capacity' => ['required', 'integer', 'min:1'],
-            'zone_id' => ['required', 'exists:zones,id'],
+            'title' => ['required', 'string', 'max:255'],
         ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $updatedBookcase = $action($bookcase, $validator->validated());
+        $updatedbook = $action($book, $validator->validated());
 
         return response()->json([
-            'message' => __('messages.bookcases.updated'),
-            'bookcase' => $updatedBookcase
+            'message' => __('messages.books.updated'),
+            'book' => $updatedbook
         ]);
     }
 

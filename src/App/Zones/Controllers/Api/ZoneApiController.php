@@ -28,9 +28,9 @@ class ZoneApiController extends Controller
     {
         // Validación de los datos de la zona
         $validator = Validator::make($request->all(), [
-            'genre_name' => ['required', 'string', 'max:255'],
+
             'capacity' => ['required', 'integer', 'min:1'],
-            'floor_id' => ['required', 'exists:floor,id'],
+           
         ]);
 
         // Si la validación falla, devolvemos los errores

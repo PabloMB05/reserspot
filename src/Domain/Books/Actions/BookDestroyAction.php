@@ -2,9 +2,9 @@
 
 namespace Domain\Books\Actions;
 
-use Domain\Boooks\Models\Book;
+use Domain\Books\Models\Book;
 
-class ZoneDestroyAction
+class BookDestroyAction
 {
     public function __invoke(Book $book): void
     {

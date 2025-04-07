@@ -182,7 +182,7 @@ export function FloorForm({ initialData, page, perPage }: FloorFormProps) {
                             disabled={form.state.isSubmitting}
                         >
                             <X className="mr-2 h-4 w-4" />
-                            {t('ui.common.buttons.cancel')}
+                            {t('ui.floor.buttons.cancel')}
                         </Button>
 
                         <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
@@ -190,10 +190,10 @@ export function FloorForm({ initialData, page, perPage }: FloorFormProps) {
                                 <Button type="submit" disabled={!canSubmit}>
                                     <Save className="mr-2 h-4 w-4" />
                                     {isSubmitting
-                                        ? t('ui.common.buttons.saving')
+                                        ? t('ui.floor.buttons.save')
                                         : initialData
-                                          ? t('ui.common.buttons.update')
-                                          : t('ui.common.buttons.save')}
+                                          ? t('ui.floor.buttons.update')
+                                          : t('ui.floor.buttons.save')}
                                 </Button>
                             )}
                         </form.Subscribe>

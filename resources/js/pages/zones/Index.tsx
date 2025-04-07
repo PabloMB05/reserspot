@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { TableSkeleton } from "@/components/stack-table/TableSkeleton";
-import { ZoneLayout } from "@/layouts/zones/ZoneLayout"; // Asegúrate de tener la layout adecuada para zonas
-import { Zone, useDeleteZone, useZones } from "@/hooks/zones/useZones"; // Ajuste según el hook para zones
+import { ZoneLayout } from "@/layouts/zones/ZoneLayout";
+import { Zone, useDeleteZone, useZones } from "@/hooks/zones/useZones";
 import { PencilIcon, PlusIcon, TrashIcon } from "lucide-react";
 import { useState, useMemo } from "react";
 import { Link, usePage } from "@inertiajs/react";
@@ -78,8 +78,32 @@ export default function ZonesIndex() {
       header: t("ui.zones.columns.created_at") || "Created At",
       accessorKey: "created_at",
     }),
-    // ... resto de tus columnas
-  ] as ColumnDef<Zone>[], [t, handleDeleteZone]);
+    createActionsColumn<Zone>({
+      id: "actions",
+      header: t("ui.zones.columns.actions") || "Actions",
+      renderActions: (zone) => (
+        <>
+          <Link href={`/zones/${zone.id}/edit?page=${currentPage}&perPage=${perPage}`}>
+            <Button variant="outline" size="icon" title={t("ui.zones.buttons.edit") || "Edit zone"}>
+              <PencilIcon className="h-4 w-4" />
+            </Button>
+          </Link>
+          <DeleteDialog
+            id={zone.id}
+            onDelete={handleDeleteZone}
+            title={t("ui.zones.delete.title") || "Delete zone"}
+            description={t("ui.zones.delete.description") || "Are you sure you want to delete this zone? This action cannot be undone."}
+            trigger={
+              <Button variant="outline" size="icon" className="text-destructive hover:text-destructive" title={t("ui.zones.buttons.delete") || "Delete zone"}>
+                <TrashIcon className="h-4 w-4" />
+              </Button>
+            }
+          />
+        </>
+      ),
+    }),
+  ] as ColumnDef<Zone>[], [t, handleDeleteZone, currentPage, perPage]);
+
   return (
     <ZoneLayout title={t('ui.zones.title')}>
       <div className="p-6">
@@ -117,7 +141,7 @@ export default function ZonesIndex() {
 
           <div className="w-full overflow-hidden">
             {isLoading ? (
-              <TableSkeleton columns={4} rows={10} />
+              <TableSkeleton columns={5} rows={10} />
             ) : isError ? (
               <div className="p-4 text-center">
                 <div className="mb-4 text-red-500">{t('ui.zones.error_loading')}</div>

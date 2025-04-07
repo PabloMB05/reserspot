@@ -11,27 +11,18 @@ class ZoneUpdateAction
 {
     public function __invoke(Zone $zone, array $data): ZoneResource
     {
-        return DB::transaction(function () use ($zone, $data) {
-            $updateData = [
-                'number' => $data['number'] ?? $zone->number,
-                'genre' => $data['genre'] ?? $zone->genre,
-                'genreName' => $data['genreName'] ?? $zone->genreName,
-                'capacity' => $data['capacity'] ?? $zone->capacity,
-                'floor_id' => $data['floor_id'] ?? $zone->floor_id,
-            ];
+        // Verificamos y preparamos los datos para la actualización
+        $updateData = [
+            'number' => $data['number'] ,        // Se actualiza el número si se pasa uno nuevo
+            'capacity' => $data['capacity'] ,  // Se corrige el campo aquí para actualizar la capacidad
+            'genre_name' => $data['genre_name'],  // Se actualiza el nombre del género si se pasa uno nuevo
+            'floor_id' => $data['floor_id'],  // Se actualiza el ID del piso si se pasa uno nuevo
+        ];
 
-            // Validar que el número de zona sea único (si se está modificando)
-            if (isset($data['number']) && $data['number'] != $zone->number) {
-                if (Zone::where('number', $data['number'])->exists()) {
-                    throw ValidationException::withMessages([
-                        'number' => 'Zone number already exists'
-                    ]);
-                }
-            }
+        // Actualiza el modelo con los nuevos datos
+        $zone->update($updateData);
 
-            $zone->update($updateData);
-
-            return ZoneResource::fromModel($zone->fresh());
-        });
+        // Retorna la zona actualizada como un recurso
+        return ZoneResource::fromModel($zone->fresh());
     }
 }

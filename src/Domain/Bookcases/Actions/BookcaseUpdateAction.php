@@ -1,37 +1,23 @@
 <?php
 
-namespace Domain\Zones\Actions;
+namespace Domain\Bookcases\Actions;
 
-use Domain\Zones\Data\Resources\ZoneResource;
-use Domain\Zones\Models\Zone;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\ValidationException;
+use Domain\Bookcases\Data\Resources\BookcaseResource;
+use Domain\Bookcases\Models\Bookcase;
+use Illuminate\Support\Facades\Hash;
 
-class ZoneUpdateAction
+class BookcaseUpdateAction
 {
-    public function __invoke(Zone $zone, array $data): ZoneResource
+    public function __invoke(Bookcase $bookcase, array $data): BookcaseResource
     {
-        return DB::transaction(function () use ($zone, $data) {
-            $updateData = [
-                'number' => $data['number'] ?? $zone->number,
-                'genre' => $data['genre'] ?? $zone->genre,
-                'genreName' => $data['genreName'] ?? $zone->genreName,
-                'capacity' => $data['capacity'] ?? $zone->capacity,
-                'floor_id' => $data['floor_id'] ?? $zone->floor_id,
-            ];
+        $updateData = [
+            'number' => $data['number'],
+            'zone_id' => $data['zone_id'],
+            'capacity' => $data['capacity'],
+        ];
 
-            // Validar que el número de zona sea único (si se está modificando)
-            if (isset($data['number']) && $data['number'] != $zone->number) {
-                if (Zone::where('number', $data['number'])->exists()) {
-                    throw ValidationException::withMessages([
-                        'number' => 'Zone number already exists'
-                    ]);
-                }
-            }
+        $bookcase->update($updateData);
 
-            $zone->update($updateData);
-
-            return ZoneResource::fromModel($zone->fresh());
-        });
+        return BookcaseResource::fromModel($bookcase->fresh());
     }
 }

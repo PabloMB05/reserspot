@@ -1,13 +1,13 @@
 <?php
 
-namespace Domain\Books\Actions;
+namespace Domain\Bookcases\Actions;
 
-use Domain\Boooks\Models\Book;
+use Domain\Bookcases\Models\Bookcase;
 
-class ZoneDestroyAction
+class BookcaseDestroyAction
 {
-    public function __invoke(Book $book): void
+    public function __invoke(Bookcase $Bookcase): void
     {
-        $book->delete();
+        $Bookcase->delete();
     }
 }

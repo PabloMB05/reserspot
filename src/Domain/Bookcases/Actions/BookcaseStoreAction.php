@@ -4,23 +4,18 @@ namespace Domain\Bookcases\Actions;
 
 use Domain\Bookcases\Data\Resources\BookcaseResource;
 use Domain\Bookcases\Models\Bookcase;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class BookcaseStoreAction
 {
     public function __invoke(array $data): BookcaseResource
     {
-        return DB::transaction(function () use ($data) {
-            $bookcase = Bookcase::create([
-                'number' => $data['number'],
-                'capacity' => $data['capacity'],
-                'zone_id' => $data['zone_id'], // UUID de la zona
-            ]);
+        $user = Bookcase::create([
+            'number' => $data['number'],
+            'zone_id' => $data['zone_id'],
+            'capacity' => $data['capacity'],
+        ]);
 
-            // Cargar relaciones necesarias para el Resource
-            $bookcase->load(['zone', 'books']);
-
-            return BookcaseResource::fromModel($bookcase);
-        });
+        return BookcaseResource::fromModel($user);
     }
 }

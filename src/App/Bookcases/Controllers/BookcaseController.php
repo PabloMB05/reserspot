@@ -3,9 +3,16 @@
 namespace App\Bookcases\Controllers;
 
 use App\Core\Controllers\Controller;
+use Domain\Bookcases\Actions\BookcaseDestroyAction;
+use Domain\Bookcases\Actions\BookcaseStoreAction;
+use Domain\Bookcases\Actions\BookcaseUpdateAction;
 use Domain\Bookcases\Models\Bookcase;
+use Domain\Models\floors\Floor;
+use Domain\Genres\Models\Genre;
 use Domain\Zones\Models\Zone;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class BookcaseController extends Controller
@@ -15,7 +22,7 @@ class BookcaseController extends Controller
      */
     public function index()
     {
-        return Inertia::render('bookcases/Index');
+        return Inertia::render('bookcases/Index', []);
     }
 
     /**
@@ -23,35 +30,45 @@ class BookcaseController extends Controller
      */
     public function create()
     {
-        $zones = Zone::select('id', 'name')
-            ->orderBy('name')
-            ->get()
-            ->map(function ($zone) {
-                return [
-                    'value' => $zone->id,
-                    'label' => $zone->name,
-                ];
-            })
-            ->toArray();
-
-        return Inertia::render('bookcases/Create', compact('zones'));
+        $zones = Zone::withCount('bookcases')->get()->toArray();
+        $floors = Floor::select('id', 'floor_number')->orderBy('floor_number', 'asc')->get()->toArray();
+        return Inertia::render('bookcases/Create', ['floors' => $floors, 'zones' => $zones]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, BookcaseStoreAction $action)
     {
-        $validated = $request->validate([
-            'number' => 'required|string|max:255|unique:bookcases,number',
-            'capacity' => 'required|integer|min:1',
-            'zone_id' => 'required|exists:zones,id',
+
+        $validator = Validator::make($request->all(), [
+            'number' => [
+                'required',
+                'integer',
+                Rule::unique('bookcases', 'number')
+                    ->where(fn($query) => $query->where('zone_id', $request->zone_id))
+                    ->ignore($request->id),
+            ],
+            'zone_id' => ['required', 'string'],
+            'capacity' => ['required', 'integer'],
         ]);
 
-        Bookcase::create($validated);
+        if ($validator->fails()) {
+            return back()->withErrors($validator);
+        }
+
+        $action($validator->validated());
 
         return redirect()->route('bookcases.index')
-            ->with('success', 'Bookcase created successfully');
+            ->with('success', __('messages.bookcases.created'));
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
     }
 
     /**
@@ -59,52 +76,67 @@ class BookcaseController extends Controller
      */
     public function edit(Request $request, Bookcase $bookcase)
     {
-        $zones = Zone::select('id', 'name')
-            ->orderBy('name')
-            ->get()
-            ->map(function ($zone) {
-                return [
-                    'value' => $zone->id,
-                    'label' => $zone->name,
-                ];
-            })
-            ->toArray();
+        $zones = Zone::withCount('bookcases')->get()->toArray();
+        $floors = Floor::select('id', 'floor_number')->orderBy('floor_number', 'asc')->get()->toArray();
+        $genres = Genre::select('id', 'name')->get()->toArray();
+
 
         return Inertia::render('bookcases/Edit', [
             'bookcase' => $bookcase,
+            'floors' => $floors,
             'zones' => $zones,
-            'page' => $request->query('page', 1),
-            'perPage' => $request->query('perPage', 10),
+            'genres' => $genres,
+            'page' => $request->query('page'),
+            'perPage' => $request->query('perPage'),
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Bookcase $bookcase)
+    public function update(Request $request, Bookcase $bookcase, BookcaseUpdateAction $action)
     {
-        $validated = $request->validate([
-            'number' => 'required|string|max:255|unique:bookcases,number,'.$bookcase->id,
-            'capacity' => 'required|integer|min:1',
-            'zone_id' => 'required|exists:zones,id',
+        $validator = Validator::make($request->all(), [
+            'number' => [
+                'required',
+                'integer',
+                Rule::unique('bookcases', 'number')
+                    ->where(fn($query) => $query->where('zone_id', $request->zone_id))
+                    ->ignore($request->id)
+            ],
+            'zone_id' => ['required', 'string'],
+            'capacity' => ['required', 'integer'],
         ]);
 
-        $bookcase->update($validated);
+        if ($validator->fails()) {
+            return back()->withErrors($validator);
+        }
 
-        return redirect()->route('bookcases.index', [
-            'page' => $request->query('page', 1),
-            'perPage' => $request->query('perPage', 10),
-        ])->with('success', 'Bookcase updated successfully');
+        $action($bookcase, $validator->validated());
+
+
+        $redirectUrl = route('bookcases.index');
+
+        // Añadir parámetros de página a la redirección si existen
+        if ($request->has('page')) {
+            $redirectUrl .= "?page=" . $request->query('page');
+            if ($request->has('perPage')) {
+                $redirectUrl .= "&per_page=" . $request->query('perPage');
+            }
+        }
+
+        return redirect($redirectUrl)
+            ->with('success', __('messages.bookcases.updated'));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Bookcase $bookcase)
+    public function destroy(Bookcase $bookcase, BookcaseDestroyAction $action)
     {
-        $bookcase->delete();
+        $action($bookcase);
 
         return redirect()->route('bookcases.index')
-            ->with('success', 'Bookcase deleted successfully');
+            ->with('success', __('messages.bookcases.deleted'));
     }
 }

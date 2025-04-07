@@ -11,232 +11,346 @@ import { useQueryClient } from '@tanstack/react-query';
 import { MapPin, Save, X } from 'lucide-react';
 import { FormEvent } from 'react';
 import { toast } from 'sonner';
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
+
 
 interface ZoneFormProps {
-    initialData?: {
-        id: string;
-        number: string;
-        capacity: string;
-        genre_name: string;
-    };
-    page?: string;
-    perPage?: string;
+  initialData?: {
+    id: string,
+    number: string,
+    capacity: string,
+    genre_name: string,
+    floor_id: string,
+  };
+  floors: {
+    id:string,
+    floor_number: number,
+    zones_count:number,
+    capacity: number,
+}[];
+  genres:any[];
+  page?: string;
+  perPage?: string;
+  isLoadingFloors?: boolean;
+  floorsError?: Error | null;
 }
 
-function FieldInfo({ field }: { field: AnyFieldApi }) {
-    const { t } = useTranslations();
-    
-    return (
-        <>
-            {field.state.meta.isTouched && field.state.meta.errors.length ? (
-                <p className="text-destructive mt-1 text-sm">{field.state.meta.errors.join(', ')}</p>
-            ) : null}
-            {field.state.meta.isValidating ? <p className="text-muted-foreground mt-1 text-sm">{t('ui.validation.validating')}</p> : null}
-        </>
-    );
+function FieldError({ field }: { field: AnyFieldApi }) {
+  const { t } = useTranslations();
+  
+  return (
+    <>
+      {field.state.meta.isTouched && field.state.meta.errorMap?.onChange ? (
+        <p className="text-destructive mt-1 text-sm">
+          {t(field.state.meta.errorMap.onChange)}
+        </p>
+      ) : null}
+      {field.state.meta.isValidating ? (
+        <p className="text-muted-foreground mt-1 text-sm">{t('ui.validation.validating')}</p>
+      ) : null}
+    </>
+  );
 }
 
-export function ZoneForm({ initialData, page, perPage }: ZoneFormProps) {
-    const { t } = useTranslations();
-    const queryClient = useQueryClient();
+export function ZoneForm({ 
+  initialData, 
+  floors = [], 
+  genres=[],
+  isLoadingFloors = false, 
+  floorsError = null,
+  page, 
+  perPage 
+}: ZoneFormProps) {
+  const { t } = useTranslations();
+  const queryClient = useQueryClient();
 
-    const form = useForm({
-        defaultValues: {
-            number: initialData?.number ?? '',
-            capacity: initialData?.capacity ?? '',
-            genre_name: initialData?.genre_name ?? '',
+  const form = useForm({
+    defaultValues: {
+      number: initialData?.number ?? '',
+      capacity: initialData?.capacity ?? '',
+      genre_name: initialData?.genre_name ?? '',
+      floor_id: initialData?.floor_id ?? '',
+    },
+    onSubmit: async ({ value }) => {
+      const zoneData = {
+        number: value.number,
+        capacity: value.capacity,
+        genre_name: value.genre_name,
+        floor_id: value.floor_id,
+      };
+
+      const options = {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ['zones'] });
+          let url = '/zones';
+          if (page) url += `?page=${page}`;
+          if (perPage) url += `&per_page=${perPage}`;
+          router.visit(url);
         },
-        onSubmit: async ({ value }) => {
-            const zoneData = {
-                ...value,
-                capacity: Number(value.capacity),
-            };
-
-            const options = {
-                onSuccess: () => {
-                    queryClient.invalidateQueries({ queryKey: ['zones'] });
-                    let url = '/zones';
-                    if (page) url += `?page=${page}`;
-                    if (perPage) url += `&per_page=${perPage}`;
-                    
-                    router.visit(url);
-                    toast.success(initialData ? t('messages.zones.updated') : t('messages.zones.created'));
-                },
-                onError: () => {
-                    toast.error(initialData ? t('messages.zones.error.update') : t('messages.zones.error.create'));
-                },
-            };
-
-            if (initialData) {
-                router.put(`/zones/${initialData.id}`, zoneData, options);
-            } else {
-                router.post('/zones', zoneData, options);
-            }
+        onError: () => {
+          toast.error(initialData ? t('messages.zones.error.update') : t('messages.zones.error.create'));
         },
-    });
+      };
 
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        form.handleSubmit();
-    };
+      if (initialData) {
+        router.put(`/zones/${initialData.id}`, zoneData, options);
+      } else {
+        router.post('/zones', zoneData, options);
+      }
+    },
+  });
+console.log(floors);
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    form.handleSubmit();
+  };
 
+  const validateFloorId = (value: string) => {
+    if (!value) return t('ui.validation.required', { attribute: t('ui.zone.floor').toLowerCase() });
+    if (!floors.some(floor => floor.id === value)) return t('messages.floors.invalid_selection');
+    return undefined;
+  };
+
+  if (floorsError) {
     return (
-        <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-            <Card>
-                <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                        <MapPin className="h-5 w-5" />
-                        {initialData ? t('ui.zone.edit') : t('ui.zone.create')}
-                    </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                    {/* Zone number field */}
-                    <div>
-                        <form.Field
-                            name="number"
-                            validators={{
-                                onChangeAsync: async ({ value }) => {
-                                    await new Promise((resolve) => setTimeout(resolve, 500));
-                                    return !value
-                                        ? t('ui.validation.required', { attribute: t('ui.zone.number').toLowerCase() })
-                                        : isNaN(Number(value))
-                                          ? t('ui.validation.number', { attribute: t('ui.zone.number').toLowerCase() })
-                                          : undefined;
-                                },
-                            }}
-                        >
-                            {(field) => (
-                                <>
-                                    <Label htmlFor={field.name}>
-                                        {t('ui.zone.number')}
-                                    </Label>
-                                    <Input
-                                        id={field.name}
-                                        name={field.name}
-                                        type="number"
-                                        value={field.state.value}
-                                        onChange={(e) => field.handleChange(e.target.value)}
-                                        onBlur={field.handleBlur}
-                                        placeholder={t('ui.zone.number')}
-                                        disabled={form.state.isSubmitting}
-                                        required
-                                        min="1"
-                                    />
-                                    <FieldInfo field={field} />
-                                </>
-                            )}
-                        </form.Field>
-                    </div>
-
-                    {/* Capacity field */}
-                    <div>
-                        <form.Field
-                            name="capacity"
-                            validators={{
-                                onChangeAsync: async ({ value }) => {
-                                    await new Promise((resolve) => setTimeout(resolve, 500));
-                                    return !value
-                                        ? t('ui.validation.required', { attribute: t('ui.zone.capacity').toLowerCase() })
-                                        : isNaN(Number(value))
-                                          ? t('ui.validation.number', { attribute: t('ui.zone.capacity').toLowerCase() })
-                                          : Number(value) <= 0
-                                            ? t('ui.validation.min.numeric', { 
-                                                attribute: t('ui.zone.capacity').toLowerCase()
-                                              })
-                                            : undefined;
-                                },
-                            }}
-                        >
-                            {(field) => (
-                                <>
-                                    <Label htmlFor={field.name}>
-                                        {t('ui.zone.capacity')}
-                                    </Label>
-                                    <Input
-                                        id={field.name}
-                                        name={field.name}
-                                        type="number"
-                                        value={field.state.value}
-                                        onChange={(e) => field.handleChange(e.target.value)}
-                                        onBlur={field.handleBlur}
-                                        placeholder={t('ui.zone.capacity')}
-                                        disabled={form.state.isSubmitting}
-                                        required
-                                        min="1"
-                                    />
-                                    <FieldInfo field={field} />
-                                </>
-                            )}
-                        </form.Field>
-                    </div>
-
-                    {/* Genre name field */}
-                    <div>
-                        <form.Field
-                            name="genre_name"
-                            validators={{
-                                onChangeAsync: async ({ value }) => {
-                                    await new Promise((resolve) => setTimeout(resolve, 500));
-                                    return !value
-                                        ? t('ui.validation.required', { attribute: t('ui.zone.genre').toLowerCase() })
-                                        : undefined;
-                                },
-                            }}
-                        >
-                            {(field) => (
-                                <>
-                                    <Label htmlFor={field.name}>
-                                        {t('ui.zone.genre')}
-                                    </Label>
-                                    <Input
-                                        id={field.name}
-                                        name={field.name}
-                                        value={field.state.value}
-                                        onChange={(e) => field.handleChange(e.target.value)}
-                                        onBlur={field.handleBlur}
-                                        placeholder={t('ui.zone.genre')}
-                                        disabled={form.state.isSubmitting}
-                                        required
-                                    />
-                                    <FieldInfo field={field} />
-                                </>
-                            )}
-                        </form.Field>
-                    </div>
-
-                    <Separator className="my-4" />
-
-                    <div className="flex justify-end gap-4">
-                        <Button
-                            type="button"
-                            variant="outline"
-                            onClick={() => {
-                                let url = '/zones';
-                                if (page) url += `?page=${page}`;
-                                if (perPage) url += `&per_page=${perPage}`;
-                                router.visit(url);
-                            }}
-                            disabled={form.state.isSubmitting}
-                        >
-                            <X className="mr-2 h-4 w-4" />
-                            {t('ui.common.buttons.cancel')}
-                        </Button>
-
-                        <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
-                            {([canSubmit, isSubmitting]) => (
-                                <Button type="submit" disabled={!canSubmit}>
-                                    <Save className="mr-2 h-4 w-4" />
-                                    {isSubmitting
-                                        ? t('ui.common.buttons.saving')
-                                        : initialData
-                                          ? t('ui.common.buttons.update')
-                                          : t('ui.common.buttons.save')}
-                                </Button>
-                            )}
-                        </form.Subscribe>
-                    </div>
-                </CardContent>
-            </Card>
-        </form>
+      <Card>
+        <CardContent className="p-4 text-destructive">
+          {t('messages.floors.load_error')}
+        </CardContent>
+      </Card>
     );
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <MapPin className="h-5 w-5" />
+            {initialData ? t('ui.zones.cards.edit.title') : t('ui.zones.cards.create.title')}
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {/* Zone number field */}
+          <div>
+            <form.Field
+              name="number"
+              validators={{
+                onChange: ({ value }) => {
+                  // Verificar si el valor está vacío
+                  if (!value) {
+                    return t('ui.zones.validation.number_required', { attribute: t('ui.zones.fields.number').toLowerCase() });
+                  }
+                  
+                  // Verificar si el valor no es un número
+                  if (isNaN(Number(value))) {
+                    return t('ui.zones.validation.number_integer', { attribute: t('ui.zones.fields.number').toLowerCase() });
+                  }
+              
+                  return undefined;
+                }
+              }}
+              
+            >
+              {(field) => (
+                <>
+                  <Label htmlFor={field.name}>
+                    {t('ui.zones.fields.number')}
+                  </Label>
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    type="number"
+                    value={field.state.value}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    onBlur={field.handleBlur}
+                    placeholder={t('ui.zones.placeholders.number')}
+                    disabled={form.state.isSubmitting}
+                    min="1"
+                  />
+                  <FieldError field={field} />
+                </>
+              )}
+            </form.Field>
+          </div>
+
+          {/* Capacity field */}
+          <div>
+            <form.Field
+              name="capacity"
+              validators={{
+                onChange: ({ value }) => {
+                  // Verificar si el valor está vacío
+                  if (!value) {
+                    return t('ui.zones.validation.capacity_required', { attribute: t('ui.zones.fields.capacity').toLowerCase() });
+                  }
+                  
+                  // Verificar si el valor no es un número
+                  if (isNaN(Number(value))) {
+                    return t('ui.zones.validation.capacity_integer', { attribute: t('ui.zones.fields.capacity').toLowerCase() });
+                  }
+              
+                  // Verificar si el valor es menor o igual a 0
+                  if (Number(value) <= 0) {
+                    return t('ui.zones.validation.capacity_min', { attribute: t('ui.zones.fields.capacity').toLowerCase(), min: 1 });
+                  }
+              
+                  return undefined;
+                }
+              }}
+              
+            >
+              {(field) => (
+                <>
+                  <Label htmlFor={field.name}>
+                    {t('ui.zone.capacity')}
+                  </Label>
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    type="number"
+                    value={field.state.value}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    onBlur={field.handleBlur}
+                    placeholder={t('ui.zone.capacity')}
+                    disabled={form.state.isSubmitting}
+                    min="1"
+                  />
+                  <FieldError field={field} />
+                </>
+              )}
+            </form.Field>
+          </div>
+
+          {/* Floor selection */}
+          <div>
+            <form.Field
+              name="floor_id"
+              validators={{
+                onChange: ({ value }) => validateFloorId(value),
+              }}
+            >
+              {(field) => (
+                <>
+                  <Label>
+                    {t('ui.zone.floor')}
+                  </Label>
+                  <Select
+                    value={field.state.value}
+                    onValueChange={field.handleChange}
+                    disabled={isLoadingFloors || !!floorsError}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder={
+                        isLoadingFloors 
+                          ? t('ui.common.loading') 
+                          : t('ui.zone.select_floor')
+                      } />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {isLoadingFloors ? (
+                        <SelectItem value="loading" disabled>
+                          {t('ui.common.loading')}
+                        </SelectItem>
+                      ) : (
+                        floors.map((floor) => (
+                          <SelectItem key={floor.id} value={floor.id} disabled={floor.zones_count >= floor.capacity}>
+                            {`${t('ui.floor.label')} ${floor.floor_number} `} -- {floor.zones_count}/{floor.capacity}
+                          </SelectItem>
+                        ))
+                      )}
+                    </SelectContent>
+                  </Select>
+                  <FieldError field={field} />
+                </>
+              )}
+            </form.Field>
+          </div>
+
+          {/* Genre selection */}
+          <div>
+            <form.Field
+              name="genre_name"
+              validators={{
+                onChange: ({ value }) => {
+                  if (!value) return t('ui.validation.required', { attribute: t('ui.zone.genre').toLowerCase() });
+                  return undefined;
+                },
+              }}
+            >
+              {(field) => (
+                <>
+                  <Label>
+                    {t('ui.zone.genre')}
+                  </Label>
+                  <Select
+                    value={field.state.value}
+                    onValueChange={field.handleChange}
+                    disabled={form.state.isSubmitting}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder={t('ui.zone.select_genre')} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {isLoadingFloors ? (
+                        <SelectItem value="loading" disabled>
+                          {t('ui.common.loading')}
+                        </SelectItem>
+                      ) : (
+                        genres.map((genre) => (
+                          <SelectItem key={genre.id} value={genre.name}>
+                            {genre.name || `${t('ui.genres.label')} ${genre.name}`}
+                          </SelectItem>
+                        ))
+                      )}
+                    </SelectContent>
+                  </Select>
+                  <FieldError field={field} />
+                </>
+              )}
+            </form.Field>
+          </div>
+
+          <Separator className="my-4" />
+
+          <div className="flex justify-end gap-4">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => {
+                const url = `/zones${page ? `?page=${page}` : ''}${perPage ? `&per_page=${perPage}` : ''}`;
+                router.visit(url);
+              }}
+              disabled={form.state.isSubmitting}
+            >
+              <X className="mr-2 h-4 w-4" />
+              {t('ui.common.cancel')}
+            </Button>
+
+            <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
+              {([canSubmit, isSubmitting]) => (
+                <Button 
+                  type="submit" 
+                  disabled={!canSubmit || isLoadingFloors || !!floorsError}
+                >
+                  <Save className="mr-2 h-4 w-4" />
+                  {isSubmitting
+                    ? t('ui.common.saving')
+                    : initialData
+                      ? t('ui.common.update')
+                      : t('ui.common.save')}
+                </Button>
+              )}
+            </form.Subscribe>
+          </div>
+        </CardContent>
+      </Card>
+    </form>
+  );
 }
