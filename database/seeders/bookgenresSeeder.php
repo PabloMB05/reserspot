@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Domain\Bookcases\Models\Bookcase;
 use Domain\Books\Models\Book;
-use Domain\Floors\Models\Floor;
+use Domain\Models\floors\Floor;
 use Domain\Genres\Models\Genre;
 use Domain\Zones\Models\Zone;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
