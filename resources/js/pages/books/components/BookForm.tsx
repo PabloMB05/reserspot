@@ -21,6 +21,7 @@ interface BookFormProps {
         author: string;
         editor: string;
         length: number;
+        isbn: string,
         bookcase_id: string;
         genre: string;
     };
@@ -114,17 +115,19 @@ export function BookForm({ initialData, page, perPage, genres, explosion, floors
             title: initialData?.title ?? '',
             author: initialData?.author ?? '',
             editor: initialData?.editor ?? '',
-            length: initialData?.length ?? undefined,
+            length: initialData?.length ?? '',
+            isbn: initialData?.isbn ?? '',
             bookcase_id: initialData?.bookcase_id ?? undefined,
             genres: explosion ?? [],
         },
+        
         onSubmit: async ({ value }) => {
             const formData = new FormData();
             formData.append('title', value.title);
             formData.append('author', value.author);
             formData.append('editor', value.editor);
             formData.append('length', value.length.toString());
-            formData.append('bookcase_id', value.bookcase_id ?? '');
+            formData.append('isbn', value.isbn);
             formData.append('_method', 'PUT');
             
             const generosString = selectedGenres.join(', ');
@@ -321,6 +324,41 @@ export function BookForm({ initialData, page, perPage, genres, explosion, floors
                             </div>
                         )}
                     </form.Field>
+                    {/* ISBN field */}
+                        <form.Field
+                            name="isbn"
+                            validators={{
+                                onChangeAsync: async ({ value }) => {
+                                    await new Promise((resolve) => setTimeout(resolve, 500));
+                                    if (!value) {
+                                        return t('ui.validation.required', { attribute: 'ISBN' });
+                                    }
+                                    const isbnRegex = /^(?:\d{10}|\d{13})$/;
+                                    return !isbnRegex.test(value) ? t('ui.validation.invalid', { attribute: 'ISBN' }) : undefined;
+                                },
+                            }}
+                        >
+                            {(field) => (
+                                <div className="space-y-2">
+                                    <Label htmlFor={field.name}>
+                                        <div className="flex items-center gap-2">
+                                            <Layers className="h-4 w-4" />
+                                            {t('ui.books.fields.isbn')}
+                                        </div>
+                                    </Label>
+                                    <Input
+                                        id={field.name}
+                                        name={field.name}
+                                        value={field.state.value}
+                                        onChange={(e) => field.handleChange(e.target.value)}
+                                        onBlur={field.handleBlur}
+                                        placeholder="9781234567890"
+                                        disabled={form.state.isSubmitting}
+                                    />
+                                    <FieldInfo field={field} />
+                                </div>
+                            )}
+                        </form.Field>
 
                     {/* Genres Multi Select */}
                     <div className="space-y-2">

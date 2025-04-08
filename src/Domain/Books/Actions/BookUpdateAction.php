@@ -18,6 +18,7 @@ class BookUpdateAction
             'author' => $data['author'],
             'editor' => $data['editor'],
             'length' => $data['length'],
+            'isbn' => $data['isbn'],
             'bookcase_id' => $data['bookcase_id'],
             'genres' => $data['generos'],
         ];

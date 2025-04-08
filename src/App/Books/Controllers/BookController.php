@@ -5,6 +5,7 @@ namespace App\Books\Controllers;
 use App\Core\Controllers\Controller;
 use Domain\Books\Actions\BookStoreAction;
 use Domain\Books\Actions\BookUpdateAction;
+use Domain\Books\Actions\BookDestroyAction;
 use Domain\Books\Models\Book;
 use Domain\Bookcases\Models\Bookcase;
 use Domain\Models\floors\Floor;
@@ -49,6 +50,7 @@ class BookController extends Controller
             'author' => ['required', 'string'],
             'editor' => ['required', 'string'],
             'length' => ['required', 'integer', 'min:1'],
+            'isbn' => ['required', 'string'],
             'bookcase_id' => ['required', 'string'],
             'generos' => ['required']
         ]);

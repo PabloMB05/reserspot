@@ -1,21 +1,19 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "../../lib/axios";
 
-export interface Book {
+export interface Loan {
   id: string;
-  title: string;
-  genres: string;
-  author: string;
-  length: number;
-  editor: string;
-  isbn: string;
-  bookcase_id: number;
-  zone_id: number;
-  floor_id: number;
+  user_id: string;
+  user_email:string;
+  book_id: string;
+  book_title: string;
+  due_date: string;
+  is_active: boolean;
+  is_late: boolean;
   created_at: string;
+  updated_at: string;
 }
 
-// Interface representing the actual API response structure
 export interface ApiPaginatedResponse<T> {
   current_page: number;
   data: T[];
@@ -36,7 +34,6 @@ export interface ApiPaginatedResponse<T> {
   total: number;
 }
 
-// Interface representing the expected format for the Table component
 export interface PaginatedResponse<T> {
   data: T[];
   meta: {
@@ -49,17 +46,17 @@ export interface PaginatedResponse<T> {
   };
 }
 
-interface UseBookParams {
-  search?: any[];
+interface UseLoanParams {
+  search?: any[]; // Definir los filtros posibles con claves como "user_id", "book_id", etc.
   page?: number;
   perPage?: number;
 }
 
-export function useBooks({ search, page = 1, perPage = 10 }: UseBookParams = {}) {
+export function useLoans({ search, page = 1, perPage = 10 }: UseLoanParams = {}) {
   return useQuery({
-    queryKey: ["books", { search, page, perPage }],
+    queryKey: ["loans", { search, page, perPage }],
     queryFn: async () => {
-      const { data: apiResponse } = await axios.get<ApiPaginatedResponse<Book>>("/api/books", {
+      const { data: apiResponse } = await axios.get<ApiPaginatedResponse<Loan>>("/api/loans", {
         params: {
           search,
           page,
@@ -71,7 +68,6 @@ export function useBooks({ search, page = 1, perPage = 10 }: UseBookParams = {})
         }
       });
 
-      // Transform the API response to the expected format
       return {
         data: apiResponse.data,
         meta: {
@@ -82,15 +78,15 @@ export function useBooks({ search, page = 1, perPage = 10 }: UseBookParams = {})
           to: apiResponse.to,
           total: apiResponse.total
         }
-      } as PaginatedResponse<Book>;
+      } as PaginatedResponse<Loan>;
     },
   });
 }
 
-export function useCreateBook() {
+export function useCreateLoan() {
   return useMutation({
-    mutationFn: async (data: { title: string; genres: string; author: string ; length: number ; editor: string ; bookcase_id: string }) => {
-      const response = await axios.post("/api/books", data, {
+    mutationFn: async (data: { user_id: string; book_id: string; due_date: string }) => {
+      const response = await axios.post("/api/loans", data, {
         headers: {
           'Accept': 'application/json',
           'X-Requested-With': 'XMLHttpRequest'
@@ -101,10 +97,17 @@ export function useCreateBook() {
   });
 }
 
-export function useUpdateBook(bookId: string) {
+export function useUpdateLoan(loanId: string) {
   return useMutation({
-    mutationFn: async (data: { title: string; genres: string; author: string ; length: number ; editor: string ; bookcase_id: string }) => {
-      const response = await axios.put(`/api/books/${bookId}`, data, {
+    mutationFn: async (data: {
+      user_id: string;
+      user_email:string;
+      book_id: string;
+      due_date: string;
+      is_active?: boolean;
+      is_late?: boolean;
+    }) => {
+      const response = await axios.put(`/api/loans/${loanId}`, data, {
         headers: {
           'Accept': 'application/json',
           'X-Requested-With': 'XMLHttpRequest'
@@ -115,10 +118,10 @@ export function useUpdateBook(bookId: string) {
   });
 }
 
-export function useDeleteBook() {
+export function useDeleteLoan() {
   return useMutation({
-    mutationFn: async (bookId: string) => {
-      await axios.delete(`/api/books/${bookId}`, {
+    mutationFn: async (loanId: string) => {
+      await axios.delete(`/api/loans/${loanId}`, {
         headers: {
           'Accept': 'application/json',
           'X-Requested-With': 'XMLHttpRequest'

@@ -120,6 +120,11 @@ export default function BooksIndex() {
                     accessorKey: 'editor',
                 }),
                 createTextColumn<Book>({
+                    id: 'isbn',
+                    header: t('ui.books.columns.isbn') || 'ISBN',
+                    accessorKey: 'isbn',
+                }),
+                createTextColumn<Book>({
                     id: 'floor_id',
                     header: t('ui.books.columns.floor') || 'Floor',
                     accessorKey: 'floor_id',

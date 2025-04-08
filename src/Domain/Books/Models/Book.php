@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\MediaLibrary\HasMedia;
+use Domain\Loan\Models\Loan;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
 class Book extends Model implements HasMedia
@@ -33,6 +34,7 @@ class Book extends Model implements HasMedia
         'author',
         'length',
         'editor',
+        'isbn',
         'bookcase_id',
     ];
 
@@ -45,5 +47,9 @@ class Book extends Model implements HasMedia
     public function genres(): BelongsToMany
     {
         return $this->belongsToMany(Book::class, 'book_genre', 'book_id', 'genre_id');
+    }
+    public function loan()
+    {
+        return $this->hasMany(Loan::class);
     }
 }

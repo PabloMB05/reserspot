@@ -24,6 +24,7 @@ class BookFactory extends Factory
             'genres'=>implode(', ', $genresArray),
             'length' => $this->faker->numberBetween(300, 900),
             'editor' => $this->faker->name,
+            'isbn' => $this->faker->randomNumber(9),
             'bookcase_id' => $bookcase,
 
         ];

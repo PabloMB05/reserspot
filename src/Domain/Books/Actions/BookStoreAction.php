@@ -4,14 +4,11 @@ namespace Domain\Books\Actions;
 
 use Domain\Books\Data\Resources\BookResource;
 use Domain\Books\Models\Book;
-use Illuminate\Support\Facades\Hash;
 
 class BookStoreAction
 {
     public function __invoke(array $data): BookResource
     {
-
-
         $generos = implode(', ', $data['generos']);
 
         $book = Book::create([
@@ -19,6 +16,7 @@ class BookStoreAction
             'author' => $data['author'],
             'editor' => $data['editor'],
             'length' => $data['length'],
+            'isbn' => $data['isbn'], 
             'bookcase_id' => $data['bookcase_id'],
             'genres' => $generos,
         ]);

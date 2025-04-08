@@ -17,6 +17,7 @@ class BookResource extends Data
         public readonly string $author,
         public readonly int $length,
         public readonly string $editor,
+        public readonly string $isbn,
         public readonly int $bookcase_id,
         public readonly int $zone_id,
         public readonly int $floor_id,
@@ -33,12 +34,14 @@ class BookResource extends Data
         $floor = $zone->floor;
 
         return new self(
+            
             id: $book->id,
             title: $book->title,
             genres: $book->genres,
             author: $book->author,
             length: $book->length,
             editor: $book->editor,
+            isbn: $book->isbn,
             bookcase_id: $bookcase->number, // Usamos el número del estante
             zone_id: $zone->number,        // Usamos el número de la zona
             floor_id: $floor->floor_number,      

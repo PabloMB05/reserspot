@@ -41,9 +41,7 @@ class BookIndexAction
             ->when($editor !== "null", fn ($q) => $q->where('editor', 'ILIKE', "%$editor%"))
             ->when($bookcaseIds->isNotEmpty(), fn ($q) => $q->whereIn('bookcase_id', $bookcaseIds))
             ->latest();
-
         $paginated = $booksQuery->paginate($perPage);
-
         return $paginated->through(fn ($book) => BookResource::fromModel($book));
     }
 }
