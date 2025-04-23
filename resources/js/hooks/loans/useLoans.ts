@@ -7,11 +7,12 @@ export interface Loan {
   user_email:string;
   book_id: string;
   book_title: string;
-  due_date: string;
-  is_active: boolean;
+  days_between: string;
   is_late: boolean;
+  is_active: boolean;
   created_at: string;
-  updated_at: string;
+  return_date: string;
+  due_date: string;
 }
 
 export interface ApiPaginatedResponse<T> {
@@ -97,16 +98,10 @@ export function useCreateLoan() {
   });
 }
 
+
 export function useUpdateLoan(loanId: string) {
   return useMutation({
-    mutationFn: async (data: {
-      user_id: string;
-      user_email:string;
-      book_id: string;
-      due_date: string;
-      is_active?: boolean;
-      is_late?: boolean;
-    }) => {
+    mutationFn: async (data: { id:string, book_id:string, user_id:string, is_overdue:boolean, is_active:boolean, created_at:string, returned_at:string, due_date:string }) => {
       const response = await axios.put(`/api/loans/${loanId}`, data, {
         headers: {
           'Accept': 'application/json',

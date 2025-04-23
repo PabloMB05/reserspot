@@ -44,10 +44,9 @@ class LoanController extends Controller
     public function store(Request $request, LoanStoreAction $action)
     {
         $validator = Validator::make($request->all(), [
-            'book_id' => ['required', 'integer', 'exists:books,id'],
-            'user_id' => ['required', 'integer', 'exists:users,id'],
-            'loan_date' => ['required', 'date'],
-            'return_date' => ['required', 'date', 'after_or_equal:loan_date'],
+            'book_id' => ['required',  'exists:books,id'],
+            'user_id' => ['required',  'exists:users,id'],
+            'due_date' => ['required', 'date'],
         ]);
 
         if ($validator->fails()) {
@@ -72,9 +71,8 @@ class LoanController extends Controller
 
         return Inertia::render('loans/Edit', [
             'loan' => $loan,
-            'books' => $books,
-            'users' => $users,
-            'zones' => $zones,
+            'user_email'=> $loan->user->email,
+            'book_isbn' => $loan->book->isbn,
             'page' => $request->query('page'),
             'perPage' => $request->query('perPage'),
         ]);
@@ -86,11 +84,8 @@ class LoanController extends Controller
     public function update(Request $request, Loan $loan, LoanUpdateAction $action)
     {
         // Validación de los datos
-        $validator = Validator::make($request->all(), [
-            'book_id' => ['required', 'integer', 'exists:books,id'],
-            'user_id' => ['required', 'integer', 'exists:users,id'],
-            'loan_date' => ['required', 'date'],
-            'return_date' => ['required', 'date', 'after_or_equal:loan_date'],
+        $validator = Validator::make($request->all(), [     
+            'due_date' => ['required', 'date', 'after_or_equal:loan_date'],
         ]);
 
         if ($validator->fails()) {

@@ -12,7 +12,34 @@ import { Link, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { Check, PencilIcon, PlusIcon, TrashIcon, X } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { router } from '@inertiajs/react';
 import { toast } from 'sonner';
+
+function handleChangeStatus(id: string, due_date: string) {
+    if (confirm(t('ui.loans.confirmReturn'))) {
+        const now = new Date();
+        const formattedDate = now.toISOString().split('T')[0]; // YYYY-MM-DD
+
+        const isLate = new Date(formattedDate) > new Date(due_date);
+
+        const formData = new FormData();
+        formData.append('return_date', formattedDate);
+        formData.append('is_active', '0'); // false en backend
+        formData.append('is_late', isLate ? '1' : '0');
+        formData.append('_method', 'PUT');
+
+        router.post(`/loans/${id}`, formData, {
+            onSuccess: () => {
+                refetch();
+                toast.success(t('ui.loans.returnSuccess') || 'Loan returned successfully');
+            },
+            onError: (error) => {
+                toast.error(t('ui.loans.returnError') || 'Error returning the loan');
+                console.error('Error al cambiar estado:', error);
+            }
+        });
+    }
+}
 
 export default function LoansIndex() {
     const { t } = useTranslations();
@@ -30,9 +57,8 @@ export default function LoansIndex() {
 
     const combinedSearch = [
         filters.user_email ? filters.user_email : 'null',
-        filters.book_id ? filters.book_id : 'null',
+        filters.book_title ? filters.book_title : 'null',
         filters.due_date ? filters.due_date : 'null',
-        filters.is_active ? filters.is_active : 'null',
     ];
 
     const {
@@ -77,7 +103,7 @@ export default function LoansIndex() {
             [
                 createTextColumn<Loan>({
                     id: 'user_email',
-                    header: t('ui.loans.columns.user_id') || 'user email',
+                    header: t('ui.loans.columns.user_id') || 'User email',
                     accessorKey: 'user_email',
                 }),
                 createTextColumn<Loan>({
@@ -91,27 +117,52 @@ export default function LoansIndex() {
                     accessorKey: 'due_date',
                 }),
                 createTextColumn<Loan>({
+                    id: 'days_between',
+                    header: t('ui.loans.columns.days_between') || 'Days Remaining',
+                    accessorKey: 'days_between',
+
+                }),
+                createTextColumn<Loan>({
                     id: 'is_active',
                     header: t('ui.loans.columns.is_active') || 'Active',
                     accessorKey: 'is_active',
-                    format: (value) => (value ? <Check/>: <X/>),
+                    format: (value) => (value ? <Check /> : <X />),
                 }),
                 createTextColumn<Loan>({
                     id: 'is_late',
                     header: t('ui.loans.columns.is_late') || 'Late',
                     accessorKey: 'is_late',
-                    format: (value) => (value ? <Check/>: <X/>),
+                    format: (value) => (value ? <Check /> : <X />),
                 }),
+
+                createDateColumn<Loan>({
+                    id: 'return_date',
+                    header: t('ui.loans.columns.return_date') || 'Return Date',
+                    accessorKey: 'return_date',
+                    format: (value) => (value ? new Date(value).toLocaleDateString() : 'N/A'), // Formato de la fecha
+                }),
+
                 createDateColumn<Loan>({
                     id: 'created_at',
                     header: t('ui.loans.columns.created_at') || 'Created At',
                     accessorKey: 'created_at',
                 }),
+
                 createActionsColumn<Loan>({
                     id: 'actions',
                     header: t('ui.loans.columns.actions') || 'Actions',
                     renderActions: (loan) => (
                         <div className="flex gap-2">
+                            <Button
+                                variant="outline"
+                                size="icon"
+                                className="text-green-600 hover:bg-green-100 hover:text-green-700"
+                                title={t('ui.loans.buttons.return') || 'Return loan'}
+                                onClick={() => handleChangeStatus(loan.id, loan.due_date)} // Llamamos con loan.due_date
+                            >
+                                <Check className="h-4 w-4" />
+                            </Button>
+
                             <Link href={`/loans/${loan.id}/edit?page=${currentPage}&perPage=${perPage}`}>
                                 <Button 
                                     variant="outline" 
@@ -122,6 +173,7 @@ export default function LoansIndex() {
                                     <PencilIcon className="h-4 w-4" />
                                 </Button>
                             </Link>
+
                             <DeleteDialog
                                 id={loan.id}
                                 onDelete={handleDeleteLoan}
@@ -149,16 +201,15 @@ export default function LoansIndex() {
 
     return (
         <LoanLayout title={t('ui.loans.title')}>
-            <div className="container py-8">
+            <div className="container py-8 ml-4">
                 <div className="space-y-6">
                     <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                         <div>
                             <h1 className="text-3xl font-bold tracking-tight">{t('ui.loans.title')}</h1>
-                            <p className="text-muted-foreground mt-2">
-                            </p>
+                            <p className="text-muted-foreground mt-2"></p>
                         </div>
                         <Link href="/loans/create">
-                            <Button className="gap-2">
+                            <Button className="gap-2 mr-10">
                                 <PlusIcon className="h-4 w-4" />
                                 {t('ui.loans.buttons.new')}
                             </Button>
@@ -168,28 +219,26 @@ export default function LoansIndex() {
                     <Card>
                         <CardContent>
                             <FiltersTable
-                                filters={
-                                    [
-                                        {
-                                            id: 'user_email',
-                                            label: t('ui.loans.filters.user_id') || 'User ID',
-                                            type: 'text',
-                                            placeholder: t('ui.loans.placeholders.user_email') || 'Search by user ID...',
-                                        },
-                                        {
-                                            id: 'book_id',
-                                            label: t('ui.loans.filters.book_id') || 'Book ID',
-                                            type: 'text',
-                                            placeholder: t('ui.loans.placeholders.book_id') || 'Search by book ID...',
-                                        },
-                                        {
-                                            id: 'due_date',
-                                            label: t('ui.loans.filters.due_date') || 'Due Date',
-                                            type: 'date',
-                                            placeholder: t('ui.loans.placeholders.due_date') || 'Filter by due date...',
-                                        },
-                                    ] as FilterConfig[]
-                                }
+                                filters={[
+                                    {
+                                        id: 'user_email',
+                                        label: t('ui.loans.filters.user_email') || 'User Email',
+                                        type: 'text',
+                                        placeholder: t('ui.loans.placeholders.user_email') || 'Search by user ID...',
+                                    },
+                                    {
+                                        id: 'book_title',
+                                        label: t('ui.loans.filters.book_title'),
+                                        type: 'text',
+                                        placeholder: t('ui.loans.placeholders.book_title') || 'Search by book ID...',
+                                    },
+                                    {
+                                        id: 'due_date',
+                                        label: t('ui.loans.filters.due_date') || 'Due Date',
+                                        type: 'date',
+                                        placeholder: t('ui.loans.placeholders.due_date') || 'Filter by due date...',
+                                    },
+                                ]}
                                 onFilterChange={handleFilterChange}
                                 initialValues={filters}
                             />
@@ -211,19 +260,7 @@ export default function LoansIndex() {
                                 </div>
                             ) : (
                                 <Table
-                                    data={
-                                        loans ?? {
-                                            data: [],
-                                            meta: {
-                                                current_page: 1,
-                                                from: 0,
-                                                last_page: 1,
-                                                per_page: perPage,
-                                                to: 0,
-                                                total: 0,
-                                            },
-                                        }
-                                    }
+                                    data={loans ?? { data: [], meta: { current_page: 1, from: 0, last_page: 1, per_page: perPage, to: 0, total: 0 } }}
                                     columns={columns}
                                     onPageChange={handlePageChange}
                                     onPerPageChange={handlePerPageChange}

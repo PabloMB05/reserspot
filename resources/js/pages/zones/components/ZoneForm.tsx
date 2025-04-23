@@ -112,7 +112,7 @@ console.log(floors);
   };
 
   const validateFloorId = (value: string) => {
-    if (!value) return t('ui.validation.required', { attribute: t('ui.zone.floor').toLowerCase() });
+    if (!value) return t('ui.validation.required', { attribute: t('ui.zones.floor').toLowerCase() });
     if (!floors.some(floor => floor.id === value)) return t('messages.floors.invalid_selection');
     return undefined;
   };
@@ -145,12 +145,12 @@ console.log(floors);
                 onChange: ({ value }) => {
                   // Verificar si el valor está vacío
                   if (!value) {
-                    return t('ui.zones.validation.number_required', { attribute: t('ui.zones.fields.number').toLowerCase() });
+                    return t('ui.zones.validation.number_required', { attribute: t('ui.zones.number').toLowerCase() });
                   }
                   
                   // Verificar si el valor no es un número
                   if (isNaN(Number(value))) {
-                    return t('ui.zones.validation.number_integer', { attribute: t('ui.zones.fields.number').toLowerCase() });
+                    return t('ui.zones.validation.number_integer', { attribute: t('ui.zones.number').toLowerCase() });
                   }
               
                   return undefined;
@@ -161,7 +161,7 @@ console.log(floors);
               {(field) => (
                 <>
                   <Label htmlFor={field.name}>
-                    {t('ui.zones.fields.number')}
+                    {t('ui.zones.number')}
                   </Label>
                   <Input
                     id={field.name}
@@ -188,17 +188,17 @@ console.log(floors);
                 onChange: ({ value }) => {
                   // Verificar si el valor está vacío
                   if (!value) {
-                    return t('ui.zones.validation.capacity_required', { attribute: t('ui.zones.fields.capacity').toLowerCase() });
+                    return t('ui.zones.validation.capacity_required', { attribute: t('ui.zones.capacity').toLowerCase() });
                   }
                   
                   // Verificar si el valor no es un número
                   if (isNaN(Number(value))) {
-                    return t('ui.zones.validation.capacity_integer', { attribute: t('ui.zones.fields.capacity').toLowerCase() });
+                    return t('ui.zones.validation.capacity_integer', { attribute: t('ui.zones.capacity').toLowerCase() });
                   }
               
                   // Verificar si el valor es menor o igual a 0
                   if (Number(value) <= 0) {
-                    return t('ui.zones.validation.capacity_min', { attribute: t('ui.zones.fields.capacity').toLowerCase(), min: 1 });
+                    return t('ui.zones.validation.capacity_min', { attribute: t('ui.zones.capacity').toLowerCase(), min: 1 });
                   }
               
                   return undefined;
@@ -209,7 +209,7 @@ console.log(floors);
               {(field) => (
                 <>
                   <Label htmlFor={field.name}>
-                    {t('ui.zone.capacity')}
+                    {t('ui.zones.capacity')}
                   </Label>
                   <Input
                     id={field.name}
@@ -218,7 +218,7 @@ console.log(floors);
                     value={field.state.value}
                     onChange={(e) => field.handleChange(e.target.value)}
                     onBlur={field.handleBlur}
-                    placeholder={t('ui.zone.capacity')}
+                    placeholder={t('ui.zones.capacity')}
                     disabled={form.state.isSubmitting}
                     min="1"
                   />
@@ -239,7 +239,7 @@ console.log(floors);
               {(field) => (
                 <>
                   <Label>
-                    {t('ui.zone.floor')}
+                    {t('ui.zones.floor')}
                   </Label>
                   <Select
                     value={field.state.value}
@@ -250,7 +250,7 @@ console.log(floors);
                       <SelectValue placeholder={
                         isLoadingFloors 
                           ? t('ui.common.loading') 
-                          : t('ui.zone.select_floor')
+                          : t('ui.zones.select_floor')
                       } />
                     </SelectTrigger>
                     <SelectContent>
@@ -279,7 +279,7 @@ console.log(floors);
               name="genre_name"
               validators={{
                 onChange: ({ value }) => {
-                  if (!value) return t('ui.validation.required', { attribute: t('ui.zone.genre').toLowerCase() });
+                  if (!value) return t('ui.validation.required', { attribute: t('ui.zones.genre').toLowerCase() });
                   return undefined;
                 },
               }}
@@ -287,7 +287,7 @@ console.log(floors);
               {(field) => (
                 <>
                   <Label>
-                    {t('ui.zone.genre')}
+                    {t('ui.zones.genre')}
                   </Label>
                   <Select
                     value={field.state.value}
@@ -295,7 +295,7 @@ console.log(floors);
                     disabled={form.state.isSubmitting}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder={t('ui.zone.select_genre')} />
+                      <SelectValue placeholder={t('ui.zones.select_genre')} />
                     </SelectTrigger>
                     <SelectContent>
                       {isLoadingFloors ? (

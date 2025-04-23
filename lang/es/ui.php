@@ -126,6 +126,31 @@ return [
         'buttons' => [
             'new' => 'Crear Piso',
         ],
+        'filters' => [
+            'floor_number' => 'Numero del piso',
+            'capacity' => 'Capacidad',
+        ],
+        'placeholders'=> [
+            'floor_number'=>'seleccione un número...',
+            'capacity'=> 'introduzca la capacidad',
+        ],
+        'columns'=>[
+            'floor_number' => 'Numero del piso',
+            'capacity' => 'Capacidad',
+            'created_at' => 'Fecha de creación',
+            'actions'=> 'Acciones',
+
+        ],
+    ],
+    'floor'=>[
+        'create' => 'Crear piso',
+        'create_description' => 'Formulario de creación del piso',
+        'number'=> 'Numero del piso',
+        'capacity'=> 'capacidad del piso',
+        'buttons'=>[
+            'cancel'=> 'cancelar piso',
+            'save' => 'Guardar piso',
+        ],
     ],
     'zones' => [
         'title' => 'Zonas',
@@ -137,6 +162,107 @@ return [
             'title' => 'titulo',
             'desc' => 'desc'
         ],
+        'filters'=>[
+            'number' => 'Número de la Zona',
+            'capacity'=> ' Capacidad de la Zona',
+        ],
+        'placeholders' => [
+            'number' => 'Seleccione un número',
+            'capacity' => 'Introduzca la capacidad',
+        ],
+        'columns' => [
+            'number' => 'Número',
+            'capacity' => 'Capacidad',
+            'genre' => 'Género',
+            'created_at' => 'Fecha de creación',
+            'actions'=> 'Acciones',
+        ],
+        'cards'=>[
+            'create'=>[
+                'title'=> 'Crear Zona',
+                'description'=> 'Formulario de creación de Zona',
+            ],
+            'edit'=>[
+                'title'=> 'Editar Zona',
+                'description'=> 'Formulario en el que podra editar una zona ya creada',
+            ],
+        ],
+        'number'=> 'Numero de la zona',
+        'capacity'=> 'Capacidad de la zona',
+        'floor' => 'Selecciona el piso en el que se encuentra la zona',
+        'select_floor' => 'Introduzca el piso...',
+        'genre' => 'Selecciona el género de la zona',
+        'select_genre' =>'ej: Horror',
+        'delete' => [
+            'title' => 'Eliminar zona',
+            'description' => '¿Estás seguro de que deseas eliminar esta zona? Esta acción no se puede deshacer.',
+        ],
+    ],
+    'common' => [
+        'cancel'=> 'Cancelar',
+        'save'=> 'Guardar',
+        'update'=> 'Actualizar',
+        'showing_results' => 'Mostrando resultados',
+        'buttons' => [
+            'cancel' => 'Cancelar',
+            'delete' => 'Eliminar',
+        ],
+        'per_page' => 'Por página:',
+        'pagination' => [
+            'first' => 'Primera',
+            'last' => 'Última',
+        ],
+    ],
+    'bookcases' => [
+        'title' => 'Estanterías',
+        'buttons' => [
+            'new' => 'Nueva Estantería',
+        ],
+        'filters'=>[
+            'bookcase'=> 'Introduce la estanteria',
+            'capacity'=> 'Introduce la capacidad',
+            'floor'=> 'Intoduce el piso',
+            'zone'=> 'Introduce la zona',
+            'genres'=> 'Introduce el genero',
+        ],
+        'placeholders' => [
+            'bookcase' => 'Nombre de la estantería',
+            'capacity' => 'Capacidad',
+            'floor' => 'Piso',
+            'zone' => 'Zona',
+            'genres' => 'Géneros',
+            'title' => 'Título del libro',
+            'author' => 'Autor',
+            'pages' => 'Número de páginas',
+            'publisher' => 'Editorial',
+        ],
+        'columns' => [
+            'bookcase' => 'Estantería',
+            'capacity' => 'Capacidad',
+            'floor' => 'Piso',
+            'zone' => 'Zona',
+            'zoneGenre' => 'Género de la zona',
+            'created_at' => 'Fecha de creación',
+            'actions' => 'Acciones',
+        ],
+        'cards' => [
+            'create' => [
+                'title' => 'Crear estantería',
+                'description' => 'Completa los campos para añadir una nueva estantería a la zona seleccionada.',
+            ],
+        ],
+        'fields' => [
+        'name' => 'Nombre de la estantería',
+        'bookcase'=> 'Estantería',
+        'capacity' => 'Capacidad',
+        'floor' => 'Piso',
+        'zone' => 'Zona',
+        ],
+    ],
+
+    'buttons' => [
+        'cancel' => 'Cancelar',
+        'save' => 'Guardar',
     ],
     'users' => [
         'title' => 'Usuarios',
@@ -253,10 +379,37 @@ return [
             'next' => 'Siguiente',
         ],
     ],
+    'loans' => [
+        'columns' => [
+            'avaiable' => 'Disponible',
+        ],
+    ],
+    'genres' => [
+        'names' => [
+            'Science' => 'Ciencia',
+        ],
+    ],
     'books' => [
         'title' => 'Libros',
         'create' => 'Crear Libro',
         'edit' => 'Editar Libro',
+        'title' => 'Libros',
+        'buttons' => [
+            'new' => 'Nuevo libro',
+        ],
+        'columns' => [
+            'title' => 'Título',
+            'genres' => 'Géneros',
+            'author' => 'Autor',
+            'length' => 'Páginas',
+            'editor' => 'Editorial',
+            'isbn' => 'ISBN',
+            'floor' => 'Piso',
+            'zone' => 'Zona',
+            'bookcase' => 'Estantería',
+            'created_at' => 'Fecha de creación',
+            'actions' => 'Acciones',
+        ],
         'fields' => [
             'title' => 'Titulo',
             'email' => 'Email',

@@ -28,7 +28,6 @@ class LoanApiController extends Controller
      */
     public function show(Loan $loan)
     {
-        // Devuelve el préstamo solicitado
         return response()->json(['loan' => $loan]);
     }
 
