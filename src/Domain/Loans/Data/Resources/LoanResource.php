@@ -40,9 +40,7 @@ class LoanResource extends Data
         $due_date_carbon = Carbon::parse($loan->due_date);
         $due_date = $due_date_carbon->format('Y-m-d');
     
-        $return_date = $loan->return_date instanceof Carbon
-            ? $loan->return_date->format('Y-m-d')
-            : null;
+        $return_date = $loan->return_date;
     
         $created_at = ($loan->created_at instanceof Carbon) ? $loan->created_at->format('Y-m-d') : $loan->created_at;
         $updated_at = ($loan->updated_at instanceof Carbon) ? $loan->updated_at->format('Y-m-d') : $loan->updated_at;

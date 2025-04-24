@@ -52,4 +52,10 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::put('/loans/{loan}', [LoanApiController::class, 'update']);  
     Route::delete('/loans/{loan}', [LoanApiController::class, 'destroy']); 
 
+    // Rutas de Reservation
+    Route::get('/reservations', [LoanApiController::class, 'index']);  
+    Route::get('/reservations/{reservation}', [LoanApiController::class, 'show']); 
+    Route::post('/reservations', [LoanApiController::class, 'store']);   
+    Route::delete('/reservations/{reservation}', [LoanApiController::class, 'destroy']); 
+
 });

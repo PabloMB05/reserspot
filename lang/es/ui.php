@@ -387,10 +387,11 @@ return [
     'genres' => [
         'names' => [
             'Science' => 'Ciencia',
+            'Romance' => 'Romance',
+            'Magical' => 'Mágico',
         ],
     ],
     'books' => [
-        'title' => 'Libros',
         'create' => 'Crear Libro',
         'edit' => 'Editar Libro',
         'title' => 'Libros',

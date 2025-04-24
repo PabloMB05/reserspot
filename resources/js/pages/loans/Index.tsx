@@ -15,31 +15,6 @@ import { useMemo, useState } from 'react';
 import { router } from '@inertiajs/react';
 import { toast } from 'sonner';
 
-function handleChangeStatus(id: string, due_date: string) {
-    if (confirm(t('ui.loans.confirmReturn'))) {
-        const now = new Date();
-        const formattedDate = now.toISOString().split('T')[0]; // YYYY-MM-DD
-
-        const isLate = new Date(formattedDate) > new Date(due_date);
-
-        const formData = new FormData();
-        formData.append('return_date', formattedDate);
-        formData.append('is_active', '0'); // false en backend
-        formData.append('is_late', isLate ? '1' : '0');
-        formData.append('_method', 'PUT');
-
-        router.post(`/loans/${id}`, formData, {
-            onSuccess: () => {
-                refetch();
-                toast.success(t('ui.loans.returnSuccess') || 'Loan returned successfully');
-            },
-            onError: (error) => {
-                toast.error(t('ui.loans.returnError') || 'Error returning the loan');
-                console.error('Error al cambiar estado:', error);
-            }
-        });
-    }
-}
 
 export default function LoansIndex() {
     const { t } = useTranslations();
@@ -86,7 +61,21 @@ export default function LoansIndex() {
         setPerPage(newPerPage);
         setCurrentPage(1); // Reset to first page when changing items per page
     };
+    function handleReturnButton(loan_id: string) {
+        const new_is_active = 'false';
+        const new_return_date = 'vacio';
 
+
+        const information = new FormData();
+        information.append('new_return_date', new_return_date);
+        information.append('new_is_active', new_is_active);
+        information.append('_method', 'PUT');
+
+        router.post(`/loans/${loan_id}`, information);
+        setTimeout(function () {
+            refetch(); 
+        }, 500);
+    }
     const handleDeleteLoan = async (id: string) => {
         try {
             await deleteLoanMutation.mutateAsync(id);
@@ -139,7 +128,6 @@ export default function LoansIndex() {
                     id: 'return_date',
                     header: t('ui.loans.columns.return_date') || 'Return Date',
                     accessorKey: 'return_date',
-                    format: (value) => (value ? new Date(value).toLocaleDateString() : 'N/A'), // Formato de la fecha
                 }),
 
                 createDateColumn<Loan>({
@@ -158,7 +146,7 @@ export default function LoansIndex() {
                                 size="icon"
                                 className="text-green-600 hover:bg-green-100 hover:text-green-700"
                                 title={t('ui.loans.buttons.return') || 'Return loan'}
-                                onClick={() => handleChangeStatus(loan.id, loan.due_date)} // Llamamos con loan.due_date
+                                onClick={() => handleReturnButton(loan.id)} // Llamamos con loan.due_date
                             >
                                 <Check className="h-4 w-4" />
                             </Button>

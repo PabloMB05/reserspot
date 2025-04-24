@@ -83,9 +83,13 @@ class LoanController extends Controller
      */
     public function update(Request $request, Loan $loan, LoanUpdateAction $action)
     {
+
+    
         // Validación de los datos
         $validator = Validator::make($request->all(), [     
-            'due_date' => ['required', 'date', 'after_or_equal:loan_date'],
+            'due_date' => ['nullable', 'date', 'after_or_equal:loan_date'],
+            'new_is_active' => ['nullable'],
+            'new_return_date' => [ 'string'],
         ]);
 
         if ($validator->fails()) {

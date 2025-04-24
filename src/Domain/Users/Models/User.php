@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Domain\Loan\Models\Loan;
+use Domain\Loans\Models\Loan;
 
 use Spatie\Permission\Traits\HasRoles;
 

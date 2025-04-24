@@ -18,6 +18,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('bookcases', \App\Bookcases\Controllers\BookcaseController::class);
     Route::resource('books', \App\Books\Controllers\BookController::class);
     Route::resource('loans', \App\Loans\Controllers\LoanController::class);
+    Route::resource('reservations', \App\Reservations\Controllers\ReservationController::class);
 });
 
 

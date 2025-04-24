@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\MediaLibrary\HasMedia;
-use Domain\Loan\Models\Loan;
+use Domain\Loans\Models\Loan;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
 class Book extends Model implements HasMedia
