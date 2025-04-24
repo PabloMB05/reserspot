@@ -163,11 +163,11 @@ export default function BooksIndex() {
                     header: t('ui.books.columns.actions') || 'Actions',
                     renderActions: (book) => (
                         <div className="flex gap-2">
-                             <Link href={`/books/${book.id}/edit?page=${currentPage}&perPage=${perPage}`}>
+                            <Link href={`/reservations/create?book_id=${book.id}`}>
                                 <Button 
                                     variant="outline" 
                                     size="icon" 
-                                    title={t('ui.books.buttons.edit') || 'Edit book'}
+                                    title={t('ui.books.buttons.reserve') || 'Add reservation'}
                                     className="hover:bg-primary/10"
                                 >
                                     <BookPlus className="h-4 w-4" />
@@ -202,7 +202,7 @@ export default function BooksIndex() {
                                 }
                             />
                         </div>
-                    ),
+                    ),                    
                 }),
             ] as ColumnDef<Book>[],
         [t, handleDeleteBook],

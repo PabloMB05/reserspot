@@ -40,7 +40,7 @@ class BookController extends Controller
             ];
         })->toArray();
 
-        return Inertia::render('books/Create', ['genres' => $genres, 'floors' => $floors, 'zones' => $zones, 'bookcases' => $bookcases]);
+        return Inertia::render('books/create', ['genres' => $genres, 'floors' => $floors, 'zones' => $zones, 'bookcases' => $bookcases]);
     }
 
     public function store(Request $request, BookStoreAction $action)
@@ -52,7 +52,7 @@ class BookController extends Controller
             'length' => ['required', 'integer', 'min:1'],
             'isbn' => ['required', 'string'],
             'bookcase_id' => ['required', 'string'],
-            'generos' => ['required']
+            'genres' => ['required']
         ]);
         if ($validator->fails()) {
             return back()->withErrors($validator);
@@ -76,8 +76,8 @@ class BookController extends Controller
             ->toArray();
     
         // Obtener todos los pisos
-        $floors = Floor::select('id', 'floor_number')
-            ->orderBy('floor_number', 'asc')
+        $floors = Floor::select('id','floor_number') // Cambiado a 'number' para coincidir con el frontend
+
             ->get()
             ->toArray();
     
@@ -87,24 +87,47 @@ class BookController extends Controller
             ->get()
             ->toArray();
     
-        // Obtener las estanterías, sin necesidad de contar libros si no es necesario
-        $bookcases = Bookcase::select('id', 'number')  // Solo obtener las columnas necesarias
+        // Obtener las estanterías con información básica
+        $bookcases = Bookcase::select('id', 'number', 'zone_id', 'capacity') // Agregadas columnas necesarias
             ->get()
+            ->map(function ($bookcase) {
+                return [
+                    'id' => $bookcase->id,
+                    'number' => $bookcase->number,
+                    'zone_id' => $bookcase->zone_id,
+                    'capacity' => $bookcase->capacity,
+                    'books_count' => $bookcase->books()->count() // Conteo básico de libros
+                ];
+            })
             ->toArray();
     
-        // Expansión de los géneros desde la cadena
-        $genresExplosion = explode(', ', $book->genres);
-    
-        // Devolver la vista de edición
-        return Inertia::render('books/Edit', [
-            'book' => $book,
+        // Obtener los géneros del libro actual
+        $genresExplosion = $book->genres ? explode(', ', $book->genres) : [];
+
+        // Preparar los datos del libro para el frontend
+        $bookData = [
+            'id' => $book->id,
+            'title' => $book->title,
+            'author' => $book->author,
+            'editor' => $book->editor,
+            'length' => $book->length,
+            'isbn' => $book->isbn,
+            'bookcase_id' => $book->bookcase_id, // Mantenemos el ID para la selección
+            'genres' => $book->genres,
+            'zone_id' => $book->zone_id,
+            'floor_id' => $book->floor_id,
+        ];
+
+        return Inertia::render('books/edit', [
+            'initialData' => $bookData,
             'genres' => $genres,
             'floors' => $floors,
             'zones' => $zones,
             'bookcases' => $bookcases,
             'explosion' => $genresExplosion,
-            'page' => $request->query('page'),
-            'perPage' => $request->query('perPage'),
+            'page' => $request->query('page', 1),
+            'perPage' => $request->query('perPage', 10),
+            'imgPreviaUrl' => $book->image_url ?? null
         ]);
     }
     
@@ -119,6 +142,7 @@ class BookController extends Controller
                     fn($query) => $query->where('zone_id', $request->zone_id)
                 )->ignore($book->id), // Aquí corriges para usar el ID del libro
             ],
+           
             'zone_id' => ['required', 'string'],
             'capacity' => ['required', 'integer'],
         ]);

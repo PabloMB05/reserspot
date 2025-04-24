@@ -9,7 +9,7 @@ class BookStoreAction
 {
     public function __invoke(array $data): BookResource
     {
-        $generos = implode(', ', $data['generos']);
+
 
         $book = Book::create([
             'title' => $data['title'],
@@ -18,7 +18,7 @@ class BookStoreAction
             'length' => $data['length'],
             'isbn' => $data['isbn'], 
             'bookcase_id' => $data['bookcase_id'],
-            'genres' => $generos,
+            'genres' => $data['genres'],
         ]);
 
         return BookResource::fromModel($book);

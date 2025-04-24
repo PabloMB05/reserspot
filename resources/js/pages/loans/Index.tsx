@@ -10,7 +10,7 @@ import { useTranslations } from '@/hooks/use-translations';
 import { LoanLayout } from '@/layouts/loans/LoanLayout';
 import { Link, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
-import { Check, PencilIcon, PlusIcon, TrashIcon, X } from 'lucide-react';
+import { Check, PencilIcon, PlusIcon, TrashIcon, X, BookDown } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { router } from '@inertiajs/react';
 import { toast } from 'sonner';
@@ -141,17 +141,20 @@ export default function LoansIndex() {
                     header: t('ui.loans.columns.actions') || 'Actions',
                     renderActions: (loan) => (
                         <div className="flex gap-2">
+                        {loan.is_active &&
                             <Button
+                                onClick={() => handleReturnButton(loan.id)}
                                 variant="outline"
                                 size="icon"
-                                className="text-green-600 hover:bg-green-100 hover:text-green-700"
-                                title={t('ui.loans.buttons.return') || 'Return loan'}
-                                onClick={() => handleReturnButton(loan.id)} // Llamamos con loan.due_date
+                                title={t('ui.loans.buttons.return') || 'Return book'}
                             >
-                                <Check className="h-4 w-4" />
+                                <BookDown className="h-4 w-4" />
                             </Button>
+                        }
 
-                            <Link href={`/loans/${loan.id}/edit?page=${currentPage}&perPage=${perPage}`}>
+                        {loan.is_active &&
+                            <Link
+                             href={`/loans/${loan.id}/edit?page=${currentPage}&perPage=${perPage}`}>
                                 <Button 
                                     variant="outline" 
                                     size="icon" 
@@ -161,6 +164,7 @@ export default function LoansIndex() {
                                     <PencilIcon className="h-4 w-4" />
                                 </Button>
                             </Link>
+                        }
 
                             <DeleteDialog
                                 id={loan.id}

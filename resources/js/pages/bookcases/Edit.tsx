@@ -23,7 +23,7 @@ interface BookcaseFormProps {
   };
   floors: {
     id: string;
-    story: number;
+    floor_number: number;
   }[];
   zones: Zone[];
 }
@@ -34,7 +34,7 @@ export default function CreateBookcase({ bookcase, floors, zones }: BookcaseForm
   // Adaptar los datos a lo que espera BookcaseForm
   const adaptedFloors = floors.map((floor) => ({
     id: floor.id,
-    floor_number: floor.story,
+    floor_number: floor.floor_number,
   }));
 
   const adaptedZones = zones.map((zone) => ({

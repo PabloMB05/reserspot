@@ -1,92 +1,188 @@
-'use client';
-
-import { useEffect, FormEvent, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Separator } from '@/components/ui/separator';
+import { MultiSelect } from '@/components/ui/multi-select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useTranslations } from '@/hooks/use-translations';
 import { router } from '@inertiajs/react';
+import type { AnyFieldApi } from '@tanstack/react-form';
 import { useForm } from '@tanstack/react-form';
 import { useQueryClient } from '@tanstack/react-query';
-import { BookOpen, Save, X, CalendarIcon } from 'lucide-react';
+import { Book, ChartColumnStacked, FilePenLine, LandPlot, Layers, PencilRuler, Save, UserPen, X } from 'lucide-react';
+import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { Icon } from '@/components/icon';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { format, isAfter, isValid, parseISO } from 'date-fns';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-interface LoanFormProps {
+interface BookFormProps {
   initialData?: {
-    id?: number;
-    email: string;
+    id: string;
+    title: string;
+    author: string;
+    editor: string;
+    length: number;
     isbn: string;
-    due_date: string | Date;
+    bookcase_id: number;
+    genres: string;
+    count_book?: number;
+    count_loan_book?: number;
+    avaiable?: boolean;
+    zone_id?: number;
+    floor_id?: number;
   };
+  floors: {
+    id: string;
+    floor_number: number;
+  }[];
+  zones: {
+    id: string;
+    number: number;
+    floor_id: string;
+    genre_name: string;
+  }[];
+  bookcases: {
+    id: string;
+    number: number;
+    books_count: number;
+    capacity: number;
+    zone_id: string;
+  }[];
+  genres: { value: string; label: string }[];
   page?: string;
+  explosion?: string[];
   perPage?: string;
 }
 
-function getFormattedDueDate(dueDate: unknown): string {
-  if (!dueDate) return '';
-  const dateObj =
-    typeof dueDate === 'string' ? parseISO(dueDate) : dueDate instanceof Date ? dueDate : null;
-  if (dateObj && isValid(dateObj)) {
-    return format(dateObj, 'yyyy-MM-dd');
-  }
-  return '';
+interface Genre {
+  value: string;
+  label?: string;
 }
 
-export function LoanForm({ initialData, page, perPage }: LoanFormProps) {
+function FieldInfo({ field }: { field: AnyFieldApi }) {
+  return (
+    <>
+      {field.state.meta.isTouched && field.state.meta.errors.length ? (
+        <p className="text-destructive mt-1 text-sm">{field.state.meta.errors.join(', ')}</p>
+      ) : null}
+      {field.state.meta.isValidating ? <p className="text-muted-foreground mt-1 text-sm">Validating...</p> : null}
+    </>
+  );
+}
+
+export function BookForm({ initialData, page, perPage, genres, explosion, floors, zones, bookcases
+
+
+
+ }: BookFormProps) {
   const { t } = useTranslations();
   const queryClient = useQueryClient();
+
+  // Transform initial genres from string to array
+  const initialGenres = initialData?.genres ? initialData.genres.split(', ') : [];
+  
+  const transformGenres = (genres: Genre[]) => {
+    return genres.map((genre) => ({
+      ...genre,
+      label: t(`ui.genres.names.${genre.value}`),
+    }));
+  };
+
+  const transformedGenres = transformGenres(genres);
+  
+  // State for form controls
+  const [selectedGenres, setSelectedGenres] = useState<string[]>(explosion ?? initialGenres);
+  const [selectedFloor, setSelectedFloor] = useState<string | undefined>(() => {
+    if (initialData?.floor_id) {
+      return floors.find(f => f.floor_number === initialData.floor_id)?.id;
+    }
+    return undefined;
+  });
+  const [selectedZone, setSelectedZone] = useState<string | undefined>(() => {
+    if (initialData?.zone_id) {
+      return zones.find(z => z.number === initialData.zone_id)?.id;
+    }
+    return undefined;
+  });
+  const [selectedBookcase, setSelectedBookcase] = useState<string | undefined>(() => {
+    if (initialData?.bookcase_id) {
+      return bookcases.find(b => b.number === initialData.bookcase_id)?.id;
+    }
+    return undefined;
+  });
   const [activeTab, setActiveTab] = useState('basic');
 
+  const handleFloorChange = (floorId: string) => {
+    setSelectedFloor(floorId);
+    setSelectedZone(undefined);
+    setSelectedBookcase(undefined);
+  };
+
+  const handleZoneChange = (zoneId: string) => {
+    setSelectedZone(zoneId);
+    setSelectedBookcase(undefined);
+  };
+
+  useEffect(() => {
+    if (explosion) {
+      setSelectedGenres(explosion);
+    }
+  }, [explosion]);
+
+  const comprobanteZona = () => selectedZone === undefined || selectedGenres.length === 0;
+  const comprobantePiso = () => selectedFloor === undefined || selectedGenres.length === 0;
+
+  // TanStack Form setup
   const form = useForm({
     defaultValues: {
-      email: '',
-      isbn: '',
-      due_date: '',
+      title: initialData?.title ?? '',
+      author: initialData?.author ?? '',
+      editor: initialData?.editor ?? '',
+      length: initialData?.length ?? undefined,
+      isbn: initialData?.isbn ?? '',
+      bookcase_id: selectedBookcase ?? undefined,
+      genres: selectedGenres,
     },
-    onSubmit: async ({ value }) => {
-      const loanData = { ...value };
 
+    onSubmit: async ({ value }) => {
+      const formData = {
+        title: value.title,
+        author: value.author,
+        editor: value.editor,
+        length: value.length,
+        isbn: value.isbn,
+        bookcase_id: value.bookcase_id ?? '',
+        genres: selectedGenres.join(', '), // Convert array to comma-separated string
+      };
+      console.log(formData);
       const options = {
         onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ['loans'] });
-          let url = '/loans';
-          if (page) url += `?page=${page}`;
-          if (perPage) url += `&per_page=${perPage}`;
+          queryClient.invalidateQueries({ queryKey: ['books'] });
+          let url = '/books';
+          if (page) {
+            url += `?page=${page}`;
+            if (perPage) {
+              url += `&per_page=${perPage}`;
+            }
+          }
           router.visit(url);
-          toast.success(t('messages.loans.created'));
         },
-        onError: (err) => {
-          console.error('Create loan error:', err);
-          toast.error(t('messages.loans.error.create'));
+        onError: () => {
+          toast.error(initialData ? t('messages.books.error.update') : t('messages.books.error.create'));
         },
       };
 
-      if (initialData?.id) {
-        router.put(`/loans/${initialData.id}`, loanData, options);
+      if (initialData) {
+        router.put(`/books/${initialData.id}`, formData, options);
       } else {
-        router.post('/loans', loanData, options);
+        router.post('/books', formData, options);
       }
     },
   });
 
-  // Sync initial data for editing mode
-  useEffect(() => {
-    if (initialData) {
-      form.setFieldValue('email', initialData.email ?? '');
-      form.setFieldValue('isbn', initialData.isbn ?? '');
-      form.setFieldValue('due_date', getFormattedDueDate(initialData.due_date));
-    }
-  }, [initialData]);
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    e.stopPropagation();
+   
     form.handleSubmit();
   };
 
@@ -95,186 +191,359 @@ export function LoanForm({ initialData, page, perPage }: LoanFormProps) {
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="basic">
-            <BookOpen className="mr-2 h-4 w-4" />
-            {t('ui.loan.tabs.basic')}
+            <Book className="mr-2 h-4 w-4" />
+            {t('ui.books.tabs.basic')}
           </TabsTrigger>
-          {/* Location tab is omitted as it's not relevant in this case */}
+          <TabsTrigger value="location">
+            <LandPlot className="mr-2 h-4 w-4" />
+            {t('ui.books.tabs.location')}
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="basic" className="space-y-4">
-          {/* Email field */}
-          <div>
-            <form.Field
-              name="email"
-              validators={{
-                onChangeAsync: async ({ value }) => {
-                  await new Promise((r) => setTimeout(r, 300));
-                  return !value
-                    ? t('ui.validation.required', { attribute: t('ui.user.email') })
-                    : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
-                    ? t('ui.validation.email')
+          {/* Title field */}
+          <form.Field
+            name="title"
+            validators={{
+              onChangeAsync: async ({ value }) => {
+                await new Promise((resolve) => setTimeout(resolve, 500));
+                return !value
+                  ? t('ui.validation.required', { attribute: t('ui.books.fields.title').toLowerCase() })
+                  : value.length < 2
+                    ? t('ui.validation.min.string', { attribute: t('ui.books.fields.title').toLowerCase(), min: '2' })
                     : undefined;
-                },
-              }}
-            >
-              {(field) => (
-                <div className="space-y-2">
-                  <Label htmlFor={field.name}>{t('ui.user.email')}</Label>
-                  <Input
-                    id={field.name}
-                    name={field.name}
-                    type="email"
-                    value={field.state.value}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    onBlur={field.handleBlur}
-                    placeholder={initialData?.email || 'user@example.com'}
-                    disabled={form.state.isSubmitting}
-                    required
-                  />
-                </div>
-              )}
-            </form.Field>
-          </div>
+              },
+            }}
+          >
+            {(field) => (
+              <div className="space-y-2">
+                <Label htmlFor={field.name}>
+                  <div className="flex items-center gap-2">
+                    <Book className="h-4 w-4" />
+                    {t('ui.books.fields.title')}
+                  </div>
+                </Label>
+                <Input
+                  id={field.name}
+                  name={field.name}
+                  value={field.state.value}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  onBlur={field.handleBlur}
+                  placeholder={t('ui.books.placeholders.title')}
+                  disabled={form.state.isSubmitting}
+                />
+                <FieldInfo field={field} />
+              </div>
+            )}
+          </form.Field>
+
+          {/* Author field */}
+          <form.Field
+            name="author"
+            validators={{
+              onChangeAsync: async ({ value }) => {
+                await new Promise((resolve) => setTimeout(resolve, 500));
+                return !value
+                  ? t('ui.validation.required', { attribute: t('ui.books.fields.author').toLowerCase() })
+                  : value.length < 2
+                    ? t('ui.validation.min.string', { attribute: t('ui.books.fields.author').toLowerCase(), min: '2' })
+                    : undefined;
+              },
+            }}
+          >
+            {(field) => (
+              <div className="space-y-2">
+                <Label htmlFor={field.name}>
+                  <div className="flex items-center gap-2">
+                    <UserPen className="h-4 w-4" />
+                    {t('ui.books.fields.author')}
+                  </div>
+                </Label>
+                <Input
+                  id={field.name}
+                  name={field.name}
+                  value={field.state.value}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  onBlur={field.handleBlur}
+                  placeholder={t('ui.books.placeholders.author')}
+                  disabled={form.state.isSubmitting}
+                />
+                <FieldInfo field={field} />
+              </div>
+            )}
+          </form.Field>
+
+          {/* Editor field */}
+          <form.Field
+            name="editor"
+            validators={{
+              onChangeAsync: async ({ value }) => {
+                await new Promise((resolve) => setTimeout(resolve, 500));
+                return !value
+                  ? t('ui.validation.required', { attribute: t('ui.books.fields.editor').toLowerCase() })
+                  : value.length < 2
+                    ? t('ui.validation.min.string', { attribute: t('ui.books.fields.editor').toLowerCase(), min: '2' })
+                    : undefined;
+              },
+            }}
+          >
+            {(field) => (
+              <div className="space-y-2">
+                <Label htmlFor={field.name}>
+                  <div className="flex items-center gap-2">
+                    <FilePenLine className="h-4 w-4" />
+                    {t('ui.books.fields.editor')}
+                  </div>
+                </Label>
+                <Input
+                  id={field.name}
+                  name={field.name}
+                  value={field.state.value}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  onBlur={field.handleBlur}
+                  placeholder={t('ui.books.placeholders.editor')}
+                  disabled={form.state.isSubmitting}
+                />
+                <FieldInfo field={field} />
+              </div>
+            )}
+          </form.Field>
+
+          {/* Pages field */}
+          <form.Field
+            name="length"
+            validators={{
+              onChangeAsync: async ({ value }) => {
+                await new Promise((resolve) => setTimeout(resolve, 500));
+                return !value ? t('ui.validation.required', { attribute: t('ui.books.fields.length').toLowerCase() }) : undefined;
+              },
+            }}
+          >
+            {(field) => (
+              <div className="space-y-2">
+                <Label htmlFor={field.name}>
+                  <div className="flex items-center gap-2">
+                    <PencilRuler className="h-4 w-4" />
+                    {t('ui.books.fields.length')}
+                  </div>
+                </Label>
+                <Input
+                  id={field.name}
+                  name={field.name}
+                  type="number"
+                  min={1}
+                  step={1}
+                  value={field.state.value}
+                  onChange={(e) => field.handleChange(parseInt(e.target.value))}
+                  onBlur={field.handleBlur}
+                  placeholder={t('ui.books.placeholders.length')}
+                  disabled={form.state.isSubmitting}
+                />
+                <FieldInfo field={field} />
+              </div>
+            )}
+          </form.Field>
 
           {/* ISBN field */}
-          <div>
-            <form.Field
-              name="isbn"
-              validators={{
-                onChangeAsync: async ({ value }) => {
-                  await new Promise((resolve) => setTimeout(resolve, 500));
-                  if (!value) {
-                    return t('ui.validation.required', { attribute: t('ui.loans.fields.isbn') });
-                  }
-                  if (!/^\d+$/.test(value)) {
-                    return t('ui.validation.numeric', { attribute: t('ui.books.columns.isbn') });
-                  }
-                  return undefined;
-                },
-              }}
-            >
-              {(field) => (
-                <div className="space-y-2">
-                  <Label htmlFor={field.name}>{t('ui.loans.fields.isbn')}</Label>
-                  <Input
-                    id={field.name}
-                    name={field.name}
-                    value={field.state.value}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    onBlur={field.handleBlur}
-                    placeholder={initialData?.isbn || '9781234567890'}
-                    disabled={form.state.isSubmitting}
-                    autoComplete="off"
-                  />
-                </div>
-              )}
-            </form.Field>
-          </div>
-
-          {/* Due Date field */}
-          <div>
-            <form.Field
-              name="due_date"
-              validators={{
-                onChangeAsync: async ({ value }) => {
-                  await new Promise((r) => setTimeout(r, 300));
-
-                  if (!value) {
-                    return t('ui.validation.required', { attribute: t('ui.loan.due_date') });
-                  }
-
-                  const parsedDate = parseISO(value);
-                  if (!isValid(parsedDate)) {
-                    return t('ui.validation.date', { attribute: t('ui.loan.due_date') });
-                  }
-
-                  if (!isAfter(parsedDate, new Date())) {
-                    return t('ui.validation.after_today', {
-                      attribute: t('ui.loan.due_date'),
-                    });
-                  }
-
-                  return undefined;
-                },
-              }}
-            >
-              {(field) => {
-                const date = field.state.value ? parseISO(field.state.value) : null;
-
-                return (
-                  <>
-                    <Label htmlFor={field.name}>{t('ui.loan.due_date')}</Label>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <button
-                          type="button"
-                          className="w-full text-left flex items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm"
-                        >
-                          {date && isValid(date)
-                            ? format(date, 'PPP')
-                            : t('ui.loan.createLoan.placeholders.date')}
-                          <CalendarIcon className="ml-2 h-4 w-4 text-muted-foreground" />
-                        </button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0">
-                        <Calendar
-                          mode="single"
-                          selected={date ?? undefined}
-                          onSelect={(selectedDate) => {
-                            if (selectedDate) {
-                              const iso = selectedDate.toISOString().split('T')[0];
-                              field.handleChange(iso);
-                            }
-                          }}
-                          disabled={(date) => date < new Date()}
-                          initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
-                  </>
-                );
-              }}
-            </form.Field>
-          </div>
-
-          <Separator className="my-4" />
-
-          {/* Form buttons */}
-          <div className="flex justify-end gap-4 pt-4">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => {
-                let url = '/loans';
-                if (page) {
-                  url += `?page=${page}`;
-                  if (perPage) {
-                    url += `&per_page=${perPage}`;
-                  }
+          <form.Field
+            name="isbn"
+            validators={{
+              onChangeAsync: async ({ value }) => {
+                await new Promise((resolve) => setTimeout(resolve, 500));
+                if (!value) {
+                  return t('ui.validation.required', { attribute: 'ISBN' });
                 }
-                router.visit(url);
-              }}
-              disabled={form.state.isSubmitting}
-            >
-              <X className="mr-2 h-4 w-4" />
-              {t('ui.loan.buttons.cancel')}
-            </Button>
+                const isbnRegex = /^(?:\d{10}|\d{13})$/;
+                return !isbnRegex.test(value) ? t('ui.validation.invalid', { attribute: 'ISBN' }) : undefined;
+              },
+            }}
+          >
+            {(field) => (
+              <div className="space-y-2">
+                <Label htmlFor={field.name}>
+                  <div className="flex items-center gap-2">
+                    <Layers className="h-4 w-4" />
+                    {t('ui.books.fields.isbn')}
+                  </div>
+                </Label>
+                <Input
+                  id={field.name}
+                  name={field.name}
+                  value={field.state.value}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  onBlur={field.handleBlur}
+                  placeholder="9781234567890"
+                  disabled={form.state.isSubmitting}
+                />
+                <FieldInfo field={field} />
+              </div>
+            )}
+          </form.Field>
 
-            <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
-              {([canSubmit, isSubmitting]) => (
-                <Button type="submit" disabled={!canSubmit}>
-                  <Save className="mr-2 h-4 w-4" />
-                  {isSubmitting
-                    ? t('ui.loan.buttons.saving')
-                    : initialData
-                    ? t('ui.loan.buttons.update')
-                    : t('ui.loan.buttons.save')}
-                </Button>
-              )}
-            </form.Subscribe>
+          {/* Genres Multi Select */}
+          <div className="space-y-2">
+            <Label>
+              <div className="flex items-center gap-2">
+                <ChartColumnStacked className="h-4 w-4" />
+                {t('ui.books.fields.genres')}
+              </div>
+            </Label>
+            <MultiSelect
+              options={transformedGenres}
+              onValueChange={setSelectedGenres}              
+              defaultValue={selectedGenres}
+              placeholder={t('ui.books.placeholders.genres')}
+              variant="inverted"
+              maxCount={3}
+            />
+            {selectedGenres.length > 0 && (
+              <div className="mt-2 rounded-md border p-3">
+                <h3 className="text-sm font-medium">{t('ui.books.fields.selgenres')}</h3>
+                <ul className="mt-1 list-inside list-disc space-y-1">
+                  {selectedGenres.map((genre) => (
+                    <li key={genre} className="text-sm">
+                      {t(`ui.genres.names.${genre}`)}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         </TabsContent>
+
+        <TabsContent value="location" className="space-y-4">
+          {/* Floor Select */}
+          <div className="space-y-2">
+            <Label>
+              <div className="flex items-center gap-2">
+                <Layers className="h-4 w-4" />
+                {t('ui.books.fields.floors')}
+              </div>
+            </Label>
+            <Select value={selectedFloor} onValueChange={handleFloorChange}>
+              <SelectTrigger>
+                <SelectValue placeholder={t('ui.books.fields.floor')} />
+              </SelectTrigger>
+              <SelectContent>
+                {floors.map((floor) => (
+                  <SelectItem key={floor.id} value={floor.id}>
+                    {t('ui.books.fields.floor')} {floor.floor_number}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Zone Select */}
+          <div className="space-y-2">
+            <Label>
+              <div className="flex items-center gap-2">
+                <LandPlot className="h-4 w-4" />
+                {t('ui.books.fields.zones')}
+              </div>
+            </Label>
+            <Select disabled={comprobantePiso()} value={selectedZone} onValueChange={handleZoneChange}>
+              <SelectTrigger>
+                <SelectValue placeholder={t('ui.books.fields.zone')} />
+              </SelectTrigger>
+              <SelectContent>
+                {zones
+                  .filter((zone) => zone.floor_id === selectedFloor)
+                  .filter((zone) => selectedGenres.includes(zone.genre_name))
+                  .map((zone) => (
+                    <SelectItem key={zone.id} value={zone.id}>
+                      {`${t('ui.books.fields.zone')} ${zone.number} - ${t(`ui.genres.names.${zone.genre_name}`)}`}
+                    </SelectItem>
+                  ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Bookcase Select */}
+          <form.Field
+            name="bookcase_id"
+            validators={{
+              onChangeAsync: async ({ value }) => {
+                await new Promise((resolve) => setTimeout(resolve, 500));
+                return !value ? t('ui.validation.required', { attribute: t('ui.bookcases.fieldsbookcase').toLowerCase() }) : null;
+              },
+            }}
+          >
+            {(field) => (
+              <div className="space-y-2">
+                <Label>
+                  <div className="flex items-center gap-2">
+                    <ChartColumnStacked className="h-4 w-4" />
+                    {t('ui.books.fields.bookcases')}
+                  </div>
+                </Label>
+                <Select
+                  disabled={comprobanteZona()}
+                  value={selectedBookcase}
+                  onValueChange={(value) => {
+                    field.handleChange(value);
+                    setSelectedBookcase(value);
+                  }}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder={t('ui.books.fields.bookcases')} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {bookcases
+                      .filter((bookcase) => bookcase.zone_id === selectedZone)
+                      .map((bookcase) => (
+                        <SelectItem
+                          key={bookcase.id}
+                          value={bookcase.id}
+                          disabled={bookcase.books_count >= bookcase.capacity}
+                        >
+                          {`${t('ui.books.fields.bookcase')} ${bookcase.number} - ${bookcase.books_count}/${bookcase.capacity}`}
+                          {bookcase.books_count >= bookcase.capacity ? ' (Full)' : ' (Available)'}
+                        </SelectItem>
+                      ))}
+                  </SelectContent>
+                </Select>
+                <FieldInfo field={field} />
+              </div>
+            )}
+          </form.Field>
+        </TabsContent>
       </Tabs>
+
+      {/* Form buttons */}
+      <div className="flex justify-end gap-4 pt-4">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => {
+            let url = '/books';
+            if (page) {
+              url += `?page=${page}`;
+              if (perPage) {
+                url += `&per_page=${perPage}`;
+              }
+            }
+            router.visit(url);
+          }}
+          disabled={form.state.isSubmitting}
+        >
+          <X className="mr-2 h-4 w-4" />
+          {t('ui.books.buttons.cancel')}
+        </Button>
+
+        <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
+          {([canSubmit, isSubmitting]) => (
+            <Button type="submit" disabled={!canSubmit}>
+              <Save className="mr-2 h-4 w-4" />
+              {isSubmitting
+                ? t('ui.books.buttons.saving')
+                : initialData
+                  ? t('ui.books.buttons.update')
+                  : t('ui.books.buttons.save')}
+            </Button>
+          )}
+        </form.Subscribe>
+      </div>
     </form>
   );
 }
