@@ -19,7 +19,6 @@ class DatabaseSeeder extends Seeder
             BookcaseSeeder::class,
             BookSeeder::class,
             bookgenresSeeder::class,
-            LoanSeeder::class,
         ]);
 
 

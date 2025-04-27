@@ -1,23 +1,32 @@
-import { createActionsColumn, createDateColumn, createTextColumn } from '@/components/stack-table/columnsTable';
+import { createActionsColumn, createTextColumn } from '@/components/stack-table/columnsTable';
 import { DeleteDialog } from '@/components/stack-table/DeleteDialog';
 import { FilterConfig, FiltersTable } from '@/components/stack-table/FiltersTable';
 import { Table } from '@/components/stack-table/Table';
 import { TableSkeleton } from '@/components/stack-table/TableSkeleton';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Book, useBooks, useDeleteBook } from '@/hooks/books/useBooks';
 import { useTranslations } from '@/hooks/use-translations';
 import { BookLayout } from '@/layouts/books/BookLayout';
-import { Link, usePage } from '@inertiajs/react';
+import { Link, router, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
-import { BookPlus, Check, PencilIcon, PlusIcon, TrashIcon, X } from 'lucide-react';
+import { ClipboardList, Handshake, Image, PencilIcon, PlusIcon, TrashIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
-export default function BooksIndex() {
+interface BookIndexProps {
+    floor_list: number[],
+    zone_list: number[],
+    bookcase_list: number[],
+}
+
+export default function BooksIndex({floor_list, zone_list, bookcase_list}:BookIndexProps) {
     const { t } = useTranslations();
     const { url } = usePage();
-
     // Obtener los parámetros de la URL actual
     const urlParams = new URLSearchParams(url.split('?')[1] || '');
     const pageParam = urlParams.get('page');
@@ -27,6 +36,9 @@ export default function BooksIndex() {
     const [currentPage, setCurrentPage] = useState(pageParam ? parseInt(pageParam) : 1);
     const [perPage, setPerPage] = useState(perPageParam ? parseInt(perPageParam) : 10);
     const [filters, setFilters] = useState<Record<string, any>>({});
+    const [open, setOpen] = useState(false);
+    const [selectedBook, setSelectedBook] = useState<Book | null>(null);
+    const [reserMail, setReserMail] = useState('');
 
     const combinedSearch = [
         filters.title ? filters.title : 'null',
@@ -37,6 +49,8 @@ export default function BooksIndex() {
         filters.floor ? filters.floor : 'null',
         filters.zone ? filters.zone : 'null',
         filters.bookcase ? filters.bookcase : 'null',
+        filters.ISBN ? filters.ISBN : 'null',
+        filters.available ? filters.available : 'null',
     ];
 
     const {
@@ -56,9 +70,28 @@ export default function BooksIndex() {
         setCurrentPage(page);
     };
 
+    function handleLoanButton(bookID: string) {
+        return router.get('/loans/create', { bookID });
+    }
+
+    function HandleReservation(bookID: string, userMail: string) {
+
+        const reservationData = new FormData();
+        reservationData.append('bookID', bookID);
+        reservationData.append('userMail', userMail);
+
+        router.post('/reservations', reservationData);
+        // window.location.reload();
+    }
+
     const handleFilterChange = (newFilters: Record<string, any>) => {
+        const filtersChanged = newFilters!==filters;
+
+        if (filtersChanged) {
+            setCurrentPage(1);
+        }
         setFilters(newFilters);
-    };
+        };
 
     const handlePerPageChange = (newPerPage: number) => {
         setPerPage(newPerPage);
@@ -68,7 +101,6 @@ export default function BooksIndex() {
     const handleDeleteBook = async (id: string) => {
         try {
             await deleteBookMutation.mutateAsync(id);
-            toast.success(t('ui.books.deleted_success') || 'Book deleted successfully');
             refetch();
         } catch (error) {
             toast.error(t('ui.books.deleted_error') || 'Error deleting book');
@@ -83,6 +115,47 @@ export default function BooksIndex() {
                     id: 'title',
                     header: t('ui.books.columns.title') || 'Title',
                     accessorKey: 'title',
+                }),
+                createTextColumn<Book>({
+                    id: 'isbn',
+                    header: t('isbn') || 'Title',
+                    accessorKey: 'isbn',
+                    format: (value) => {
+                        return value['number'] + ' - (' + value['loans'] + '/' + value['total'] + ')';
+
+                    },
+                }),
+                createTextColumn<Book>({
+                    id: 'hasActive',
+                    header: t('ui.books.utils.available') || 'Title',
+                    accessorKey: 'hasActive',
+                    format: (value) => {
+                        return !value ? t('ui.books.utils.available') : t('ui.books.utils.unavailable');
+                    },
+                }),
+                createActionsColumn<Book>({
+                    id: 'imgUrl',
+                    header: t('ui.books.columns.image') || 'Image',
+                    accessorKey: 'imgUrl',
+                    renderActions(book) {
+                        return (
+                            <TooltipProvider>
+                                <Tooltip>
+                                    <TooltipTrigger>
+                                        <Image />
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        {/* Check if URL exists */}
+                                        {book.imgUrl ? (
+                                            <img src={book.imgUrl} alt="Preview" style={{ width: '200px', height: 'auto', marginTop: '10px' }} />
+                                        ) : (
+                                            <span>{book.imgUrl}</span> // Fallback message or image
+                                        )}
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
+                        );
+                    },
                 }),
                 createTextColumn<Book>({
                     id: 'genres',
@@ -119,25 +192,6 @@ export default function BooksIndex() {
                     header: t('ui.books.columns.editor') || 'Editor',
                     accessorKey: 'editor',
                 }),
-                createActionsColumn<Book>({
-                    id: 'isbn',
-                    header: t('ui.books.columns.isbn') || 'ISBN',
-                   renderActions: (books) =>{
-                    let $isbn = books.isbn;
-                    let $isbn_count = books.count_book;
-                    let $isbn_count_loan = books.count_loan_book;
-                    return(
-                        <span>{$isbn} <p>({$isbn_count_loan}/{$isbn_count})</p> </span>
-                    )
-
-                   }
-                }),
-                 createTextColumn<Book>({
-                    id: 'avaiable',
-                    header: t('ui.loans.columns.avaiable') || 'avaiable',
-                    accessorKey: 'avaiable',
-                    format: (value) => (value ? <Check/>: <X/>),
-                }),
                 createTextColumn<Book>({
                     id: 'floor_id',
                     header: t('ui.books.columns.floor') || 'Floor',
@@ -153,56 +207,69 @@ export default function BooksIndex() {
                     header: t('ui.books.columns.bookcase') || 'Bookcase',
                     accessorKey: 'bookcase_id',
                 }),
-                createDateColumn<Book>({
-                    id: 'created_at',
-                    header: t('ui.books.columns.created_at') || 'Created At',
-                    accessorKey: 'created_at',
-                }),
+                // createDateColumn<Book>({
+                //     id: 'created_at',
+                //     header: t('ui.books.columns.created_at') || 'Created At',
+                //     accessorKey: 'created_at',
+                // }),
                 createActionsColumn<Book>({
                     id: 'actions',
                     header: t('ui.books.columns.actions') || 'Actions',
-                    renderActions: (book) => (
-                        <div className="flex gap-2">
-                            <Link href={`/reservations/create?book_id=${book.id}`}>
-                                <Button 
-                                    variant="outline" 
-                                    size="icon" 
-                                    title={t('ui.books.buttons.reserve') || 'Add reservation'}
-                                    className="hover:bg-primary/10"
-                                >
-                                    <BookPlus className="h-4 w-4" />
-                                </Button>
-                            </Link>
-                            <Link href={`/books/${book.id}/edit?page=${currentPage}&perPage=${perPage}`}>
-                                <Button 
-                                    variant="outline" 
-                                    size="icon" 
-                                    title={t('ui.books.buttons.edit') || 'Edit book'}
-                                    className="hover:bg-primary/10"
-                                >
-                                    <PencilIcon className="h-4 w-4" />
-                                </Button>
-                            </Link>
-                            <DeleteDialog
-                                id={book.id}
-                                onDelete={handleDeleteBook}
-                                title={t('ui.books.delete.title') || 'Delete book'}
-                                description={
-                                    t('ui.books.delete.description') || 'Are you sure you want to delete this book? This action cannot be undone.'
-                                }
-                                trigger={
+                    renderActions: (book) => {
+                        return (
+                            <>
+                                {!book.hasActive && (
+                                    <Button
+                                        disabled={book.hasActive}
+                                        onClick={() => handleLoanButton(book.id)}
+                                        variant="outline"
+                                        size="icon"
+                                        title={t('ui.books.buttons.loan') || 'Loan book'}
+                                    >
+                                        <Handshake className="h-4 w-4 text-green-500" />
+                                    </Button>
+                                )}
+
+                                {book.hasActive && (
                                     <Button
                                         variant="outline"
                                         size="icon"
-                                        className="text-destructive hover:bg-destructive/10 hover:text-destructive"
-                                        title={t('ui.users.buttons.delete') || 'Delete user'}
+                                        title={t('ui.books.buttons.queue') || 'Loan book'}
+                                        onClick={() => {
+                                            setSelectedBook(book);
+                                            setOpen(true);
+                                        }}
                                     >
-                                        <TrashIcon className="h-4 w-4" />
+                                        <ClipboardList className="h-4 w-4 text-orange-500" />
                                     </Button>
-                                }
-                            />
-                        </div>
-                    ),                    
+                                )}
+
+                                <Link href={`/books/${book.id}/edit?page=${currentPage}&perPage=${perPage}`}>
+                                    <Button variant="outline" size="icon" title={t('ui.books.buttons.edit') || 'Edit book'}>
+                                        <PencilIcon className="h-4 w-4" />
+                                    </Button>
+                                </Link>
+                                <DeleteDialog
+                                    id={book.id}
+                                    onDelete={handleDeleteBook}
+                                    title={t('ui.books.delete.title') || 'Delete book'}
+                                    description={
+                                        t('ui.books.delete.description') || 'Are you sure you want to delete this book? This action cannot be undone.'
+                                    }
+                                    trigger={
+                                        <Button
+                                            variant="outline"
+                                            size="icon"
+                                            className="text-destructive hover:text-destructive"
+                                            title={t('ui.users.buttons.delete') || 'Delete user'}
+                                        >
+                                            <TrashIcon className="h-4 w-4" />
+                                        </Button>
+                                    }
+                                />
+                            </>
+                        );
+                    },
                 }),
             ] as ColumnDef<Book>[],
         [t, handleDeleteBook],
@@ -210,97 +277,121 @@ export default function BooksIndex() {
 
     return (
         <BookLayout title={t('ui.books.title')}>
-            <div className="container py-8">
+            <div className="p-6">
                 <div className="space-y-6">
-                    <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                        <div>
-                            <h1 className="text-3xl font-bold tracking-tight">{t('ui.books.title')}</h1>
-                            <p className="text-muted-foreground mt-2">
-                            </p>
-                        </div>
+                    <div className="flex items-center justify-between">
+                        <h1 className="text-3xl font-bold">{t('ui.books.title')}</h1>
                         <Link href="/books/create">
-                            <Button className="gap-2">
-                                <PlusIcon className="h-4 w-4" />
+                            <Button>
+                                <PlusIcon className="mr-2 h-4 w-4" />
                                 {t('ui.books.buttons.new')}
                             </Button>
                         </Link>
                     </div>
+                    <div></div>
 
-                    <Card>
-                        <CardContent>
-                            <FiltersTable
-                                filters={
-                                    [
-                                        {
-                                            id: 'title',
-                                            label: t('ui.bookcases.filters.title') || 'Title',
-                                            type: 'text',
-                                            placeholder: t('ui.bookcases.placeholders.title') || 'Search by title...',
-                                        },
-                                        {
-                                            id: 'genres',
-                                            label: t('ui.bookcases.filters.genres') || 'Genres',
-                                            type: 'text',
-                                            placeholder: t('ui.bookcases.placeholders.genres') || 'Search by genre...',
-                                        },
-                                        {
-                                            id: 'author',
-                                            label: t('ui.bookcases.filters.author') || 'Author',
-                                            type: 'text',
-                                            placeholder: t('ui.bookcases.placeholders.author') || 'Search by author...',
-                                        },
-                                        {
-                                            id: 'pages',
-                                            label: t('ui.bookcases.filters.pages') || 'Pages',
-                                            type: 'number',
-                                            placeholder: t('ui.bookcases.placeholders.pages') || 'Filter by pages...',
-                                        },
-                                        {
-                                            id: 'publisher',
-                                            label: t('ui.bookcases.filters.publisher') || 'Publisher',
-                                            type: 'text',
-                                            placeholder: t('ui.bookcases.placeholders.publisher') || 'Search by publisher...',
-                                        },
-                                        {
-                                            id: 'floor',
-                                            label: t('ui.bookcases.filters.floor') || 'Floor',
-                                            type: 'number',
-                                            placeholder: t('ui.bookcases.placeholders.floor') || 'Filter by floor...',
-                                        },
-                                        {
-                                            id: 'zone',
-                                            label: t('ui.bookcases.filters.zone') || 'Zone',
-                                            type: 'number',
-                                            placeholder: t('ui.bookcases.placeholders.zone') || 'Filter by zone...',
-                                        },
-                                        {
-                                            id: 'bookcase',
-                                            label: t('ui.bookcases.filters.bookcase') || 'Bookcase',
-                                            type: 'number',
-                                            placeholder: t('ui.bookcases.placeholders.bookcase') || 'Filter by bookcase...',
-                                        },
-                                    ] as FilterConfig[]
-                                }
-                                onFilterChange={handleFilterChange}
-                                initialValues={filters}
-                            />
-                        </CardContent>
-                    </Card>
+                    <Accordion type="single" collapsible className="w-full">
+      <AccordionItem value="item-1">
+      <AccordionTrigger className="text-center w-full justify-center">
+      {t('ui.common.filters.trigger')}</AccordionTrigger>
+        <AccordionContent>
+                    <div className="space-y-4">
+                        <FiltersTable
+                            filters={
+                                [
+                                    {
+                                        id: 'title',
+                                        label: t('ui.books.filters.title') || 'Titulo',
+                                        type: 'text',
+                                        placeholder: t('ui.books.placeholders.title') || 'Titulo...',
+                                    },
+                                    {
+                                        id: 'ISBN',
+                                        label: t('ISBN') || 'ISBN',
+                                        type: 'text',
+                                        placeholder: t('ui.books.placeholders.ISBN') || 'ISBN...',
+                                    },
+                                    {
+                                        id: 'available',
+                                        label: t('ui.books.filters.available') || 'Disponible',
+                                        type: 'select',
+                                        options: [
+                                            {label: 'Disponible', value: 'true'},
+                                            {label: 'No disponible', value: 'false'},
+                                        ],
+                                        placeholder: t('ui.books.placeholders.available') || 'Disponible...',
+                                    },
+                                    {
+                                        id: 'genres',
+                                        label: t('ui.books.filters.genres') || 'Géneros',
+                                        type: 'text',
+                                        placeholder: t('ui.books.placeholders.genres') || 'Géneros...',
+                                    },
+                                    {
+                                        id: 'author',
+                                        label: t('ui.books.filters.author') || 'Autor',
+                                        type: 'text',
+                                        placeholder: t('ui.books.placeholders.author') || 'Autor...',
+                                    },
+                                    {
+                                        id: 'pages',
+                                        label: t('ui.books.filters.pages') || 'Páginas',
+                                        type: 'number',
+                                        placeholder: t('ui.books.placeholders.pages') || 'Páginas...',
+                                    },
+                                    {
+                                        id: 'publisher',
+                                        label: t('ui.books.filters.publisher') || 'Editorial',
+                                        type: 'text',
+                                        placeholder: t('ui.books.placeholders.publisher') || 'Editorial...',
+                                    },
+                                    {
+                                        id: 'floor',
+                                        label: t('ui.books.filters.floor') || 'Piso',
+                                        type: 'select',
+                                        options: floor_list,
+                                        placeholder: t('ui.books.placeholders.floor') || 'Piso...',
+                                    },
+                                    {
+                                        id: 'zone',
+                                        label: t('ui.books.filters.zone') || 'Zona',
+                                        type: 'select',
+                                        options: zone_list,
+                                        placeholder: t('ui.books.placeholders.zone') || 'Zona...',
+                                    },
+                                    {
+                                        id: 'bookcase',
+                                        label: t('ui.books.filters.bookcase') || 'Estantería',
+                                        type: 'select',
+                                        options: bookcase_list,
+                                        placeholder: t('ui.books.placeholders.bookcase') || 'Estantería...',
+                                    },
+                                ] as FilterConfig[]
+                            }
+                            onFilterChange={handleFilterChange}
+                            initialValues={filters}
+                            containerClassName="grid w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-5 lg:grid-cols-5 gap-4"
+                        />
+                    </div>
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
+    <div className="text-center w-full justify-center mb-5">
+    {books?.meta.total !== undefined && <h2>{t('ui.common.filters.results', {attribute: books?.meta.total})}</h2>}
+    </div>
 
-                    <Card>
-                        <CardContent className="pt-6">
-                            {isLoading ? (
-                                <TableSkeleton columns={10} rows={10} />
-                            ) : isError ? (
-                                <div className="flex flex-col items-center justify-center space-y-4 py-12 text-center">
-                                    <div className="text-destructive">
-                                        {t('ui.books.error_loading') || 'Error loading books'}
-                                    </div>
-                                    <Button onClick={() => refetch()} variant="outline">
-                                        {t('ui.books.buttons.retry') || 'Retry'}
-                                    </Button>
-                                </div>
-                            ) : (
+                    <div className="w-full overflow-hidden">
+                        {isLoading ? (
+                            <TableSkeleton columns={10} rows={10} />
+                        ) : isError ? (
+                            <div className="p-4 text-center">
+                                <div className="mb-4 text-red-500">{t('ui.books.error_loading')}</div>
+                                <Button onClick={() => refetch()} variant="outline">
+                                    {t('ui.books.buttons.retry')}
+                                </Button>
+                            </div>
+                        ) : (
+                            <div>
                                 <Table
                                     data={
                                         books ?? {
@@ -320,13 +411,62 @@ export default function BooksIndex() {
                                     onPerPageChange={handlePerPageChange}
                                     perPageOptions={[10, 25, 50, 100]}
                                     noResultsMessage={t('ui.books.no_results') || 'No books found'}
-                                    className="rounded-lg border"
                                 />
-                            )}
-                        </CardContent>
-                    </Card>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
+            <Dialog
+                open={open}
+                onOpenChange={(val) => {
+                    setOpen(val);
+                    if (!val) {
+                        setReserMail('');
+                        setSelectedBook(null);
+                    }
+                }}
+            >
+                <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                        <DialogTitle>{t('ui.reservations.utils.title')}</DialogTitle>
+                        <DialogDescription>{t('ui.reservations.utils.description')}</DialogDescription>
+                    </DialogHeader>
+                    {selectedBook && (
+                        <div className="grid gap-4 py-4">
+                            <div className="grid grid-cols-4 items-center gap-4">
+                                <Label htmlFor="name" className="text-right">
+                                {t('ui.reservations.utils.book')}
+                                </Label>
+                                <Input disabled id="name" value={selectedBook.title} className="col-span-3" />
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                                <Label htmlFor="username" className="text-right">
+                                {t('ui.reservations.utils.email')}
+                                </Label>
+                                <Input
+                                    id="username"
+                                    type="email"
+                                    value={reserMail}
+                                    onChange={(e) => setReserMail(e.target.value)}
+                                    className="col-span-3"
+                                />
+                            </div>
+                        </div>
+                    )}
+                    <DialogFooter>
+                        <Button
+                            onClick={() => {
+                                if (selectedBook) HandleReservation(selectedBook.id, reserMail);
+                                //comprobar email Y libro
+                                if (selectedBook) setOpen(false);
+                            }}
+                        >
+                            {t('ui.reservations.utils.confirm')}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </BookLayout>
     );
 }

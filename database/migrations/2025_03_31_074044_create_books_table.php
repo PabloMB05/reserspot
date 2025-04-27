@@ -14,12 +14,13 @@ return new class extends Migration
         Schema::create('books', function (Blueprint $table) {
             $table->uuid('id')->primary()->unique();
             $table->string('title');
+            $table->string('isbn');
             $table->string('genres');
             $table->string('author');
             $table->integer('length');
             $table->string('editor');
-            $table->string('isbn');
             $table->foreignUuid('bookcase_id')->constrained(table:'bookcases', indexName:'id')->cascadeOnDelete();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

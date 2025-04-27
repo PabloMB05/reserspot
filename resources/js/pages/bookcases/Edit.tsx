@@ -8,7 +8,7 @@ import { ChartColumnStacked } from 'lucide-react';
 interface Zone {
   id: string;
   number: number;
-  genreName: string;
+  genre_name: string;
   capacity: number;
   floor_id: string;
   bookcases_count: number;
@@ -39,7 +39,7 @@ export default function CreateBookcase({ bookcase, floors, zones }: BookcaseForm
 
   const adaptedZones = zones.map((zone) => ({
     ...zone,
-    genre_name: zone.genreName, // convertir de camelCase a snake_case
+    genre_name: zone.genre_name, // convertir de camelCase a snake_case
   }));
 
   return (

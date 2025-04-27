@@ -1,291 +1,303 @@
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Calendar } from '@/components/ui/calendar';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Separator } from '@/components/ui/separator';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useTranslations } from '@/hooks/use-translations';
+import { cn } from '@/lib/utils';
 import { router } from '@inertiajs/react';
+import type { AnyFieldApi } from '@tanstack/react-form';
 import { useForm } from '@tanstack/react-form';
 import { useQueryClient } from '@tanstack/react-query';
-import { BookOpen, Save, X } from 'lucide-react';
-import { FormEvent } from 'react';
+import { format, isSunday } from 'date-fns';
+import { enUS, es } from 'date-fns/locale';
+import { Box, CalendarIcon, Layers2, Save, X } from 'lucide-react';
+import * as React from 'react';
+import { DayPicker } from 'react-day-picker';
+import 'react-day-picker/style.css';
 import { toast } from 'sonner';
-import { Building2 } from 'lucide-react';
-import { Icon } from '@/components/icon';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { format, isAfter, isValid, parseISO } from 'date-fns';
-import { CalendarIcon } from 'lucide-react';
 
-import type { AnyFieldApi } from '@tanstack/react-form';
-
-interface EditLoanProps {
-    loan?: {
+interface LoanFormProps {
+    initialData?: {
         id: string;
-        due_date: Date;
+        book_id: string;
+        user_id: string;
+        is_overdue: boolean;
+        is_active: boolean;
+        hours_between: number;
+        hoursDue_between: number;
+        created_at: string;
+        returned_at: string;
+        due_date: string;
     };
-    user_email?: string;  // Cambiado de email a user_email
-    book_isbn?: string;  // Cambiado de isbn a book_isbn
+    usermail?: string;
+    bookIDButton?: string;
+    ddate?: string;
+    emailList: string[];
     page?: string;
     perPage?: string;
+
+        lang: 'en' | 'es';
+      
 }
 
+// Field error display component
 function FieldInfo({ field }: { field: AnyFieldApi }) {
-    const { t } = useTranslations();
     return (
         <>
             {field.state.meta.isTouched && field.state.meta.errors.length ? (
                 <p className="text-destructive mt-1 text-sm">{field.state.meta.errors.join(', ')}</p>
             ) : null}
-            {field.state.meta.isValidating ? <p className="text-muted-foreground mt-1 text-sm">{t('ui.validation.validating')}</p> : null}
+            {field.state.meta.isValidating ? <p className="text-muted-foreground mt-1 text-sm">Validating...</p> : null}
         </>
     );
 }
 
-export function LoanForm({ loan, book_isbn, user_email,page, perPage }: EditLoanProps) {
+export function LoanForm({ initialData, page, perPage, bookIDButton, lang, emailList, usermail, ddate }: LoanFormProps) {
     const { t } = useTranslations();
     const queryClient = useQueryClient();
-    console.log(user_email);
-    // Helper function to parse the date string from backend
-    const parseDueDate = (dateString: string | undefined): string => {
-        if (!dateString) return '';
-        
-        // Handle the 'dd/MM/yyyy' format
-        if (dateString.includes('/')) {
-            const [day, month, year] = dateString.split('/');
-            return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-        }
-        
-        // Assume it's already in 'yyyy-MM-dd' format
-        return dateString;
-    };
 
+    const comprobanteButton = bookIDButton !== null;
+    const comprobanteEmail = usermail !== undefined;
+
+    let fecha: Date;
+
+    if (ddate) {
+        fecha = new Date(ddate); // month is 0-indexed
+      } else {
+        fecha = new Date(); // fallback
+        fecha.setDate(fecha.getDate() + 1);
+
+      }
+
+
+
+
+    // TanStack Form setup
     const form = useForm({
         defaultValues: {
-            user_email: user_email ?? '',  // Usamos user_email
-            book_isbn: book_isbn ?? '',    // Usamos book_isbn
-            due_date: loan?.due_date ? parseDueDate(loan.due_date) : '',
+            book: initialData?.book_id ?? bookIDButton ?? undefined,
+            user: usermail ?? undefined,
+            dueDate: fecha ?? undefined,
         },
         onSubmit: async ({ value }) => {
-            const loanData = {
-                ...value,
-            };
-
             const options = {
+                // preserveState:true,
                 onSuccess: () => {
+                    console.log('Prestamo creado con éxito.');
+
                     queryClient.invalidateQueries({ queryKey: ['loans'] });
+
+                    // Construct URL with page parameters
                     let url = '/loans';
-                    if (page) url += `?page=${page}`;
-                    if (perPage) url += `&per_page=${perPage}`;
+                    if (page) {
+                        url += `?page=${page}`;
+                        if (perPage) {
+                            url += `&per_page=${perPage}`;
+                        }
+                    }
+
                     router.visit(url);
-                    toast.success(t('messages.loans.created'));
                 },
-                onError: (err) => {
-                    console.error('Create loan error:', err);
-                    toast.error(t('messages.loans.error.create'));
+                onError: (errors: Record<string, string>) => {
+                    if (Object.keys(errors).length === 0) {
+                        toast.error(initialData ? t('messages.loans.error.update') : t('messages.loans.error.create'));
+                    }
                 },
             };
 
-            if (loan?.id) {
-                router.put(`/loans/${loan.id}`, loanData, options);
+            // Submit with Inertia
+            if (initialData) {
+                router.put(`/loans/${initialData.id}`, value, options);
             } else {
-                router.post('/loans', loanData, options);
+                router.post('/loans', value, options);
             }
         },
     });
 
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    // Form submission handler
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        e.stopPropagation();
         form.handleSubmit();
     };
 
+    const langMap = {
+        en: enUS,
+        es: es,
+      };
+
     return (
-        <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-            <Card>
-                <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                        <BookOpen className="h-5 w-5" />
-                        {t(loan?.id ? 'ui.loan.edit' : 'ui.loan.create')}
-                    </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                    {/* Email field - Solo lectura cuando se edita */}
-                    <div>
-                        <form.Field
-                            name="user_email"
-                            validators={{
-                                onChangeAsync: async ({ value }) => {
-                                    if (loan?.id) return undefined; // No validamos en edición
-                                    
-                                    await new Promise((r) => setTimeout(r, 300));
-                                    return !value
-                                        ? t('ui.validation.required', { attribute: t('ui.user.email') })
-                                        : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
-                                        ? t('ui.validation.email')
-                                        : undefined;
-                                },
-                            }}
-                        >
-                            {(field) => (
-                                <>
-                                    <Label htmlFor={field.name}>{t('ui.user.email')}</Label>
-                                    <Input
-                                        id={field.name}
-                                        name={field.name}
-                                        type="email"
-                                        value={field.state.value}
-                                        onChange={(e) => field.handleChange(e.target.value)} // Solo permite cambios si no es edición
-                                        onBlur={field.handleBlur}
-                                        placeholder={user_email}
-                                        disabled={form.state.isSubmitting || !!loan?.id} // Deshabilitado en edición
-                                    />
-                                    <FieldInfo field={field} />
-                                </>
-                            )}
-                        </form.Field>
-                    </div>
-
-                    {/* ISBN field - Solo lectura cuando se edita */}
-                    <div>
-                        <form.Field
-                            name="book_isbn"
-                            validators={{
-                                onChangeAsync: async ({ value }) => {
-                                    if (loan?.id) return undefined; // No validamos en edición
-                                    
-                                    await new Promise((resolve) => setTimeout(resolve, 500));
-                                    if (!value) {
-                                        return t('ui.validation.required', {
-                                            attribute: t('ui.loans.fields.isbn').toLowerCase(),
-                                        });
-                                    }
-                                    if (!/^\d+$/.test(value)) {
-                                        return t('ui.validation.numeric', {
-                                            attribute: t('ui.books.columns.isbn').toLowerCase(),
-                                        });
-                                    }
-                                    return undefined;
-                                },
-                            }}
-                        >
-                            {(field) => (
-                                <div>
-                                    <div className="flex items-center gap-2 mb-2">
-                                        <Icon iconNode={Building2} className="w-5 h-5" />
-                                        <Label htmlFor={field.name}>{t('ui.loans.fields.isbn')}</Label>
+        <form onSubmit={handleSubmit} noValidate>
+            <div className="space-y-4">
+                {/* Book field */}
+                <div>
+                    <form.Field
+                        name="book"
+                        validators={{
+                            onChangeAsync: async ({ value }) => {
+                                await new Promise((resolve) => setTimeout(resolve, 500));
+                                return !value ? t('ui.validation.required', { attribute: t('ui.loans.fields.book').toLowerCase() }) : undefined;
+                            },
+                        }}
+                    >
+                        {(field) => (
+                            <>
+                                <Label htmlFor={field.name}>
+                                    <div className="mb-1 flex items-center gap-1">
+                                        <Layers2 color="grey" size={18} />
+                                        {t('ui.loans.fields.book')}
                                     </div>
-                                    <Input
-                                        id={field.name}
-                                        name={field.name}
-                                        value={field.state.value}
-                                        onChange={(e) => field.handleChange(e.target.value)} // Solo permite cambios si no es edición
-                                        onBlur={field.handleBlur}
-                                        placeholder={book_isbn}
-                                        disabled={form.state.isSubmitting || !!loan?.id} // Deshabilitado en edición
-                                     
-                                       
-                                        autoComplete="off"
+                                </Label>
+                                <Input
+                                    id={field.name}
+                                    name={field.name}
+                                    type="text"
+                                    value={field.state.value}
+                                    onChange={(e) => field.handleChange(e.target.value)}
+                                    onBlur={field.handleBlur}
+                                    placeholder={t('ui.loans.placeholders.book')}
+                                    disabled={comprobanteButton || form.state.isSubmitting}
+                                    required={false}
+                                    autoComplete="off"
+                                />
+                                <FieldInfo field={field} />
+                            </>
+                        )}
+                    </form.Field>
+                </div>
+
+                {/* User field */}
+                <div>
+                    <form.Field
+                        name="user"
+                    >
+                        {(field) => (
+                            <>
+                                <Label htmlFor={field.name}>
+                                    <div className="mb-1 flex items-center gap-1">
+                                        <Box color="grey" size={18} />
+                                        {t('ui.loans.fields.user')}
+                                    </div>
+                                </Label>
+                                <Input
+                                    id={field.name}
+                                    name={field.name}
+                                    type="text"
+                                    value={field.state.value}
+                                    onChange={(e) => field.handleChange(e.target.value)}
+                                    onBlur={field.handleBlur}
+                                    placeholder={t('ui.loans.placeholders.user')}
+                                    disabled={comprobanteEmail || form.state.isSubmitting}
+                                    required={false}
+                                    autoComplete="off"
+                                />
+                                <FieldInfo field={field} />
+                            </>
+                        )}
+                    </form.Field>
+                </div>
+
+                {/* Due Date field */}
+                <div>
+                    <form.Field
+                        name="dueDate"
+                        validators={{
+                            onChangeAsync: async ({ value }) => {
+                                await new Promise((resolve) => setTimeout(resolve, 500));
+                                return !value ? t('ui.validation.required', { attribute: t('ui.loans.fields.duedate').toLowerCase() }) :
+                                value <= new Date ? t('ui.validation.pastDueDate', { attribute: t('ui.loans.fields.duedate').toLowerCase() }) :
+                                isSunday(value) ? t('ui.validation.sunday', { attribute: t('ui.loans.fields.duedate').toLowerCase() }) :
+                                undefined;
+
+                            },
+                        }}
+                    >
+                        {(field) => (
+                            <>
+                                <Label htmlFor={field.name}>
+                                    <div className="mb-1 flex items-center gap-1">
+                                        <Box color="grey" size={18} />
+                                        {t('ui.loans.fields.duedate')}
+                                    </div>
+                                </Label>
+                                <Popover>
+                                    <PopoverTrigger asChild>
+                                        <Button
+                                            variant={'outline'}
+                                            className={cn('w-[240px] justify-start text-left font-normal', !field.state.value && 'text-muted-foreground')}
+                                        >
+                                            <CalendarIcon />
+                                            {field.state.value ? format(field.state.value, 'PPP', {locale: langMap[lang]}) : <span>{t('ui.loans.utils.pickDate')}</span>}
+                                        </Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent className="w-auto p-0" align="start">
+                                    <Calendar
+                                        animate
+                                        mode="single"
+                                        locale={langMap[lang]}
+                                        disabled={[{ before: new Date() }, new Date(), isSunday]}
+                                        timeZone="Europe/Madrid"
+                                        selected={field.state.value}
+                                        onSelect={(value) => {
+                                            if (value) {
+                                            field.handleChange(value);
+                                            }
+                                        }}
                                     />
-                                    <FieldInfo field={field} />
-                                </div>
-                            )}
-                        </form.Field>
-                    </div>
 
-                    {/* Due Date field - Siempre editable */}
-                    <div>
-                        <form.Field
-                            name="due_date"
-                            validators={{
-                                onChangeAsync: async ({ value }) => {
-                                    await new Promise((r) => setTimeout(r, 300));
+                                    </PopoverContent>
+                                </Popover>
+                                {/* <DayPicker
+                                    animate
+                                    mode="single"
+                                    locale={langMap[lang]}
+                                    disabled={[{ before: new Date() }, new Date()]}
+                                    timeZone="Europe/Madrid"
+                                    selected={field.state.value}
+                                    onSelect={(value) => field.handleChange(value)}
+                                /> */}
+                                <FieldInfo field={field} />
+                            </>
+                        )}
+                    </form.Field>
+                </div>
 
-                                    if (!value) {
-                                        return t('ui.validation.required', { attribute: t('ui.loan.due_date') });
-                                    }
+                {/* Form buttons */}
+                <div className="mt-3 mt-4 flex justify-center gap-100">
+                    <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => {
+                            let url = '/loans';
+                            if (page) {
+                                url += `?page=${page}`;
+                                if (perPage) {
+                                    url += `&per_page=${perPage}`;
+                                }
+                            }
+                            router.visit(url);
+                        }}
+                        disabled={form.state.isSubmitting}
+                    >
+                        <X />
+                        {t('ui.loans.buttons.cancel')}
+                    </Button>
 
-                                    const parsedDate = parseISO(value);
-                                    if (!isValid(parsedDate)) {
-                                        return t('ui.validation.date', { attribute: t('ui.loan.due_date') });
-                                    }
-
-                                    if (!isAfter(parsedDate, new Date())) {
-                                        return t('ui.validation.after_today', { attribute: t('ui.loan.due_date') });
-                                    }
-
-                                    return undefined;
-                                },
-                            }}
-                        >
-                            {(field) => {
-                                const date = field.state.value ? parseISO(field.state.value) : null;
-
-                                return (
-                                    <>
-                                        <Label htmlFor={field.name}>{t('ui.loan.due_date')}</Label>
-                                        <Popover>
-                                            <PopoverTrigger asChild>
-                                                <button
-                                                    type="button"
-                                                    className="w-full text-left flex items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm"
-                                                    disabled={form.state.isSubmitting}
-                                                >
-                                                    {date ? format(date, 'PPP') : t('ui.loan.createLoan.placeholders.date')}
-                                                    <CalendarIcon className="ml-2 h-4 w-4 text-muted-foreground" />
-                                                </button>
-                                            </PopoverTrigger>
-                                            <PopoverContent className="w-auto p-0">
-                                                <Calendar
-                                                    mode="single"
-                                                    timeZone="Europe/Madrid"
-                                                    selected={date ?? undefined}
-                                                    onSelect={(selectedDate) => {
-                                                        if (selectedDate) {
-                                                            const iso = selectedDate.toISOString().split('T')[0];
-                                                            field.handleChange(iso);
-                                                        }
-                                                    }}
-                                                    disabled={(date) => date < new Date()}
-                                                    initialFocus
-                                                />
-                                            </PopoverContent>
-                                        </Popover>
-                                        <FieldInfo field={field} />
-                                    </>
-                                );
-                            }}
-                        </form.Field>
-                    </div>
-
-                    <Separator className="my-4" />
-
-                    <div className="flex justify-end gap-4">
-                        <Button
-                            type="button"
-                            variant="outline"
-                            onClick={() => {
-                                let url = '/loans';
-                                if (page) url += `?page=${page}`;
-                                if (perPage) url += `&per_page=${perPage}`;
-                                router.visit(url);
-                            }}
-                            disabled={form.state.isSubmitting}
-                        >
-                            <X className="mr-2 h-4 w-4" />
-                            {t('ui.loan.buttons.cancel')}
-                        </Button>
-
-                        <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
-                            {([canSubmit, isSubmitting]) => (
-                                <Button type="submit" disabled={!canSubmit}>
-                                    <Save className="mr-2 h-4 w-4" />
-                                    {isSubmitting ? t('ui.loan.buttons.saving') : t(loan?.id ? 'ui.loan.buttons.update' : 'ui.loan.buttons.save')}
-                                </Button>
-                            )}
-                        </form.Subscribe>
-                    </div>
-                </CardContent>
-            </Card>
+                    <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
+                        {([canSubmit, isSubmitting]) => (
+                            <Button type="submit" disabled={!canSubmit}>
+                                <Save />
+                                {isSubmitting
+                                    ? t('ui.loans.buttons.saving')
+                                    : initialData
+                                      ? t('ui.loans.buttons.update')
+                                      : t('ui.loans.buttons.save')}
+                            </Button>
+                        )}
+                    </form.Subscribe>
+                </div>
+            </div>
         </form>
     );
 }

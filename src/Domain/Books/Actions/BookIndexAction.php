@@ -2,46 +2,82 @@
 
 namespace Domain\Books\Actions;
 
-use Domain\Books\Models\Book;
-use Domain\Models\floors\Floor;
-use Domain\Zones\Models\Zone;
 use Domain\Bookcases\Models\Bookcase;
 use Domain\Books\Data\Resources\BookResource;
+use Domain\Books\Models\Book;
+use Domain\Models\floors\Floor;
+use Domain\Loans\Models\Loan;
+use Domain\Zones\Models\Zone;
 
 class BookIndexAction
 {
     public function __invoke(?array $search = null, int $perPage = 10)
     {
-        [$title, $genres, $author, $length, $editor, $floorNumber, $zoneNumber, $bookcaseNumber] = $search ?? [];
+        $title = $search[0];
+        $genres = $search[1];
+        $author = $search[2];
+        $pages = $search[3];
+        $publisher = $search[4];
+        $floor = $search[5];
+        $zone = $search[6];
+        $bookcase = $search[7];
+        $isbn = $search[8];
+        $available = $search[9];
 
-        // Obtener floor_id si corresponde
-        $floorId = null;
-        if ($floorNumber !== "null") {
-            $floorId = Floor::where('floor_number', $floorNumber)->value('id');
-        }
+        $floorModel = Floor::query()->when($floor !== "null", function ($query) use ($floor) {
+            $query->where('floor_number', '=', $floor);
+        })->first();
 
-        // Filtrar zonas por número y floor_id
-        $zoneIds = Zone::query()
-            ->when($zoneNumber !== "null", fn ($q) => $q->where('number', $zoneNumber))
-            ->when($floorId, fn ($q) => $q->where('floor_id', $floorId))
-            ->pluck('id');
+        $floor_id = $floorModel ? $floorModel->id : null;
 
-        // Filtrar bookcases por número y zona
-        $bookcaseIds = Bookcase::query()
-            ->when($bookcaseNumber !== "null", fn ($q) => $q->where('number', $bookcaseNumber))
-            ->when($zoneIds->isNotEmpty(), fn ($q) => $q->whereIn('zone_id', $zoneIds))
-            ->pluck('id');
+        $zones = Zone::query()->when($zone !== "null", function ($query) use ($zone) {
+            $query->where('number', '=', $zone);
+        })
+        ->when($floor !== "null" && $floor_id !== null, function ($query) use ($floor_id) {
+            $query->where('floor_id', '=', $floor_id);
+        })->pluck('id');
 
-        // Construir la consulta principal de libros
-        $booksQuery = Book::query()
-            ->when($title !== "null", fn ($q) => $q->where('title', 'ILIKE', "%$title%"))
-            ->when($genres !== "null", fn ($q) => $q->where('genres', 'ILIKE', "%$genres%"))
-            ->when($author !== "null", fn ($q) => $q->where('author', 'ILIKE', "%$author%"))
-            ->when($length !== "null", fn ($q) => $q->where('length', $length))
-            ->when($editor !== "null", fn ($q) => $q->where('editor', 'ILIKE', "%$editor%"))
-            ->when($bookcaseIds->isNotEmpty(), fn ($q) => $q->whereIn('bookcase_id', $bookcaseIds))
-            ->latest();
-        $paginated = $booksQuery->paginate($perPage);
-        return $paginated->through(fn ($book) => BookResource::fromModel($book));
+        $bookcases = Bookcase::query()
+            ->when($bookcase !== "null", function ($query) use ($bookcase) {
+                $query->where('number', '=', $bookcase);
+            })
+            ->when($zone !== "null" || $floor !== 'null', function ($query) use ($zones) {
+                $query->whereIn('zone_id', $zones);
+            })->pluck('id');
+
+        $libros_prestados = Loan::where('is_active', '=', true)->pluck('book_id');
+
+        $book = Book::query()
+        ->when($title !== "null", function ($query) use ($title) {
+            $query->where('title', 'ILIKE', '%'.$title.'%');
+        })
+        ->when($genres !== "null", function ($query) use ($genres) {
+            $query->where('genres', 'ILIKE', '%'.$genres.'%');
+        })
+        ->when($author !== "null", function ($query) use ($author) {
+            $query->where('author', 'ILIKE', '%'.$author.'%');
+        })
+        ->when($pages !== "null", function ($query) use ($pages) {
+            $query->where('length', '=', $pages);
+        })
+        ->when($publisher !== "null", function ($query) use ($publisher) {
+            $query->where('editor', 'ILIKE', '%'.$publisher.'%');
+        })
+        ->when($bookcases !== "null", function ($query) use ($bookcases) {
+            $query->whereIn('bookcase_id', $bookcases);
+        })
+        ->when($isbn !== "null", function ($query) use ($isbn) {
+            $query->where('isbn', 'ILIKE', '%'.$isbn.'%');
+        })
+        ->when($available=='true', function ($query) use ($libros_prestados) {
+            $query->whereNotIn('id', $libros_prestados);
+        })
+        ->when($available=='false', function ($query) use ($libros_prestados) {
+            $query->whereIn('id', $libros_prestados);
+        })
+            ->latest()
+            ->paginate($perPage);
+
+        return $book->through(fn ($book) => BookResource::fromModel($book));
     }
 }

@@ -6,50 +6,38 @@ import { BookForm } from '@/pages/books/components/BookForm';
 import { Book } from 'lucide-react';
 
 interface BookFormProps {
-  initialData?: {
-    id: string;
-    title: string;
-    author: string;
-    editor: string;
-    length: number;
-    isbn: string;
-    bookcase_id: number;
-    genres: string;
-    count_book?: number;
-    count_loan_book?: number;
-    avaiable?: boolean;
-    zone_id?: number;
-    floor_id?: number;
-  };
-  floors: {
-    id: string;
-    floor_number: number;
-  }[];
-  zones: {
-    id: string;
-    number: number;
-    floor_id: string;
-    genre_name: string;
-  }[];
-  bookcases: {
-    id: string;
-    number: number;
-    books_count: number;
-    capacity: number;
-    zone_id: string;
-  }[];
-  genres: { value: string; label: string }[];
-  page?: string;
-  explosion?: string[];
-  perPage?: string;
+    book: {
+        id: string;
+        title: string;
+        author: string;
+        editor: string;
+        length: number;
+        genre: string;
+        bookcase_id: string;
+    };
+    floors: {
+        id: string;
+        floor_number: number;
+    }[];
+    zones: {
+        id: string;
+        number: number;
+        genre_name: string;
+        floor_id: string;
+    }[];
+    bookcases: {
+        id: string;
+        number: number;
+        capacity: number;
+        books_count: number;
+        zone_id: string;
+    }[];
+    explosion: string[];
+    genres: { value: string; label: string }[];
+    imgPreviaUrl: string;
 }
 
-interface Genre {
-  value: string;
-  label?: string;
-}
-
-export default function CreateBook({initialData, genres, explosion, floors, zones, bookcases}:BookFormProps) {
+export default function CreateBook({book, genres, explosion, floors, zones, bookcases, imgPreviaUrl}:BookFormProps) {
     const { t } = useTranslations();
 
     return (
@@ -67,7 +55,7 @@ export default function CreateBook({initialData, genres, explosion, floors, zone
                     </CardHeader>
                     <Separator />
                     <CardContent>
-                        <BookForm initialData={initialData} genres={genres} explosion={explosion} floors={floors} zones={zones} bookcases={bookcases}/>
+                        <BookForm initialData={book} genres={genres} explosion={explosion} floors={floors} zones={zones} bookcases={bookcases} imgPreviaUrl={imgPreviaUrl}/>
                     </CardContent>
                 </Card>
             </div>

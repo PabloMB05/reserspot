@@ -22,6 +22,7 @@ class Book extends Model implements HasMedia
      * Create a new factory instance for the model.
      */
     protected static function newFactory()
+    
     {
         return BookFactory::new();
     }
@@ -56,5 +57,9 @@ class Book extends Model implements HasMedia
     public function activeLoan()
     {
         return $this->hasOne(Loan::class)->where('is_active', true);
+    }
+    public function reservations(): HasMany
+    {
+        return $this->hasMany(Reservation::class);
     }
 }

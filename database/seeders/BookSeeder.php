@@ -9,9 +9,13 @@ class BookSeeder extends Seeder
 {
     public function run()
     {
-        // Insert specific data
+        // Crear 50 libros usando la fábrica
+        $books = Book::factory(50)->create();
 
-        Book::factory(50)->create();
-
+        // Agregar medios para cada libro usando su UUID
+        foreach ($books as $book) {
+            // Aquí agregamos un archivo desde una URL a cada libro
+            $book->addMediaFromUrl('https://img.freepik.com/free-vector/abstract-elegant-winter-book-cover_23-2148798745.jpg')->toMediaCollection('media');
+        }
     }
 }
