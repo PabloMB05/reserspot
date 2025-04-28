@@ -41,10 +41,10 @@ class confirmaciondereserva extends Notification implements ShouldQueue
     {
 
         return (new MailMessage)
-                    ->line('¡Hola '.$notifiable->name.'!')
-                    ->line('¡Es tu turno para poder leer '.$this->book->title.'!')
-                    ->action('Ven a reservarlo', url('/books'))
-                    ->line('¡No tardes!');
+        ->line('¡Hola '.$notifiable->name.'!')
+        ->line('¡Ya puedes leer '.$this->book->title.'! Tu turno ha llegado.')
+        ->action('Reserva ahora', url('/books'))
+        ->line('¡No dejes pasar la oportunidad!');
 
     }
 

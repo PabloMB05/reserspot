@@ -22,7 +22,6 @@ class BookIndexAction
         $zone = $search[6];
         $bookcase = $search[7];
         $isbn = $search[8];
-        $available = $search[9];
 
         $floorModel = Floor::query()->when($floor !== "null", function ($query) use ($floor) {
             $query->where('floor_number', '=', $floor);
@@ -68,12 +67,6 @@ class BookIndexAction
         })
         ->when($isbn !== "null", function ($query) use ($isbn) {
             $query->where('isbn', 'ILIKE', '%'.$isbn.'%');
-        })
-        ->when($available=='true', function ($query) use ($libros_prestados) {
-            $query->whereNotIn('id', $libros_prestados);
-        })
-        ->when($available=='false', function ($query) use ($libros_prestados) {
-            $query->whereIn('id', $libros_prestados);
         })
             ->latest()
             ->paginate($perPage);

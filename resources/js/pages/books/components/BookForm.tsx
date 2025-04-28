@@ -3,6 +3,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { MultiSelect } from '@/components/ui/multi-select';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useTranslations } from '@/hooks/use-translations';
 import { router } from '@inertiajs/react';
 import type { AnyFieldApi } from '@tanstack/react-form';
@@ -51,7 +52,6 @@ interface Genre {
     label?: string;
 }
 
-// Field error display component
 function FieldInfo({ field }: { field: AnyFieldApi }) {
     return (
         <>
@@ -67,12 +67,10 @@ var generosFinales: string[] = [];
 export function BookForm({ initialData, page, perPage, genres, explosion, floors, zones, bookcases, imgPreviaUrl }: BookFormProps) {
     const { t } = useTranslations();
     const queryClient = useQueryClient();
-
-    // Function to transform the genres array and add 'label' field
     const transformGenres = (genres: Genre[]) => {
         return genres.map((genre) => ({
             ...genre,
-            label: t(`ui.genres.names.${genre.value}`), // Create the translation key dynamically
+            label: t(`ui.genres.names.${genre.value}`), 
         }));
     };
 
@@ -182,7 +180,6 @@ export function BookForm({ initialData, page, perPage, genres, explosion, floors
                 },
             };
 
-            // Submit with Inertia
             if (initialData) {
                 router.post(`/books/${initialData.id}`, formData, options);
             } else {
@@ -190,8 +187,6 @@ export function BookForm({ initialData, page, perPage, genres, explosion, floors
             }
         },
     });
-
-    // Form submission handler
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         e.stopPropagation();
@@ -200,97 +195,24 @@ export function BookForm({ initialData, page, perPage, genres, explosion, floors
 
     return (
         <form onSubmit={handleSubmit} noValidate>
-            <div className="space-y-4">
-                {/* Title field */}
-                <div>
-                    <form.Field
-                        name="title"
-                        validators={{
-                            onChangeAsync: async ({ value }) => {
-                                await new Promise((resolve) => setTimeout(resolve, 500));
-                                return !value
-                                    ? t('ui.validation.required', { attribute: t('ui.books.fields.title').toLowerCase() })
-                                    : value.length < 2
-                                      ? t('ui.validation.min.string', { attribute: t('ui.books.fields.title').toLowerCase(), min: '2' })
-                                      : undefined;
-                            },
-                        }}
-                    >
-                        {(field) => (
-                            <>
-                                <Label htmlFor={field.name}>
-                                    <div className="mb-1 flex items-center gap-1">
-                                        <Book color="grey" size={18} />
-                                        {t('ui.books.fields.title')}
-                                    </div>
-                                </Label>
-                                <Input
-                                    id={field.name}
-                                    name={field.name}
-                                    value={field.state.value}
-                                    onChange={(e) => field.handleChange(e.target.value)}
-                                    onBlur={field.handleBlur}
-                                    placeholder={t('ui.books.placeholders.title')}
-                                    disabled={form.state.isSubmitting}
-                                    required={false}
-                                    autoComplete="off"
-                                />
-                                <FieldInfo field={field} />
-                            </>
-                        )}
-                    </form.Field>
-                </div>
-                {/* Author field */}
-                <div>
-                    <form.Field
-                        name="author"
-                        validators={{
-                            onChangeAsync: async ({ value }) => {
-                                await new Promise((resolve) => setTimeout(resolve, 500));
-                                return !value
-                                    ? t('ui.validation.required', { attribute: t('ui.books.fields.author').toLowerCase() })
-                                    : value.length < 2
-                                      ? t('ui.validation.min.string', { attribute: t('ui.books.fields.author').toLowerCase(), min: '2' })
-                                      : undefined;
-                            },
-                        }}
-                    >
-                        {(field) => (
-                            <>
-                                <Label htmlFor={field.name}>
-                                    <div className="mb-1 flex items-center gap-1">
-                                        <UserPen color="grey" size={18} />
-                                        {t('ui.books.fields.author')}
-                                    </div>
-                                </Label>
-                                <Input
-                                    id={field.name}
-                                    name={field.name}
-                                    value={field.state.value}
-                                    onChange={(e) => field.handleChange(e.target.value)}
-                                    onBlur={field.handleBlur}
-                                    placeholder={t('ui.books.placeholders.author')}
-                                    disabled={form.state.isSubmitting}
-                                    required={false}
-                                    autoComplete="off"
-                                />
-                                <FieldInfo field={field} />
-                            </>
-                        )}
-                    </form.Field>
-                </div>
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                    {/* Editor field */}
+            <Tabs defaultValue="book-info" className="space-y-4">
+                <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="book-info">{t('ui.books.tabs.bookInfo')}</TabsTrigger>
+                    <TabsTrigger value="location">{t('ui.books.tabs.location')}</TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="book-info" className="space-y-4">
+                    {/* Title field */}
                     <div>
                         <form.Field
-                            name="editor"
+                            name="title"
                             validators={{
                                 onChangeAsync: async ({ value }) => {
                                     await new Promise((resolve) => setTimeout(resolve, 500));
                                     return !value
-                                        ? t('ui.validation.required', { attribute: t('ui.books.fields.publisher').toLowerCase() })
+                                        ? t('ui.validation.required', { attribute: t('ui.books.fields.title').toLowerCase() })
                                         : value.length < 2
-                                          ? t('ui.validation.min.string', { attribute: t('ui.books.fields.publisher').toLowerCase(), min: '2' })
+                                          ? t('ui.validation.min.string', { attribute: t('ui.books.fields.title').toLowerCase(), min: '2' })
                                           : undefined;
                                 },
                             }}
@@ -299,8 +221,8 @@ export function BookForm({ initialData, page, perPage, genres, explosion, floors
                                 <>
                                     <Label htmlFor={field.name}>
                                         <div className="mb-1 flex items-center gap-1">
-                                            <FilePenLine color="grey" size={18} />
-                                            {t('ui.books.fields.editor')}
+                                            <Book color="grey" size={18} />
+                                            {t('ui.books.fields.title')}
                                         </div>
                                     </Label>
                                     <Input
@@ -309,7 +231,7 @@ export function BookForm({ initialData, page, perPage, genres, explosion, floors
                                         value={field.state.value}
                                         onChange={(e) => field.handleChange(e.target.value)}
                                         onBlur={field.handleBlur}
-                                        placeholder={t('ui.books.placeholders.publisher')}
+                                        placeholder={t('ui.books.placeholders.title')}
                                         disabled={form.state.isSubmitting}
                                         required={false}
                                         autoComplete="off"
@@ -319,15 +241,18 @@ export function BookForm({ initialData, page, perPage, genres, explosion, floors
                             )}
                         </form.Field>
                     </div>
-
-                    {/* Pages field */}
+                    {/* Author field */}
                     <div>
                         <form.Field
-                            name="length"
+                            name="author"
                             validators={{
                                 onChangeAsync: async ({ value }) => {
                                     await new Promise((resolve) => setTimeout(resolve, 500));
-                                    return !value ? t('ui.validation.required', { attribute: t('ui.books.fields.length').toLowerCase() }) : undefined;
+                                    return !value
+                                        ? t('ui.validation.required', { attribute: t('ui.books.fields.author').toLowerCase() })
+                                        : value.length < 2
+                                          ? t('ui.validation.min.string', { attribute: t('ui.books.fields.author').toLowerCase(), min: '2' })
+                                          : undefined;
                                 },
                             }}
                         >
@@ -335,20 +260,17 @@ export function BookForm({ initialData, page, perPage, genres, explosion, floors
                                 <>
                                     <Label htmlFor={field.name}>
                                         <div className="mb-1 flex items-center gap-1">
-                                            <PencilRuler color="grey" size={18} />
-                                            {t('ui.books.fields.length')}
+                                            <UserPen color="grey" size={18} />
+                                            {t('ui.books.fields.author')}
                                         </div>
                                     </Label>
                                     <Input
                                         id={field.name}
                                         name={field.name}
-                                        type="number"
-                                        min={1}
-                                        step={1}
                                         value={field.state.value}
-                                        onChange={(e) => field.handleChange(parseInt(e.target.value))}
+                                        onChange={(e) => field.handleChange(e.target.value)}
                                         onBlur={field.handleBlur}
-                                        placeholder={t('ui.books.placeholders.pages')}
+                                        placeholder={t('ui.books.placeholders.author')}
                                         disabled={form.state.isSubmitting}
                                         required={false}
                                         autoComplete="off"
@@ -358,190 +280,245 @@ export function BookForm({ initialData, page, perPage, genres, explosion, floors
                             )}
                         </form.Field>
                     </div>
-                </div>
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        {/* Editor field */}
+                        <div>
+                            <form.Field
+                                name="editor"
+                                validators={{
+                                    onChangeAsync: async ({ value }) => {
+                                        await new Promise((resolve) => setTimeout(resolve, 500));
+                                        return !value
+                                            ? t('ui.validation.required', { attribute: t('ui.books.fields.publisher').toLowerCase() })
+                                            : value.length < 2
+                                              ? t('ui.validation.min.string', { attribute: t('ui.books.fields.publisher').toLowerCase(), min: '2' })
+                                              : undefined;
+                                    },
+                                }}
+                            >
+                                {(field) => (
+                                    <>
+                                        <Label htmlFor={field.name}>
+                                            <div className="mb-1 flex items-center gap-1">
+                                                <FilePenLine color="grey" size={18} />
+                                                {t('ui.books.fields.editor')}
+                                            </div>
+                                        </Label>
+                                        <Input
+                                            id={field.name}
+                                            name={field.name}
+                                            value={field.state.value}
+                                            onChange={(e) => field.handleChange(e.target.value)}
+                                            onBlur={field.handleBlur}
+                                            placeholder={t('ui.books.placeholders.publisher')}
+                                            disabled={form.state.isSubmitting}
+                                            required={false}
+                                            autoComplete="off"
+                                        />
+                                        <FieldInfo field={field} />
+                                    </>
+                                )}
+                            </form.Field>
+                        </div>
 
-                {/* Genres Multi Select Field */}
-
-                <div className="max-w-xl p-4">
-                    <h1 className="mb-4 text-2xl font-bold">{t('ui.books.fields.genres')}</h1>
-                    <MultiSelect
-                        options={transformedGenres}
-                        onValueChange={setSelectedGenres}
-                        defaultValue={selectedGenres}
-                        placeholder={t('ui.books.placeholders.genres')}
-                        variant="inverted"
-                        // animation={2}
-                        maxCount={3}
-                    />
-                    <div className="mt-4">
-                        <h2 className="mb-3 text-xl font-semibold">{t('ui.books.fields.selgenres')}</h2>
-                        <ul className="grid list-none grid-cols-3 gap-x-4 gap-y-2">
-                            {selectedGenres.map((genre) => (
-                                <li key={genre} className="rounded-full border-2 border-white bg-transparent px-3 py-1 text-sm text-white">
-                                    {t(`ui.genres.names.${genre}`)}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                </div>
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                    {/* Floor Select */}
-                    <div>
-                        <Label>
-                            <div className="mb-1 flex items-center gap-1">
-                                <Layers color="grey" size={18} />
-                                {t('ui.books.fields.floor')}
-                            </div>
-                        </Label>
-                        <Select required={true} value={selectedFloor} onValueChange={(value) => handleFloorChange(value)}>
-                            <SelectTrigger className="w-[180px]">
-                                <SelectValue placeholder={t('ui.books.fields.floor')} />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {floors.map((floor) => (
-                                    <SelectItem key={floor.id} value={floor.id}>
-                                        {t('ui.books.fields.floor')} {floor.floor_number}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
+                        {/* Pages field */}
+                        <div>
+                            <form.Field
+                                name="length"
+                                validators={{
+                                    onChangeAsync: async ({ value }) => {
+                                        await new Promise((resolve) => setTimeout(resolve, 500));
+                                        return !value ? t('ui.validation.required', { attribute: t('ui.books.fields.length').toLowerCase() }) : undefined;
+                                    },
+                                }}
+                            >
+                                {(field) => (
+                                    <>
+                                        <Label htmlFor={field.name}>
+                                            <div className="mb-1 flex items-center gap-1">
+                                                <PencilRuler color="grey" size={18} />
+                                                {t('ui.books.fields.length')}
+                                            </div>
+                                        </Label>
+                                        <Input
+                                            id={field.name}
+                                            name={field.name}
+                                            type="number"
+                                            min={1}
+                                            step={1}
+                                            value={field.state.value}
+                                            onChange={(e) => field.handleChange(parseInt(e.target.value))}
+                                            onBlur={field.handleBlur}
+                                            placeholder={t('ui.books.placeholders.pages')}
+                                            disabled={form.state.isSubmitting}
+                                            required={false}
+                                            autoComplete="off"
+                                        />
+                                        <FieldInfo field={field} />
+                                    </>
+                                )}
+                            </form.Field>
+                        </div>
                     </div>
 
-                    {/* Zone Select */}
-                    <div>
-                        <Label>
-                            <div className="mb-1 flex items-center gap-1">
-                                <LandPlot color="grey" size={18} />
-                                {t('ui.books.fields.zone')}
-                            </div>
-                        </Label>
-                        <Select disabled={comprobantePiso()} required={true} value={selectedZone} onValueChange={(value) => handleZoneChange(value)}>
-                            <SelectTrigger className="w-[180px]">
-                                <SelectValue placeholder={t('ui.books.fields.zone')} />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {zones
-                                    .filter((zone) => zone.floor_id === selectedFloor)
-                                    .filter((zone) => selectedGenres.includes(zone.genre_name))
-                                    .map((zone) => (
-                                        <SelectItem key={zone.id} value={zone.id}>
-                                            {`${t(`ui.books.fields.zone`)} ${zone.number} - ${t(`ui.genres.names.${zone.genre_name}`)}`}
-                                            {/* DIABLO */}
-                                        </SelectItem>
-                                    ))}
-                            </SelectContent>
-                        </Select>
+                    {/* Genres Multi Select Field */}
+                    <div className="max-w-xl p-4">
+                        <h1 className="mb-4 text-2xl font-bold">{t('ui.books.fields.genres')}</h1>
+                        <MultiSelect
+                            options={transformedGenres}
+                            onValueChange={setSelectedGenres}
+                            defaultValue={selectedGenres}
+                            placeholder={t('ui.books.placeholders.genres')}
+                            variant="inverted"
+                            maxCount={3}
+                        />
                     </div>
-                    {/* Bookcase field */}
+
                     <div>
                         <form.Field
-                            name="bookcase_id"
-                            validators={{
-                                onChangeAsync: async ({ value }) => {
-                                    await new Promise((resolve) => setTimeout(resolve, 500));
-                                    return !value ? t('ui.validation.required', { attribute: t('ui.books.fields.bookcase').toLowerCase() }) : null;
-                                },
-                            }}
+                            name="imagen"
                         >
                             {(field) => (
                                 <>
                                     <Label htmlFor={field.name}>
                                         <div className="mb-1 flex items-center gap-1">
-                                            <ChartColumnStacked color="grey" size={18} />
-                                            {t('ui.books.fields.bookcase')}
+                                            <FilePenLine color="grey" size={18} />
+                                            {t('ui.books.fields.image')}
                                         </div>
                                     </Label>
-                                    <Select
-                                        disabled={comprobanteZona()}
-                                        required={true}
-                                        value={selectedBookcase}
-                                        onValueChange={(value) => field.handleChange(value)}
-                                    >
-                                        <SelectTrigger className="w-[180px]">
-                                            <SelectValue placeholder={t('ui.books.fields.bookcase')} />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {bookcases
-                                                .filter((bookcase) => bookcase.zone_id === selectedZone)
-                                                .map((bookcase) => (
-                                                    <SelectItem
-                                                        key={bookcase.id}
-                                                        value={bookcase.id}
-                                                        disabled={bookcase.books_count >= bookcase.capacity}
-                                                    >
-                                                        {`${t(`ui.books.fields.bookcase`)} ${bookcase.number} - ${bookcase.books_count}/${bookcase.capacity}`}
-                                                        {bookcase.books_count >= bookcase.capacity ? <Lock></Lock> : ''}
-                                                        {/* DIABLO */}
-                                                    </SelectItem>
-                                                ))}
-                                        </SelectContent>
-                                    </Select>
+                                    <Input
+                                        id={field.name}
+                                        type="file"
+                                        name={field.name}
+                                        onChange={(e) => {
+                                            field.handleChange(e.target.files[0]);
+                                            setSelectedImage(e.target.files[0]);
+                                        }}
+                                        onBlur={field.handleBlur}
+                                        disabled={form.state.isSubmitting}
+                                        required={false}
+                                        autoComplete="off"
+                                    />
                                     <FieldInfo field={field} />
                                 </>
                             )}
                         </form.Field>
                     </div>
-                </div>
 
-                {/* Image field */}
-                <div>
-                    <form.Field
-                        name="imagen"
-                        // validators={{
-                        //     onChangeAsync: async ({ value }) => {
-                        //         await new Promise((resolve) => setTimeout(resolve, 500));
-                        //         return !value
-                        //             ? t('ui.validation.required', { attribute: t('ui.books.fields.editor').toLowerCase() })
-                        //             : undefined;
-                        //     },
-                        // }}
-                    >
-                        {(field) => (
-                            <>
-                                <Label htmlFor={field.name}>
-                                    <div className="mb-1 flex items-center gap-1">
-                                        <FilePenLine color="grey" size={18} />
-                                        {t('ui.books.fields.image')}
-                                    </div>
-                                </Label>
-                                <Input
-                                    id={field.name}
-                                    type="file"
-                                    name={field.name}
-                                    // value={}
-                                    onChange={(e) => {
-                                        // console.log(e.target.files);
-                                        field.handleChange(e.target.files[0]);
-                                        // console.log(e.target.files);
-                                        setSelectedImage(e.target.files[0]);
-                                    }}
-                                    onBlur={field.handleBlur}
-                                    disabled={form.state.isSubmitting}
-                                    required={false}
-                                    autoComplete="off"
-                                />
-                                <FieldInfo field={field} />
-                            </>
-                        )}
-                    </form.Field>
-                </div>
+                    {/* Image Preview */}
+                    {SelectedImage && (
+                        <img src={URL.createObjectURL(SelectedImage)} alt="Preview" style={{ width: '200px', height: 'auto', marginTop: '10px' }} />
+                    )}
 
-                {/* Image Preview */}
+                    {/* Image Preview */}
+                    {imgPreviaUrl && !SelectedImage && (
+                        <span>
+                            <img src={imgPreviaUrl} alt="Preview" style={{ width: '200px', height: 'auto', marginTop: '10px' }} />
+                        </span>
+                    )}
+                </TabsContent>
 
-                {SelectedImage && (
-                    <img src={URL.createObjectURL(SelectedImage)} alt="Preview" style={{ width: '200px', height: 'auto', marginTop: '10px' }} />
-                )}
+                <TabsContent value="location" className="space-y-4">
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                        {/* Floor Select */}
+                        <div>
+                            <Label>
+                                <div className="mb-1 flex items-center gap-1">
+                                    <Layers color="grey" size={18} />
+                                    {t('ui.books.fields.floor')}
+                                </div>
+                            </Label>
+                            <Select required={true} value={selectedFloor} onValueChange={(value) => handleFloorChange(value)}>
+                                <SelectTrigger className="w-[180px]">
+                                    <SelectValue placeholder={t('ui.books.fields.floor')} />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {floors.map((floor) => (
+                                        <SelectItem key={floor.id} value={floor.id}>
+                                            {t('ui.books.fields.floor')} {floor.floor_number}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
 
-                {/* Image Preview */}
+                        {/* Zone Select */}
+                        <div>
+                            <Label>
+                                <div className="mb-1 flex items-center gap-1">
+                                    <LandPlot color="grey" size={18} />
+                                    {t('ui.books.fields.zone')}
+                                </div>
+                            </Label>
+                            <Select disabled={comprobantePiso()} required={true} value={selectedZone} onValueChange={(value) => handleZoneChange(value)}>
+                                <SelectTrigger className="w-[180px]">
+                                    <SelectValue placeholder={t('ui.books.fields.zone')} />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {zones
+                                        .filter((zone) => zone.floor_id === selectedFloor)
+                                        .filter((zone) => selectedGenres.includes(zone.genre_name))
+                                        .map((zone) => (
+                                            <SelectItem key={zone.id} value={zone.id}>
+                                                {`${t(`ui.books.fields.zone`)} ${zone.number} - ${t(`ui.genres.names.${zone.genre_name}`)}`}
+                                            </SelectItem>
+                                        ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        {/* Bookcase field */}
+                        <div>
+                            <form.Field
+                                name="bookcase_id"
+                                validators={{
+                                    onChangeAsync: async ({ value }) => {
+                                        await new Promise((resolve) => setTimeout(resolve, 500));
+                                        return !value ? t('ui.validation.required', { attribute: t('ui.books.fields.bookcase').toLowerCase() }) : null;
+                                    },
+                                }}
+                            >
+                                {(field) => (
+                                    <>
+                                        <Label htmlFor={field.name}>
+                                            <div className="mb-1 flex items-center gap-1">
+                                                <ChartColumnStacked color="grey" size={18} />
+                                                {t('ui.books.fields.bookcase')}
+                                            </div>
+                                        </Label>
+                                        <Select
+                                            disabled={comprobanteZona()}
+                                            required={true}
+                                            value={selectedBookcase}
+                                            onValueChange={(value) => field.handleChange(value)}
+                                        >
+                                            <SelectTrigger className="w-[180px]">
+                                                <SelectValue placeholder={t('ui.books.fields.bookcase')} />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {bookcases
+                                                    .filter((bookcase) => bookcase.zone_id === selectedZone)
+                                                    .map((bookcase) => (
+                                                        <SelectItem
+                                                            key={bookcase.id}
+                                                            value={bookcase.id}
+                                                            disabled={bookcase.books_count >= bookcase.capacity}
+                                                        >
+                                                            {`${t(`ui.books.fields.bookcase`)} ${bookcase.number} - ${bookcase.books_count}/${bookcase.capacity}`}
+                                                            {bookcase.books_count >= bookcase.capacity ? <Lock></Lock> : ''}
+                                                        </SelectItem>
+                                                    ))}
+                                            </SelectContent>
+                                        </Select>
+                                        <FieldInfo field={field} />
+                                    </>
+                                )}
+                            </form.Field>
+                        </div>
+                    </div>
+                </TabsContent>
 
-                {imgPreviaUrl && !SelectedImage && (
-                    <span>
-                        <img src={imgPreviaUrl} alt="Preview" style={{ width: '200px', height: 'auto', marginTop: '10px' }} />
-                    </span>
-                )}
-
-                {/* Form buttons */}
-                <div className="mt-3 mt-4 flex justify-center gap-100">
+                {/* Form buttons - placed outside tabs to always be visible */}
+                <div className="mt-3 flex justify-center gap-100">
                     <Button
                         type="button"
                         variant="outline"
@@ -574,7 +551,7 @@ export function BookForm({ initialData, page, perPage, genres, explosion, floors
                         )}
                     </form.Subscribe>
                 </div>
-            </div>
+            </Tabs>
         </form>
     );
 }

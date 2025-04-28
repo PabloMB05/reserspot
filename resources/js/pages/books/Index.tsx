@@ -27,12 +27,10 @@ interface BookIndexProps {
 export default function BooksIndex({floor_list, zone_list, bookcase_list}:BookIndexProps) {
     const { t } = useTranslations();
     const { url } = usePage();
-    // Obtener los parámetros de la URL actual
     const urlParams = new URLSearchParams(url.split('?')[1] || '');
     const pageParam = urlParams.get('page');
     const perPageParam = urlParams.get('per_page');
 
-    // Inicializar el estado con los valores de la URL o los valores predeterminados
     const [currentPage, setCurrentPage] = useState(pageParam ? parseInt(pageParam) : 1);
     const [perPage, setPerPage] = useState(perPageParam ? parseInt(perPageParam) : 10);
     const [filters, setFilters] = useState<Record<string, any>>({});
@@ -50,7 +48,6 @@ export default function BooksIndex({floor_list, zone_list, bookcase_list}:BookIn
         filters.zone ? filters.zone : 'null',
         filters.bookcase ? filters.bookcase : 'null',
         filters.ISBN ? filters.ISBN : 'null',
-        filters.available ? filters.available : 'null',
     ];
 
     const {
@@ -74,15 +71,7 @@ export default function BooksIndex({floor_list, zone_list, bookcase_list}:BookIn
         return router.get('/loans/create', { bookID });
     }
 
-    function HandleReservation(bookID: string, userMail: string) {
 
-        const reservationData = new FormData();
-        reservationData.append('bookID', bookID);
-        reservationData.append('userMail', userMail);
-
-        router.post('/reservations', reservationData);
-        // window.location.reload();
-    }
 
     const handleFilterChange = (newFilters: Record<string, any>) => {
         const filtersChanged = newFilters!==filters;
@@ -95,7 +84,7 @@ export default function BooksIndex({floor_list, zone_list, bookcase_list}:BookIn
 
     const handlePerPageChange = (newPerPage: number) => {
         setPerPage(newPerPage);
-        setCurrentPage(1); // Reset to first page when changing items per page
+        setCurrentPage(1); 
     };
 
     const handleDeleteBook = async (id: string) => {
@@ -107,7 +96,12 @@ export default function BooksIndex({floor_list, zone_list, bookcase_list}:BookIn
             console.error('Error deleting book:', error);
         }
     };
-
+    function HandleReservation(bookID: string, userMail: string) {
+        const reservationData = new FormData();
+        reservationData.append('bookID', bookID);
+        reservationData.append('userMail', userMail);
+        router.post('/reservations', reservationData);
+    }
     const columns = useMemo(
         () =>
             [
@@ -123,38 +117,6 @@ export default function BooksIndex({floor_list, zone_list, bookcase_list}:BookIn
                     format: (value) => {
                         return value['number'] + ' - (' + value['loans'] + '/' + value['total'] + ')';
 
-                    },
-                }),
-                createTextColumn<Book>({
-                    id: 'hasActive',
-                    header: t('ui.books.utils.available') || 'Title',
-                    accessorKey: 'hasActive',
-                    format: (value) => {
-                        return !value ? t('ui.books.utils.available') : t('ui.books.utils.unavailable');
-                    },
-                }),
-                createActionsColumn<Book>({
-                    id: 'imgUrl',
-                    header: t('ui.books.columns.image') || 'Image',
-                    accessorKey: 'imgUrl',
-                    renderActions(book) {
-                        return (
-                            <TooltipProvider>
-                                <Tooltip>
-                                    <TooltipTrigger>
-                                        <Image />
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                        {/* Check if URL exists */}
-                                        {book.imgUrl ? (
-                                            <img src={book.imgUrl} alt="Preview" style={{ width: '200px', height: 'auto', marginTop: '10px' }} />
-                                        ) : (
-                                            <span>{book.imgUrl}</span> // Fallback message or image
-                                        )}
-                                    </TooltipContent>
-                                </Tooltip>
-                            </TooltipProvider>
-                        );
                     },
                 }),
                 createTextColumn<Book>({
@@ -207,11 +169,6 @@ export default function BooksIndex({floor_list, zone_list, bookcase_list}:BookIn
                     header: t('ui.books.columns.bookcase') || 'Bookcase',
                     accessorKey: 'bookcase_id',
                 }),
-                // createDateColumn<Book>({
-                //     id: 'created_at',
-                //     header: t('ui.books.columns.created_at') || 'Created At',
-                //     accessorKey: 'created_at',
-                // }),
                 createActionsColumn<Book>({
                     id: 'actions',
                     header: t('ui.books.columns.actions') || 'Actions',
@@ -311,16 +268,7 @@ export default function BooksIndex({floor_list, zone_list, bookcase_list}:BookIn
                                         type: 'text',
                                         placeholder: t('ui.books.placeholders.ISBN') || 'ISBN...',
                                     },
-                                    {
-                                        id: 'available',
-                                        label: t('ui.books.filters.available') || 'Disponible',
-                                        type: 'select',
-                                        options: [
-                                            {label: 'Disponible', value: 'true'},
-                                            {label: 'No disponible', value: 'false'},
-                                        ],
-                                        placeholder: t('ui.books.placeholders.available') || 'Disponible...',
-                                    },
+                                    
                                     {
                                         id: 'genres',
                                         label: t('ui.books.filters.genres') || 'Géneros',
@@ -376,9 +324,6 @@ export default function BooksIndex({floor_list, zone_list, bookcase_list}:BookIn
         </AccordionContent>
       </AccordionItem>
     </Accordion>
-    <div className="text-center w-full justify-center mb-5">
-    {books?.meta.total !== undefined && <h2>{t('ui.common.filters.results', {attribute: books?.meta.total})}</h2>}
-    </div>
 
                     <div className="w-full overflow-hidden">
                         {isLoading ? (
@@ -458,7 +403,6 @@ export default function BooksIndex({floor_list, zone_list, bookcase_list}:BookIn
                         <Button
                             onClick={() => {
                                 if (selectedBook) HandleReservation(selectedBook.id, reserMail);
-                                //comprobar email Y libro
                                 if (selectedBook) setOpen(false);
                             }}
                         >

@@ -45,4 +45,4 @@ export default function CreateLoan({lang, emailList}:LoanFormProps) {
             </div>
         </LoanLayout>
     );
-}b
+}

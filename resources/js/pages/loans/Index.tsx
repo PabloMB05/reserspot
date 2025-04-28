@@ -330,10 +330,6 @@ export default function LoansIndex({lang}:IndexLoanProps) {
                             initialValues={filters}
                         />
                     </div>
-                    <div className="text-center w-full justify-center mb-5">
-
-                    {loans?.meta.total !== undefined && <h2>{t('ui.common.filters.results', {attribute: loans?.meta.total})}</h2>}
-</div>
                     <div className="w-full overflow-hidden">
                         {isLoading ? (
                             <TableSkeleton columns={10} rows={10} />

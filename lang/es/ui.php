@@ -391,174 +391,108 @@ return [
             'Magical' => 'Mágico',
         ],
     ],
-    'books' => [
-        'create' => 'Crear Libro',
-        'edit' => 'Editar Libro',
-        'title' => 'Libros',
-        'buttons' => [
-            'new' => 'Nuevo libro',
-        ],
-        'columns' => [
-            'title' => 'Título',
-            'genres' => 'Géneros',
-            'author' => 'Autor',
-            'length' => 'Páginas',
-            'editor' => 'Editorial',
-            'isbn' => 'ISBN',
-            'floor' => 'Piso',
-            'zone' => 'Zona',
-            'bookcase' => 'Estantería',
-            'created_at' => 'Fecha de creación',
-            'actions' => 'Acciones',
-        ],
+    
+  'books' => [
+        'title' => 'Books',
+        'create' => 'Create Book',
+        'edit' => 'Edit Book',
         'fields' => [
-            'title' => 'Titulo',
-            'email' => 'Email',
-            'password' => 'Contraseña',
-            'password_optional' => 'Contraseña (opcional)',
-            'created_at' => 'Fecha de creación',
-            'actions' => 'Acciones',
-            'rolPpal' => 'Rol Principal',
-            'permisos' => 'Permisos Específicos'
+            'title' => 'Title',
+            'author' => 'Author',
+            'genres' => 'Genres',
+            'publisher' => 'Publisher',
+            'editor' => 'Publisher',
+            'length' => 'Pages',
+            'bookcase' => 'Bookcase',
+            'zone' => 'Zone',
+            'floor' => 'Floor',
+            'image' => 'Image',
+            'created_at' => 'Creation at',
+            'actions' => 'Actions',
+            'selgenres' => 'Selected Genres'
+        ],
+        'utils' => [
+            'available' => 'Available',
+            'unavailable' => 'Unavailable'
         ],
         'columns' => [
-            'title' => 'Título',
-            'author' => 'Autor',
-            'genres' => 'Géneros',
-            'editor' => 'Editorial',
-            'length' => 'Páginas',
-            'bookcase' => 'Estantería',
-            'zone' => 'Zona',
-            'floor' => 'Piso',
-            'created_at' => 'Fecha de creación',
-            'actions' => 'Acciones',
-        ],
-        'gridelements' => [
-            'users' => 'Usuarios',
-            'products' => 'Productos',
-            'reports' => 'Reportes',
-            'configurations' => 'Configuración',
-        ],
-        'permisos' => [
-            'Users' => [
-                'users' => [
-                    'view' => 'Ver usuarios',
-                    'create' => 'Crear usuarios',
-                    'edit' => 'Editar usuarios',
-                    'delete' => 'Eliminar usuarios'
-                ],
-            ],
-            'Products' => [
-                'products' => [
-                    'view' => 'Ver productos',
-                    'create' => 'Crear productos',
-                    'edit' => 'Editar productos',
-                    'delete' => 'Eliminar productos'
-                ],
-
-            ],
-            'Reports' => [
-                'reports' => [
-                    'view' => 'Ver reportes',
-                    'export' => 'Exportar reportes',
-                    'print' => 'Imprimir reportes'
-                ],
-
-            ],
-            'Config' => [
-                'config' => [
-                    'access' => 'Acceso a configuración',
-                    'modify' => 'Modificar configuración'
-                ],
-
-            ],
-        ],
-        'roles' => [
-            'default' => 'Selecciona un Rol',
-            'admin' => 'Administrador',
-            'advanced' => 'Usuario Avanzado',
-            'usuario' => 'Usuario Básico'
+            'title' => 'Title',
+            'author' => 'Author',
+            'genres' => 'Genres',
+            'editor' => 'Publisher',
+            'length' => 'Pages',
+            'bookcase' => 'Bookcase',
+            'zone' => 'Zone',
+            'floor' => 'Floor',
+            'image' => 'Image',
+            'created_at' => 'Creation at',
+            'actions' => 'Actions',
         ],
         'filters' => [
-            'search' => 'Buscar',
-            'title' => 'Título del Libro',
-            'author' => 'Autor del Libro',
+            'title' => 'Title',
+            'author' => 'Author',
+            'genres' => 'Genres',
+            'publisher' => 'Publisher',
+            'pages' => 'Pages',
+            'bookcase' => 'Bookcase',
+            'available' => 'Availability',
+            'zone' => 'Zone',
+            'floor' => 'Floor',
         ],
         'placeholders' => [
-            'title' => 'Titulo...',
-            'author' => 'Autor...',
-            'password' => 'Contraseña segura',
-            'search' => 'Buscar libros...',
-            'passRulings' => 'La contraseña debe tener al menos 8 caracteres, incluyendo letras y números'
-        ],
-        'tabs' => [
-            'userForm' => 'Información Básica',
-            'permissionsForm' => 'Roles y Permisos'
+            'title' => 'Enter the Title...',
+            'author' => 'Enter the Author...',
+            'ISBN' => 'Enter the ISBN...',
+            'genres' => 'Enter the Genre/s...',
+            'publisher' => 'Enter the Publisher...',
+            'available' => 'Availability',
+            'pages' => 'Enter number of pages...',
+            'bookcase' => 'Enter the Bookcase...',
+            'zone' => 'Enter the Zone...',
+            'floor' => 'Enter the Floor...',
         ],
         'cards' => [
-            'title' => 'Crear Nuevo Usuario',
-            'description' => 'Ingresa la información para crear un nuevo usuario en el sistema'
+            'create' => [
+                'title' => 'Create New Book',
+                'description' => 'Enter the information to create a new book in the system'
+            ],
+            'edit' => [
+                'title' => 'Edit Book',
+                'description' => 'Enter the new information to edit this book'
+            ]
         ],
         'buttons' => [
-            'new' => 'Nuevo Usuario',
-            'edit' => 'Editar',
-            'save' => 'Guardar',
-            'update' => 'Actualizar',
-            'cancel' => 'Cancelar',
-            'delete' => 'Eliminar',
-            'deleting' => 'Eliminando...',
-            'saving' => 'Guardando...',
-            'retry' => 'Reintentar',
+            'new' => 'New Book',
+            'edit' => 'Edit',
+            'save' => 'Save',
+            'update' => 'Update',
+            'cancel' => 'Cancel',
+            'delete' => 'Delete',
+            'deleting' => 'Deleting...',
+            'saving' => 'Saving...',
+            'retry' => 'Retry',
+            'loan' => 'Lend',
+            'queue' => 'Make a reservation',
+
         ],
         'delete' => [
-            'title' => '¿Estás seguro?',
+            'title' => 'Are you sure?',
             'description' => 'Esta acción no se puede deshacer. Se eliminará permanentemente el usuario del sistema.',
         ],
         'delete_dialog' => [
-            'title' => '¿Estás seguro?',
+            'title' => 'Are you sure?',
             'description' => 'Esta acción no se puede deshacer. Se eliminará permanentemente el usuario del sistema.',
-            'success' => 'Eliminado correctamente ;)',
+            'success' => 'Deleted successfully ;)',
         ],
-        'deleted_error' => 'Error al eliminar el usuario',
-        'no_results' => 'No hay resultados.',
-        'error_loading' => 'Error al cargar los usuarios. Por favor, inténtalo de nuevo.',
-        'showing_results' => 'Mostrando :from a :to de :total resultados',
+        'deleted_error' => 'Error trying to delete the book',
+        'no_results' => 'No results.',
+        'error_loading' => 'Error loading books. Please, try again.',
+        'showing_results' => 'showing :from to :to from :total results',
         'pagination' => [
-            'previous' => 'Anterior',
-            'next' => 'Siguiente',
+            'previous' => 'Last',
+            'next' => 'Next',
         ],
     ],
-  "books"=> [
-    "tabs"=> [
-      "basic"=> "Datos básicos",
-      "location"=> "Ubicación"
-    ],
-    "fields"=> [
-      "title"=> "Título",
-      "author"=> "Autor",
-      "editor"=> "Editorial",
-      "length"=> "Número de páginas",
-      "genres"=> "Géneros",
-      "selgenres"=> "Géneros seleccionados"
-    ],
-    "placeholders"=> [
-      "title"=> "Introduce el título del libro",
-      "author"=> "Introduce el nombre del autor",
-      "editor"=> "Introduce la editorial",
-      "length"=> "Número de páginas",
-      "genres"=> "Selecciona hasta 3 géneros"
-    ],
-    "buttons"=> [
-      "cancel"=> "Cancelar",
-      "save"=> "Guardar",
-      "saving"=> "Guardando...",
-      "update"=> "Actualizar"
-    ],
-    "error"=> [
-      "create"=> "Hubo un error al crear el libro.",
-      "update"=> "Hubo un error al actualizar el libro."
-    ],
-],
 
 
 ];

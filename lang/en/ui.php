@@ -12,16 +12,81 @@ return [
             'documentation' => 'Documentation',
         ],
     ],
+    'reservations' => [
+        'title' => 'Reservations',
+        'filters' => [
+            'book' => 'Book title',
+            'email' => 'User email',
+            'queue' => 'Queue Position',
+        ],
+        'placeholders' => [
+            'book' => 'Enter book title...',
+            'user' => 'Enter user email...',
+            'queue' => 'Enter queue position...'
+        ],
+        'columns' => [
+            'book_id' => 'User Name',
+            'user_id' => 'User email',
+            'puesto' => 'Position',
+            'created_at' => 'Created at',
+            'actions' => 'Actions',
+        ],
+        'delete' => [
+            'title' => 'Delete Reservation',
+            'description' => 'Are you sure you want to delete this reservation? This action cannot be undone.',
+        ],
+    ],
+    'loans' => [
+        'title' => 'Loans',
+        'buttons' => [
+            'new' => 'New Loan',
+        ],
+        'filters'=>[
+            'book'=> 'Enter a book title...',
+            'email'=> 'Enter user email...',
+            'status'=> 'Enter status...',
+            'start_date'=> 'Enter start date...',
+            'due_date'=> 'Enter due date...',
+        ],
+        'placeholders' => [
+            'booktitle' => 'Book title',
+            'email' => 'Email',
+            'status' => 'Status',
+            'start_date' => 'Start date',
+            'due_date' => 'Due date',
+        ],
+        'columns' => [
+            'book' => 'Book',
+            'email' => 'Email',
+            'status' => 'Status',
+            'created_at' => 'Created at',
+            'remaining' => 'Remaining',
+            'duedate' => 'Due date',
+            'actions' => 'Actions',
+        ],
+        'utils' => [
+            'inProgress' => 'In progress',
+            'finished' => 'Finished',
+            'returned' => 'Returned on: ',
+            'days' => 'days',
+            'remaining' => 'Remaining',
+        ],
+    ],
+    'common' => [
+        'filters' => [
+            'results' => 'Results',
+        ],
+    ],
     'buttons' => [
-        'new' => 'Nuevo Usuario',
-        'edit' => 'Editar',
-        'save' => 'Guardar',
-        'update' => 'Actualizar',
-        'cancel' => 'Cancelar',
-        'delete' => 'Eliminar',
-        'deleting' => 'Eliminando...',
-        'saving' => 'Guardando...',
-        'retry' => 'Reintentar',
+        'new' => 'New',
+        'edit' => 'Edit',
+        'save' => 'Save',
+        'update' => 'Update',
+        'cancel' => 'Cancel',
+        'delete' => 'Delete',
+        'deleting' => 'Deleting...',
+        'saving' => 'Saving...',
+        'retry' => 'Retry',
     ],
     'dashboard' => [
         'users' => 'Users',
@@ -96,16 +161,16 @@ return [
         ],
     ],
     'validation' => [
-           'required' => 'The :attribute field is required.',
-            'email' => 'The :attribute field must be a valid email address.',
-            'min' => [
-                'string' => 'The :attribute field must be at least :min characters.',
-            ],
-            'max' => [
-                'string' => 'The :attribute field must not be greater than :max characters.',
-            ],
-            'unique' => 'The :attribute has already been taken.',
-            'confirmed' => 'The :attribute confirmation does not match.',
+        'required' => 'The :attribute field is required.',
+        'email' => 'The :attribute field must be a valid email address.',
+        'min' => [
+            'string' => 'The :attribute field must be at least :min characters.',
+        ],
+        'max' => [
+            'string' => 'The :attribute field must not be greater than :max characters.',
+        ],
+        'unique' => 'The :attribute has already been taken.',
+        'confirmed' => 'The :attribute confirmation does not match.',
     ],
     'common' => [
         'buttons' => [
@@ -113,7 +178,7 @@ return [
             'delete' => 'Delete',
             'close' => 'Close',
         ],
-        'filters'=> [
+        'filters' => [
             'title' => 'Filters',
             'clear' => 'Clear',
         ],
@@ -140,89 +205,88 @@ return [
     'bookcases' => [
         'title' => 'Bookcases',
         "cards" => [
-            "create"=>[
-                "title"=> "Create bookcase", 
-                "description"=> "Fill out the form below to add a new bookcase to the collection."
+            "create" => [
+                "title" => "Create bookcase",
+                "description" => "Fill out the form below to add a new bookcase to the collection."
             ],
-            "edit"=>[
-                    "title" => "Edit bookcase",
-                    "description"=> "Fill out the form below to update a bookcase to the collection.",
-                ],
+            "edit" => [
+                "title" => "Edit bookcase",
+                "description" => "Fill out the form below to update a bookcase in the collection.",
+            ],
         ],
         'buttons' => [
             'new' => 'New Bookcase',
         ],
         'filters' => [
-            'title'=> 'Title',
+            'title' => 'Title',
             'genres' => 'Genre',
             'author' => 'Author',
             'pages' => 'Pages',
-            'publisher'=> 'Editorial',
-            'floor'=> 'Floor Number',
-            'zone'=> 'Zone Number',
-            'bookcase'=>'Bookcase Number',
+            'publisher' => 'Publisher',
+            'floor' => 'Floor Number',
+            'zone' => 'Zone Number',
+            'bookcase' => 'Bookcase Number',
             'capacity' => 'Capacity',
-            
         ],
-        'fields'=>[
-            'bookcase'=> 'Bookcase Number',
+        'fields' => [
+            'bookcase' => 'Bookcase Number',
             'capacity' => 'Capacity',
-            'floor'=> 'Floor Number',
-            'zone'=> 'Zone Number',
-            'zoneGenre'=> 'Genre',
+            'floor' => 'Floor Number',
+            'zone' => 'Zone Number',
+            'zoneGenre' => 'Genre',
         ],
-        'columns'=>[
-            'bookcase'=> 'Bookcase Number',
+        'columns' => [
+            'bookcase' => 'Bookcase Number',
             'capacity' => 'Capacity',
-            'floor'=> 'Floor Number',
-            'zone'=> 'Zone Number',
-            'zoneGenre'=> 'Genre',
-            'created_at'=> 'Create at',
-            'actions'=> 'Actions'
+            'floor' => 'Floor Number',
+            'zone' => 'Zone Number',
+            'zoneGenre' => 'Genre',
+            'created_at' => 'Created at',
+            'actions' => 'Actions'
         ],
         'placeholders' => [
-            'title'=> 'Enter a title...',
-            'genres' =>'Enter a genre...',
-            'author'=> 'Enter a author...',
-            'pages'=> 'Enter a pages...',
-            'publisher'=> 'Enter a editorial...',
-            'floor'=> 'Enter a floor...',
+            'title' => 'Enter a title...',
+            'genres' => 'Enter a genre...',
+            'author' => 'Enter an author...',
+            'pages' => 'Enter page count...',
+            'publisher' => 'Enter a publisher...',
+            'floor' => 'Enter a floor...',
             'zone' => 'Enter a zone...',
             'bookcase' => 'Enter a bookcase...',
-            'capacity' => 'Enter a capacity...'
+            'capacity' => 'Enter capacity...'
         ],
     ],
     'zones' => [
         'title' => 'Zones',
         "cards" => [
-            "create"=>[
-                "title"=> "Create Zones", 
-                "description"=> "Fill out the form below to add a new zone to the collection."
+            "create" => [
+                "title" => "Create Zone",
+                "description" => "Fill out the form below to add a new zone to the collection."
             ],
-            "edit"=>[
-                    "title" => "Edit Zone",
-                    "description"=> "Fill out the form below to update a zones to the collection.",
-                ],
+            "edit" => [
+                "title" => "Edit Zone",
+                "description" => "Fill out the form below to update a zone in the collection.",
+            ],
         ],
         'buttons' => [
             'new' => 'New Zone',
         ],
-        'filters'=>[
-            'number'=> 'Zone Number',
-            'capacity'=> 'Capacity'
+        'filters' => [
+            'number' => 'Zone Number',
+            'capacity' => 'Capacity'
         ],
-        'placeholders'=>[
-            'number'=> 'Enter a number...',
-            'capacity'=> 'Enter a capacity...',
+        'placeholders' => [
+            'number' => 'Enter a number...',
+            'capacity' => 'Enter capacity...',
         ],
-        'columns'=> [
+        'columns' => [
             'number' => 'Zone Number',
             'capacity' => 'Capacity',
             'genre' => 'Genre',
-            'created_ad'=>'Created_at',
-            'actions'=> 'Actions'
+            'created_ad' => 'Created at',
+            'actions' => 'Actions'
         ],
-        'fields'=>[
+        'fields' => [
             'number' => 'Zone Number',
             'capacity' => 'Capacity',
             'genre' => 'Genre',
@@ -233,7 +297,7 @@ return [
         ],
         'validation' => [
             'number_required' => 'The zone number is required',
-            'number_integer' => 'The zone number must be an number',
+            'number_integer' => 'The zone number must be a number',
             'capacity_required' => 'The capacity is required',
             'capacity_integer' => 'The capacity must be a number',
             'capacity_min' => 'The capacity must be at least :min',
@@ -243,6 +307,9 @@ return [
         'title' => 'Users',
         'create' => 'Create User',
         'edit' => 'Edit User',
+        'flters'=>[
+            'search' => 'User search',
+        ],
         'fields' => [
             'name' => 'Name',
             'email' => 'Email',
@@ -260,12 +327,12 @@ return [
             'actions' => 'Actions',
         ],
         'gridelements' => [
-            'users' => 'Usuarios',
-            'products' => 'Productos',
-            'reports' => 'Reportes',
-            'configurations' => 'Configuración',
+            'users' => 'Users',
+            'products' => 'Products',
+            'reports' => 'Reports',
+            'configurations' => 'Configuration',
         ],
-        'permisos' => [
+        'permissions' => [
             'Users' => [
                 'users' => [
                     'view' => 'View users',
@@ -281,7 +348,6 @@ return [
                     'edit' => 'Edit products',
                     'delete' => 'Delete products'
                 ],
-
             ],
             'Reports' => [
                 'reports' => [
@@ -289,22 +355,13 @@ return [
                     'export' => 'Export reports',
                     'print' => 'Print reports'
                 ],
-
             ],
             'Config' => [
                 'config' => [
                     'access' => 'Access configuration',
                     'modify' => 'Modify configuration'
                 ],
-
             ],
-        ],
-        'gridelements' => [
-            'users' => 'Users',
-            'products' => 'Products',
-            'reports' => 'Reports',
-            'configurations' => 'Configuration',
-
         ],
         'roles' => [
             'default' => 'Select a Role',
@@ -317,11 +374,11 @@ return [
             'email' => 'User email',
         ],
         'placeholders' => [
-            'name' => 'Complete user name',
+            'name' => 'Full user name',
             'email' => 'email@example.com',
-            'password' => 'Secure user password',
+            'password' => 'Secure password',
             'search' => 'Search users...',
-            'passRulings' => 'The password must be at least 8 characters long, including nubers and letters'
+            'passRulings' => 'Password must be at least 8 characters long, including numbers and letters'
         ],
         'tabs' => [
             'userForm' => 'Basic Information',
@@ -349,7 +406,7 @@ return [
         'delete_dialog' => [
             'title' => 'Are you sure?',
             'description' => 'This action cannot be undone. The user will be permanently deleted from the system.',
-            'success' => 'Successfully deleted ;)',
+            'success' => 'Successfully deleted',
         ],
         'deleted_error' => 'Error deleting user',
         'no_results' => 'No results.',
@@ -367,7 +424,7 @@ return [
             'capacity' => 'Search by capacity',
         ],
         'columns' => [
-            'floor_number' => 'Number floor',
+            'floor_number' => 'Floor number',
             'capacity' => 'Capacity',
             'created_at' => 'Date created',
             'actions' => 'Actions',
@@ -375,11 +432,10 @@ return [
         'buttons' => [
             'new' => 'Create new floor',
         ],
-        'placeholders' =>[
-            'floor_number' => 'Number of floor',
-            'capacity' => 'capacity quantity',
+        'placeholders' => [
+            'floor_number' => 'Floor number',
+            'capacity' => 'Capacity quantity',
         ],
-        
     ],
     'floor' => [
         'create' => 'Create Floor',
@@ -390,7 +446,6 @@ return [
         'capacity' => 'Capacity',
         'createdAt' => 'Created At',
         'actions' => 'Actions',
-        
         'validation' => [
             'number_required' => 'The floor number is required',
             'number_integer' => 'The floor number must be an integer',
@@ -399,7 +454,6 @@ return [
             'capacity_integer' => 'The capacity must be a number',
             'capacity_min' => 'The capacity must be at least :min',
         ],
-        
         'messages' => [
             'created' => 'Floor created successfully',
             'updated' => 'Floor updated successfully',
@@ -410,7 +464,6 @@ return [
                 'delete' => 'Error deleting floor',
             ],
         ],
-        
         'buttons' => [
             'create' => 'Create Floor',
             'save' => 'Save',
@@ -419,43 +472,45 @@ return [
             'edit' => 'Edit',
             'delete' => 'Delete',
         ],
-        
         'titles' => [
             'list' => 'Floors List',
             'management' => 'Floor Management',
             'details' => 'Floor Details',
         ],
-        
         'placeholders' => [
             'number' => 'Enter floor number',
             'capacity' => 'Enter capacity',
             'search' => 'Search floors...',
         ],
-        
         'filters' => [
             'all' => 'All Floors',
             'active' => 'Active Floors',
         ],
-        
         'empty' => [
             'title' => 'No floors found',
             'description' => 'Start by creating a new floor',
         ],
-    
     ],
     'books' => [
+        'filters' => [
+            'search' => 'Search',
+            'title' => 'Book Title...',
+            'author' => 'Book Author...',
+            'available' => 'Available',
+            'genres' => 'Book Genre...',
+        ],
         'title' => 'Books',
         'create' => 'Create Book',
         'edit' => 'Edit Book',
         'fields' => [
             'title' => 'Title',
             'email' => 'Email',
-            'password' => 'Contraseña',
-            'password_optional' => 'Contraseña (opcional)',
-            'created_at' => 'Fecha de creación',
-            'actions' => 'Acciones',
-            'rolPpal' => 'Rol Principal',
-            'permisos' => 'Permisos Específicos'
+            'password' => 'Password',
+            'password_optional' => 'Password (optional)',
+            'created_at' => 'Created at',
+            'actions' => 'Actions',
+            'rolPpal' => 'Main Role',
+            'permisos' => 'Specific Permissions'
         ],
         'columns' => [
             'title' => 'Title',
@@ -466,190 +521,186 @@ return [
             'bookcase' => 'Bookcase',
             'zone' => 'Zone',
             'floor' => 'Floor',
-            'created_at' => 'Creation at',
+            'created_at' => 'Created at',
             'actions' => 'Actions',
         ],
         'gridelements' => [
-            'users' => 'Usuarios',
-            'products' => 'Productos',
-            'reports' => 'Reportes',
-            'configurations' => 'Configuración',
+            'users' => 'Users',
+            'products' => 'Products',
+            'reports' => 'Reports',
+            'configurations' => 'Configuration',
         ],
-        'permisos' => [
+        'permissions' => [
             'Users' => [
                 'users' => [
-                    'view' => 'Ver usuarios',
-                    'create' => 'Crear usuarios',
-                    'edit' => 'Editar usuarios',
-                    'delete' => 'Eliminar usuarios'
+                    'view' => 'View users',
+                    'create' => 'Create users',
+                    'edit' => 'Edit users',
+                    'delete' => 'Delete users'
                 ],
             ],
             'Products' => [
                 'products' => [
-                    'view' => 'Ver productos',
-                    'create' => 'Crear productos',
-                    'edit' => 'Editar productos',
-                    'delete' => 'Eliminar productos'
+                    'view' => 'View products',
+                    'create' => 'Create products',
+                    'edit' => 'Edit products',
+                    'delete' => 'Delete products'
                 ],
-
             ],
             'Reports' => [
                 'reports' => [
-                    'view' => 'Ver reportes',
-                    'export' => 'Exportar reportes',
-                    'print' => 'Imprimir reportes'
+                    'view' => 'View reports',
+                    'export' => 'Export reports',
+                    'print' => 'Print reports'
                 ],
-
             ],
             'Config' => [
                 'config' => [
-                    'access' => 'Acceso a configuración',
-                    'modify' => 'Modificar configuración'
+                    'access' => 'Access configuration',
+                    'modify' => 'Modify configuration'
                 ],
-
             ],
         ],
         'roles' => [
-            'default' => 'Selecciona un Rol',
-            'admin' => 'Administrador',
-            'advanced' => 'Usuario Avanzado',
-            'usuario' => 'Usuario Básico'
+            'default' => 'Select a Role',
+            'admin' => 'Administrator',
+            'advanced' => 'Advanced User',
+            'usuario' => 'Basic User'
         ],
         'filters' => [
-            'search' => 'Buscar',
-            'title' => "Book's Title...",
-            'author' => "Book's Author...",
+            'search' => 'Search',
+            'title' => 'Book Title...',
+            'author' => 'Book Author...',
+            'available' => 'Available',
+            'genres' => 'Book Genre...',
         ],
         'placeholders' => [
             'title' => 'Title...',
             'author' => 'Author...',
-            'password' => 'Contraseña segura',
+            'password' => 'Secure password',
             'search' => 'Search books...',
-            'passRulings' => 'La contraseña debe tener al menos 8 caracteres, incluyendo letras y números'
+            'passRulings' => 'Password must be at least 8 characters long, including letters and numbers'
         ],
         'tabs' => [
-            'userForm' => 'Información Básica',
-            'permissionsForm' => 'Roles y Permisos'
+            'userForm' => 'Basic Information',
+            'permissionsForm' => 'Roles and Permissions'
         ],
         'cards' => [
-            'title' => 'Crear Nuevo Usuario',
-            'description' => 'Ingresa la información para crear un nuevo usuario en el sistema'
+            'title' => 'Create New User',
+            'description' => 'Enter the information to create a new user in the system'
         ],
         'buttons' => [
-            'new' => 'Nuevo Usuario',
-            'edit' => 'Editar',
-            'save' => 'Guardar',
-            'update' => 'Actualizar',
-            'cancel' => 'Cancelar',
-            'delete' => 'Eliminar',
-            'deleting' => 'Eliminando...',
-            'saving' => 'Guardando...',
-            'retry' => 'Reintentar',
+            'new' => 'New',
+            'edit' => 'Edit',
+            'save' => 'Save',
+            'update' => 'Update',
+            'cancel' => 'Cancel',
+            'delete' => 'Delete',
+            'deleting' => 'Deleting...',
+            'saving' => 'Saving...',
+            'retry' => 'Retry',
         ],
         'delete' => [
-            'title' => '¿Estás seguro?',
-            'description' => 'Esta acción no se puede deshacer. Se eliminará permanentemente el usuario del sistema.',
+            'title' => 'Are you sure?',
+            'description' => 'This action cannot be undone. The user will be permanently deleted from the system.',
         ],
         'delete_dialog' => [
-            'title' => '¿Estás seguro?',
-            'description' => 'Esta acción no se puede deshacer. Se eliminará permanentemente el usuario del sistema.',
-            'success' => 'Eliminado correctamente ;)',
+            'title' => 'Are you sure?',
+            'description' => 'This action cannot be undone. The user will be permanently deleted from the system.',
+            'success' => 'Successfully deleted',
         ],
-        'deleted_error' => 'Error al eliminar el usuario',
-        'no_results' => 'No hay resultados.',
-        'error_loading' => 'Error al cargar los usuarios. Por favor, inténtalo de nuevo.',
-        'showing_results' => 'Mostrando :from a :to de :total resultados',
+        'deleted_error' => 'Error deleting user',
+        'no_results' => 'No results.',
+        'error_loading' => 'Error loading users. Please try again.',
+        'showing_results' => 'Showing :from to :to of :total results',
         'pagination' => [
-            'previous' => 'Anterior',
-            'next' => 'Siguiente',
+            'previous' => 'Previous',
+            'next' => 'Next',
         ],
     ],
-  "books"=> [
-    'title' => 'Books',
-    "tabs"=> [
-      "basic"=> "Basic Info",
-      "location"=> "Location"
-    ],
-    "cards" => [
-        "create"=>[
-            "title"=> "Create book", 
-            "description"=> "Fill out the form below to add a new book to the collection."
+    "books" => [
+        'title' => 'Books',
+        "tabs" => [
+            "basic" => "Basic Info",
+            "location" => "Location"
         ],
-        "edit"=>[
-                "title" => "Edit book",
-                "description"=> "Fill out the form below to update a book to the collection.",
+        "cards" => [
+            "create" => [
+                "title" => "Create book",
+                "description" => "Fill out the form below to add a new book to the collection."
             ],
+            "edit" => [
+                "title" => "Edit book",
+                "description" => "Fill out the form below to update a book in the collection.",
+            ],
+        ],
+        'columns' => [
+            'title' => 'Title',
+            'genres' => 'Genre',
+            'author' => 'Author',
+            'length' => 'Pages',
+            'editor' => 'Publisher',
+            'floor' => 'Floor Number',
+            'zone' => 'Zone Number',
+            'bookcase' => 'Bookcase Number',
+            'created_at' => 'Created at',
+            'actions' => 'Actions'
+        ],
+        "fields" => [
+            "title" => "Title",
+            "author" => "Author",
+            "editor" => "Publisher",
+            "length" => "Page Count",
+            "genres" => "Genres",
+            "selgenres" => "Selected genres",
+            "floors" => "Floor",
+            "floor" => "Floor: ",
+            "zones" => "Zone",
+            "zone" => "Zone: ",
+            "bookcases" => "Bookcase",
+            "bookcase" => "Bookcase: "
+        ],
+        "placeholders" => [
+            "title" => "Enter the book title",
+            "author" => "Enter the author's name",
+            "editor" => "Enter the publisher",
+            "length" => "Number of pages",
+            "genres" => "Select up to 3 genres"
+        ],
+        "buttons" => [
+            "cancel" => "Cancel",
+            "save" => "Save",
+            "saving" => "Saving...",
+            "update" => "Update",
+            'new' => 'New Book'
+        ],
+        "error" => [
+            "create" => "There was an error creating the book.",
+            "update" => "There was an error updating the book."
+        ],
     ],
-    'columns'=>[
-        'title'=> 'Title',
-        'genres' => 'Genre',
-        'author' => 'Author',
-        'length' => 'Pages',
-        'editor'=> 'Editorial',
-        'floor'=> 'Floor Number',
-        'zone'=> 'Zone Number',
-        'bookcase'=>'Bookcase Number',
-        'created_at' => 'Create at',
-        'actions' => 'Actions'
+    "genres" => [
+        "names" => [
+            "Fantasy" => "Fantasy",
+            "Drama" => "Drama",
+            "Historical" => "Historical",
+            "Science Fiction" => "Science Fiction",
+            "Horror" => "Horror",
+            "Mystery" => "Mystery",
+            "Thriller" => "Thriller",
+            "Romance" => "Romance",
+            "Adventure" => "Adventure",
+            "Dystopian" => "Dystopian",
+            "Gothic" => "Gothic",
+            "Magical Realism" => "Magical Realism",
+            "Satire" => "Satire",
+            "Comedy" => "Comedy",
+            "Tragedy" => "Tragedy",
+            "Crime Fiction" => "Crime Fiction",
+            "Mythology" => "Mythology",
+            "Western" => "Western",
+            "Cyberpunk" => "Cyberpunk",
+            "Poetry" => "Poetry",
+        ],
     ],
-    "fields"=> [
-      "title"=> "Title",
-      "author"=> "Author",
-      "editor"=> "Publisher",
-      "length"=> "Page Count",
-      "genres"=> "Genres",
-      "selgenres"=> "Selected genres",
-      "floors" => "Floor",
-      "floor" => "Floor: ",
-      "zones" => "Zone",
-      "zone" => "Zone: ",
-      "bookcases" => "Bookcase",
-      "bookcase" => "Bookcase: "
-    ],
-    "placeholders"=> [
-      "title"=> "Enter the book title",
-      "author"=> "Enter the author's name",
-      "editor"=> "Enter the publisher",
-      "length"=> "Number of pages",
-      "genres"=> "Select up to 3 genres"
-    ],
-    "buttons"=> [
-      "cancel"=> "Cancel",
-      "save"=> "Save",
-      "saving"=> "Saving...",
-      "update"=> "Update",
-      'new'=> 'New Book'
-    ],
-    "error"=> [
-      "create"=> "There was an error creating the book.",
-      "update"=> "There was an error updating the book."
-    ],
-    
-],
-"genres" => [
-    "names" => [
-        "Fantasy" => "Fantasy",
-        "Drama" => "Drama",
-        "Historical" => "Historical",
-        "Science Fiction" => "Science Fiction",
-        "Horror" => "Horror",
-        "Mystery" => "Mystery",
-        "Thriller" => "Thriller",
-        "Romance" => "Romance",
-        "Adventure" => "Adventure",
-        "Dystopian" => "Dystopian",
-        "Gothic" => "Gothic",
-        "Magical Realism" => "Magical Realism",
-        "Satire" => "Satire",
-        "Comedy" => "Comedy",
-        "Tragedy" => "Tragedy",
-        "Crime Fiction" => "Crime Fiction",
-        "Mythology" => "Mythology",
-        "Western" => "Western",
-        "Cyberpunk" => "Cyberpunk",
-        "Poetry" => "Poetry",
-    ],
-],
-
-
 ];
