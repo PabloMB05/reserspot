@@ -36,9 +36,7 @@ interface LoanFormProps {
     emailList: string[];
     page?: string;
     perPage?: string;
-
-        lang: 'en' | 'es';
-      
+    lang: string;
 }
 
 // Field error display component
@@ -171,6 +169,14 @@ export function LoanForm({ initialData, page, perPage, bookIDButton, lang, email
                 <div>
                     <form.Field
                         name="user"
+                        validators={{
+                            onChangeAsync: async ({ value }) => {
+                                await new Promise((resolve) => setTimeout(resolve, 500));
+                                return !value ? t('ui.validation.required', { attribute: t('ui.loans.fields.user').toLowerCase() }) :
+                                !emailList.includes(value) ? t('ui.validation.userEmail', { attribute: t('ui.loans.fields.user').toLowerCase() }) :
+                                undefined;
+                            },
+                        }}
                     >
                         {(field) => (
                             <>
@@ -232,20 +238,15 @@ export function LoanForm({ initialData, page, perPage, bookIDButton, lang, email
                                         </Button>
                                     </PopoverTrigger>
                                     <PopoverContent className="w-auto p-0" align="start">
-                                    <Calendar
-                                        animate
-                                        mode="single"
-                                        locale={langMap[lang]}
-                                        disabled={[{ before: new Date() }, new Date(), isSunday]}
-                                        timeZone="Europe/Madrid"
-                                        selected={field.state.value}
-                                        onSelect={(value) => {
-                                            if (value) {
-                                            field.handleChange(value);
-                                            }
-                                        }}
+                                        <Calendar
+                                    animate
+                                    mode="single"
+                                    locale={langMap[lang]}
+                                    disabled={[{ before: new Date() }, new Date(), isSunday]}
+                                    timeZone="Europe/Madrid"
+                                    selected={field.state.value}
+                                    onSelect={(value) => field.handleChange(value)}
                                     />
-
                                     </PopoverContent>
                                 </Popover>
                                 {/* <DayPicker

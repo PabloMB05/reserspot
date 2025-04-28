@@ -2,18 +2,36 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Separator } from '@/components/ui/separator';
 import { useTranslations } from '@/hooks/use-translations';
 import { LoanLayout } from '@/layouts/loans/LoanLayout';
+import { Book, Layers } from 'lucide-react';
 import { LoanForm } from './components/LoanForm';
+import { usePage } from '@inertiajs/react';
 
-export default function CreateLoan() {
+interface LoanFormProps {
+    initialData?: {
+        book_id: string;
+        email: string;
+
+    },
+    lang: string;
+    emailList: string[];
+
+}
+
+export default function CreateLoan({lang, emailList}:LoanFormProps) {
     const { t } = useTranslations();
+
+    const paramsString = window.location.search;
+    const searchParams = new URLSearchParams(paramsString);
+    const book_id = searchParams.get("bookID");
 
     return (
         <LoanLayout title={t('ui.loans.create')}>
-            <div className="flex justify-center w-full">
-                <Card className="w-full max-w-4xl m-4 p-4 shadow-lg dark:shadow-xs dark:shadow-white">
+            <div className="flex max-w-screen items-center self-center">
+                <Card className="w-100% m-4 p-4 shadow-lg dark:shadow-xs dark:shadow-white">
                     <CardHeader>
                         <CardTitle>
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-1">
+                                <Layers color="#2762c2" />
                                 {t('ui.loans.cards.create.title')}
                             </div>
                         </CardTitle>
@@ -21,10 +39,10 @@ export default function CreateLoan() {
                     </CardHeader>
                     <Separator />
                     <CardContent>
-                        <LoanForm />
+                        <LoanForm emailList={emailList} bookIDButton={book_id} lang={lang}/>
                     </CardContent>
                 </Card>
             </div>
         </LoanLayout>
     );
-}
+}b

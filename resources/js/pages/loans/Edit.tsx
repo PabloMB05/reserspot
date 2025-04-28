@@ -2,41 +2,56 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Separator } from '@/components/ui/separator';
 import { useTranslations } from '@/hooks/use-translations';
 import { LoanLayout } from '@/layouts/loans/LoanLayout';
-import { Layers } from 'lucide-react';
+import { Book, Layers } from 'lucide-react';
 import { LoanForm } from './components/LoanForm';
+import { usePage } from '@inertiajs/react';
 
-interface EditLoanProps {
-  loan: {
-    id: string;
-    user_email: string;
-    book_isbn: string;
-    due_date: string | Date;
-  };
-  page?: string;
-  perPage?: string;
-  user_email: string;  // Cambiado de email a user_email
-    book_isbn: string;  // Cambiado de isbn a book_isbn
+interface LoanFormProps {
+    loan?: {
+        id: string;
+        book_id: string;
+        user_id: string;
+        is_overdue: boolean;
+        is_active: boolean;
+        hours_between: number;
+        hoursDue_between: number;
+        created_at: string;
+        returned_at: string;
+        due_date: string;
+    },
+    usermail: string;
+    bookUUID: string;
+    emailList: string[];
+    ddate: string;
+    lang: string;
 }
 
+export default function CreateLoan({loan, lang, usermail, bookUUID, ddate, emailList}:LoanFormProps) {
+    const { t } = useTranslations();
 
-export default function EditLoan({ loan,book_isbn,user_email, page, perPage }: EditLoanProps) {
-  const { t } = useTranslations();
-  console.log(loan)
-  return (
-    <LoanLayout title={t('Editar préstamo')}>
-      <Card>
-        <CardHeader>
-          <CardTitle>
-            <Layers className="inline-block w-5 h-5 mr-2" />
-            {t('Editar préstamo')}
-          </CardTitle>
-          <CardDescription>{t('Modifica los datos del préstamo.')}</CardDescription>
-        </CardHeader>
-        <Separator />
-        <CardContent>
-          <LoanForm loan={loan} book_isbn={book_isbn} user_email={user_email} page={page} perPage={perPage} />
-        </CardContent>
-      </Card>
-    </LoanLayout>
-  );
+    const paramsString = window.location.search;
+    const searchParams = new URLSearchParams(paramsString);
+    const book_id = searchParams.get("bookID") || bookUUID;
+
+    return (
+        <LoanLayout title={t('ui.loans.edit')}>
+            <div className="flex max-w-screen items-center self-center">
+                <Card className="w-100% m-4 p-4 shadow-lg dark:shadow-xs dark:shadow-white">
+                    <CardHeader>
+                        <CardTitle>
+                            <div className="flex items-center gap-1">
+                                <Layers color="#2762c2" />
+                                {t('ui.loans.cards.create.title')}
+                            </div>
+                        </CardTitle>
+                        <CardDescription>{t('ui.loans.cards.edit.description')}</CardDescription>
+                    </CardHeader>
+                    <Separator />
+                    <CardContent>
+                        <LoanForm emailList={emailList} ddate={ddate} initialData={loan} usermail={usermail} bookIDButton={book_id} lang={lang}/>
+                    </CardContent>
+                </Card>
+            </div>
+        </LoanLayout>
+    );
 }

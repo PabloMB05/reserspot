@@ -2,7 +2,7 @@
 
 namespace Domain\Loans\Actions;
 
-use App\Notifications\confirmacion_reserva;
+use App\Notifications\confirmaciondereserva;
 use Carbon\Carbon;
 use Domain\Books\Models\Book;
 use Domain\Loans\Data\Resources\LoanResource;
@@ -23,7 +23,7 @@ class LoanUpdateAction
             $user_id_res = Reservation::where('book_id', 'like', $loan->book_id)->orderBy('created_at', 'asc')->first()->user_id;
             $user = User::find($user_id_res);
             $librito = Book::find($loan->book_id);
-            $user->notify(new confirmacion_reserva($librito));
+            $user->notify(new confirmaciondereserva($librito));
             Reservation::where('user_id', '=', $user_id_res)->where('book_id', '=', $loan->book_id)->first()->delete();
         }}
 
