@@ -1,6 +1,5 @@
 <?php
 
-
 return [
     'navigation' => [
         'menu' => 'Menú de Navegación',
@@ -13,6 +12,82 @@ return [
             'documentation' => 'Documentación',
         ],
     ],
+    'reservations' => [
+        'title' => 'Reservas',
+        'filters' => [
+            'book' => 'Título del libro',
+            'email' => 'Correo del usuario',
+            'queue' => 'Posición en cola',
+        ],
+        'placeholders' => [
+            'book' => 'Ingrese título del libro...',
+            'user' => 'Ingrese correo del usuario...',
+            'queue' => 'Ingrese posición en cola...'
+        ],
+        'columns' => [
+            'book_id' => 'Nombre de usuario',
+            'user_id' => 'Correo del usuario',
+            'puesto' => 'Posición',
+            'created_at' => 'Creado el',
+            'actions' => 'Acciones',
+        ],
+        'delete' => [
+            'title' => 'Eliminar Reserva',
+            'description' => '¿Está seguro de eliminar esta reserva? Esta acción no se puede deshacer.',
+        ],
+    ],
+    'loans' => [
+        'title' => 'Préstamos',
+        'buttons' => [
+            'new' => 'Nuevo Préstamo',
+        ],
+        'filters'=>[
+            'book'=> 'Ingrese título del libro...',
+            'email'=> 'Ingrese correo del usuario...',
+            'status'=> 'Ingrese estado...',
+            'start_date'=> 'Ingrese fecha de inicio...',
+            'due_date'=> 'Ingrese fecha de vencimiento...',
+        ],
+        'placeholders' => [
+            'booktitle' => 'Título del libro',
+            'email' => 'Correo electrónico',
+            'status' => 'Estado',
+            'start_date' => 'Fecha de inicio',
+            'due_date' => 'Fecha de vencimiento',
+        ],
+        'columns' => [
+            'book' => 'Libro',
+            'email' => 'Correo',
+            'status' => 'Estado',
+            'created_at' => 'Creado el',
+            'remaining' => 'Restante',
+            'duedate' => 'Fecha de vencimiento',
+            'actions' => 'Acciones',
+        ],
+        'utils' => [
+            'inProgress' => 'En progreso',
+            'finished' => 'Finalizado',
+            'returned' => 'Devuelto el: ',
+            'days' => 'días',
+            'remaining' => 'Restante',
+        ],
+    ],
+    'common' => [
+        'filters' => [
+            'results' => 'Resultados',
+        ],
+    ],
+    'buttons' => [
+        'new' => 'Nuevo',
+        'edit' => 'Editar',
+        'save' => 'Guardar',
+        'update' => 'Actualizar',
+        'cancel' => 'Cancelar',
+        'delete' => 'Eliminar',
+        'deleting' => 'Eliminando...',
+        'saving' => 'Guardando...',
+        'retry' => 'Reintentar',
+    ],
     'dashboard' => [
         'users' => 'Usuarios',
         'floors' => 'Pisos',
@@ -20,11 +95,11 @@ return [
         'zones' => 'Zonas',
         'bookcases' => 'Estanterías',
         'description' => [
-            'users' => 'Gestiona los usuarios del sistema',
-            'floors' => 'Gestiona los pisos y secciones del sistema',
-            'books' => 'Gestiona los libros del sistema',
-            'zones' => 'Gestiona las zonas del sistema',
-            'bookcases' => 'Gestiona las estanterías del sistema',
+            'users' => 'Gestionar todos los usuarios del sistema',
+            'floors' => 'Gestionar todos los pisos y secciones del sistema',
+            'books' => 'Gestionar todos los libros del sistema',
+            'zones' => 'Gestionar todas las zonas del sistema',
+            'bookcases' => 'Gestionar todas las estanterías del sistema',
         ]
     ],
     'user_menu' => [
@@ -33,11 +108,11 @@ return [
     ],
     'auth' => [
         'failed' => 'Estas credenciales no coinciden con nuestros registros.',
-        'throttle' => 'Demasiados intentos de inicio de sesión. Por favor, inténtalo de nuevo en :seconds segundos.',
+        'throttle' => 'Demasiados intentos de inicio de sesión. Por favor intente nuevamente en :seconds segundos.',
     ],
     'settings' => [
         'title' => 'Configuración',
-        'description' => 'Gestiona tu perfil y configuración de cuenta',
+        'description' => 'Administre la configuración de su perfil y cuenta',
         'navigation' => [
             'profile' => 'Perfil',
             'password' => 'Contraseña',
@@ -45,23 +120,23 @@ return [
             'languages' => 'Idiomas',
         ],
         'profile' => [
-            'title' => 'Configuración del perfil',
+            'title' => 'Configuración de perfil',
             'information_title' => 'Información del perfil',
-            'information_description' => 'Actualiza tu nombre y dirección de correo electrónico',
+            'information_description' => 'Actualice su nombre y dirección de correo',
             'name_label' => 'Nombre',
             'name_placeholder' => 'Nombre completo',
-            'email_label' => 'Dirección de correo',
-            'email_placeholder' => 'Dirección de correo',
-            'unverified_email' => 'Tu dirección de correo no está verificada.',
-            'resend_verification' => 'Haz clic aquí para reenviar el correo de verificación.',
-            'verification_sent' => 'Se ha enviado un nuevo enlace de verificación a tu dirección de correo.',
+            'email_label' => 'Correo electrónico',
+            'email_placeholder' => 'Correo electrónico',
+            'unverified_email' => 'Su correo electrónico no está verificado.',
+            'resend_verification' => 'Haga clic aquí para reenviar el correo de verificación.',
+            'verification_sent' => 'Se ha enviado un nuevo enlace de verificación a su correo electrónico.',
             'save_button' => 'Guardar',
             'saved_message' => 'Guardado',
         ],
         'password' => [
             'title' => 'Configuración de contraseña',
             'update_title' => 'Actualizar contraseña',
-            'update_description' => 'Asegúrate de que tu cuenta utilice una contraseña larga y aleatoria para mantenerse segura',
+            'update_description' => 'Asegúrese de usar una contraseña larga y aleatoria para mantener su cuenta segura',
             'current_password_label' => 'Contraseña actual',
             'current_password_placeholder' => 'Contraseña actual',
             'new_password_label' => 'Nueva contraseña',
@@ -73,7 +148,7 @@ return [
         ],
         'appearance' => [
             'title' => 'Configuración de apariencia',
-            'description' => 'Actualiza la configuración de apariencia de tu cuenta',
+            'description' => 'Actualice la configuración de apariencia de su cuenta',
             'modes' => [
                 'light' => 'Claro',
                 'dark' => 'Oscuro',
@@ -82,20 +157,20 @@ return [
         ],
         'languages' => [
             'title' => 'Configuración de idioma',
-            'description' => 'Cambia tu idioma preferido',
+            'description' => 'Cambie su idioma preferido',
         ],
     ],
     'validation' => [
-            'required' => 'El campo :attribute es obligatorio.',
-            'email' => 'El campo :attribute debe ser una dirección de correo válida.',
-            'min' => [
-                'string' => 'El campo :attribute debe tener al menos :min caracteres.',
-            ],
-            'max' => [
-                'string' => 'El campo :attribute no debe tener más de :max caracteres.',
-            ],
-            'unique' => 'El campo :attribute ya ha sido tomado.',
-            'confirmed' => 'El campo :attribute no coincide.',
+        'required' => 'El campo :attribute es obligatorio.',
+        'email' => 'El campo :attribute debe ser una dirección de correo válida.',
+        'min' => [
+            'string' => 'El campo :attribute debe tener al menos :min caracteres.',
+        ],
+        'max' => [
+            'string' => 'El campo :attribute no debe ser mayor a :max caracteres.',
+        ],
+        'unique' => 'El :attribute ya ha sido tomado.',
+        'confirmed' => 'La confirmación de :attribute no coincide.',
     ],
     'common' => [
         'buttons' => [
@@ -103,12 +178,12 @@ return [
             'delete' => 'Eliminar',
             'close' => 'Cerrar',
         ],
-        'filters'=> [
+        'filters' => [
             'title' => 'Filtros',
             'clear' => 'Limpiar',
         ],
         'delete_dialog' => [
-            'success' => 'Usuario eliminado correctamente',
+            'success' => 'Usuario eliminado exitosamente',
         ],
         'showing_results' => 'Mostrando :from a :to de :total resultados',
         'pagination' => [
@@ -118,170 +193,137 @@ return [
             'last' => 'Último',
         ],
         'per_page' => 'Por página',
-        'no_results' => 'No hay resultados',
+        'no_results' => 'Sin resultados',
     ],
     'floors' => [
         'title' => 'Pisos',
         'create' => 'Crear Piso',
         'buttons' => [
-            'new' => 'Crear Piso',
-        ],
-        'filters' => [
-            'floor_number' => 'Numero del piso',
-            'capacity' => 'Capacidad',
-        ],
-        'placeholders'=> [
-            'floor_number'=>'seleccione un número...',
-            'capacity'=> 'introduzca la capacidad',
-        ],
-        'columns'=>[
-            'floor_number' => 'Numero del piso',
-            'capacity' => 'Capacidad',
-            'created_at' => 'Fecha de creación',
-            'actions'=> 'Acciones',
-
-        ],
-    ],
-    'floor'=>[
-        'create' => 'Crear piso',
-        'create_description' => 'Formulario de creación del piso',
-        'number'=> 'Numero del piso',
-        'capacity'=> 'capacidad del piso',
-        'buttons'=>[
-            'cancel'=> 'cancelar piso',
-            'save' => 'Guardar piso',
-        ],
-    ],
-    'zones' => [
-        'title' => 'Zonas',
-        'create' => 'Crear Zona',
-        'buttons' => [
-            'new' => 'Crear Zona',
-        ],
-        'create' => [
-            'title' => 'titulo',
-            'desc' => 'desc'
-        ],
-        'filters'=>[
-            'number' => 'Número de la Zona',
-            'capacity'=> ' Capacidad de la Zona',
-        ],
-        'placeholders' => [
-            'number' => 'Seleccione un número',
-            'capacity' => 'Introduzca la capacidad',
-        ],
-        'columns' => [
-            'number' => 'Número',
-            'capacity' => 'Capacidad',
-            'genre' => 'Género',
-            'created_at' => 'Fecha de creación',
-            'actions'=> 'Acciones',
-        ],
-        'cards'=>[
-            'create'=>[
-                'title'=> 'Crear Zona',
-                'description'=> 'Formulario de creación de Zona',
-            ],
-            'edit'=>[
-                'title'=> 'Editar Zona',
-                'description'=> 'Formulario en el que podra editar una zona ya creada',
-            ],
-        ],
-        'number'=> 'Numero de la zona',
-        'capacity'=> 'Capacidad de la zona',
-        'floor' => 'Selecciona el piso en el que se encuentra la zona',
-        'select_floor' => 'Introduzca el piso...',
-        'genre' => 'Selecciona el género de la zona',
-        'select_genre' =>'ej: Horror',
-        'delete' => [
-            'title' => 'Eliminar zona',
-            'description' => '¿Estás seguro de que deseas eliminar esta zona? Esta acción no se puede deshacer.',
-        ],
-    ],
-    'common' => [
-        'cancel'=> 'Cancelar',
-        'save'=> 'Guardar',
-        'update'=> 'Actualizar',
-        'showing_results' => 'Mostrando resultados',
-        'buttons' => [
-            'cancel' => 'Cancelar',
-            'delete' => 'Eliminar',
-        ],
-        'per_page' => 'Por página:',
-        'pagination' => [
-            'first' => 'Primera',
-            'last' => 'Última',
+            'new' => 'Nuevo Piso',
         ],
     ],
     'bookcases' => [
         'title' => 'Estanterías',
+        "cards" => [
+            "create" => [
+                "title" => "Crear estantería",
+                "description" => "Complete el formulario para agregar una nueva estantería a la colección."
+            ],
+            "edit" => [
+                "title" => "Editar estantería",
+                "description" => "Complete el formulario para actualizar una estantería en la colección.",
+            ],
+        ],
         'buttons' => [
             'new' => 'Nueva Estantería',
         ],
-        'filters'=>[
-            'bookcase'=> 'Introduce la estanteria',
-            'capacity'=> 'Introduce la capacidad',
-            'floor'=> 'Intoduce el piso',
-            'zone'=> 'Introduce la zona',
-            'genres'=> 'Introduce el genero',
-        ],
-        'placeholders' => [
-            'bookcase' => 'Nombre de la estantería',
-            'capacity' => 'Capacidad',
-            'floor' => 'Piso',
-            'zone' => 'Zona',
-            'genres' => 'Géneros',
-            'title' => 'Título del libro',
+        'filters' => [
+            'title' => 'Título',
+            'genres' => 'Género',
             'author' => 'Autor',
-            'pages' => 'Número de páginas',
+            'pages' => 'Páginas',
             'publisher' => 'Editorial',
-        ],
-        'columns' => [
-            'bookcase' => 'Estantería',
+            'floor' => 'Número de piso',
+            'zone' => 'Número de zona',
+            'bookcase' => 'Número de estantería',
             'capacity' => 'Capacidad',
-            'floor' => 'Piso',
-            'zone' => 'Zona',
-            'zoneGenre' => 'Género de la zona',
-            'created_at' => 'Fecha de creación',
-            'actions' => 'Acciones',
-        ],
-        'cards' => [
-            'create' => [
-                'title' => 'Crear estantería',
-                'description' => 'Completa los campos para añadir una nueva estantería a la zona seleccionada.',
-            ],
         ],
         'fields' => [
-        'name' => 'Nombre de la estantería',
-        'bookcase'=> 'Estantería',
-        'capacity' => 'Capacidad',
-        'floor' => 'Piso',
-        'zone' => 'Zona',
+            'bookcase' => 'Número de estantería',
+            'capacity' => 'Capacidad',
+            'floor' => 'Número de piso',
+            'zone' => 'Número de zona',
+            'zoneGenre' => 'Género',
+        ],
+        'columns' => [
+            'bookcase' => 'Número de estantería',
+            'capacity' => 'Capacidad',
+            'floor' => 'Número de piso',
+            'zone' => 'Número de zona',
+            'zoneGenre' => 'Género',
+            'created_at' => 'Creado el',
+            'actions' => 'Acciones'
+        ],
+        'placeholders' => [
+            'title' => 'Ingrese un título...',
+            'genres' => 'Ingrese un género...',
+            'author' => 'Ingrese un autor...',
+            'pages' => 'Ingrese número de páginas...',
+            'publisher' => 'Ingrese una editorial...',
+            'floor' => 'Ingrese un piso...',
+            'zone' => 'Ingrese una zona...',
+            'bookcase' => 'Ingrese una estantería...',
+            'capacity' => 'Ingrese capacidad...'
         ],
     ],
-
-    'buttons' => [
-        'cancel' => 'Cancelar',
-        'save' => 'Guardar',
+    'zones' => [
+        'title' => 'Zonas',
+        "cards" => [
+            "create" => [
+                "title" => "Crear Zona",
+                "description" => "Complete el formulario para agregar una nueva zona a la colección."
+            ],
+            "edit" => [
+                "title" => "Editar Zona",
+                "description" => "Complete el formulario para actualizar una zona en la colección.",
+            ],
+        ],
+        'buttons' => [
+            'new' => 'Nueva Zona',
+        ],
+        'filters' => [
+            'number' => 'Número de zona',
+            'capacity' => 'Capacidad'
+        ],
+        'placeholders' => [
+            'number' => 'Ingrese un número...',
+            'capacity' => 'Ingrese capacidad...',
+        ],
+        'columns' => [
+            'number' => 'Número de zona',
+            'capacity' => 'Capacidad',
+            'genre' => 'Género',
+            'created_ad' => 'Creado el',
+            'actions' => 'Acciones'
+        ],
+        'fields' => [
+            'number' => 'Número de zona',
+            'capacity' => 'Capacidad',
+            'genre' => 'Género',
+        ],
+        'create' => [
+            'title' => 'título',
+            'desc' => 'descripción'
+        ],
+        'validation' => [
+            'number_required' => 'El número de zona es requerido',
+            'number_integer' => 'El número de zona debe ser un número',
+            'capacity_required' => 'La capacidad es requerida',
+            'capacity_integer' => 'La capacidad debe ser un número',
+            'capacity_min' => 'La capacidad debe ser al menos :min',
+        ],
     ],
     'users' => [
         'title' => 'Usuarios',
         'create' => 'Crear Usuario',
         'edit' => 'Editar Usuario',
+        'flters'=>[
+            'search' => 'Buscar usuario',
+        ],
         'fields' => [
             'name' => 'Nombre',
-            'email' => 'Email',
+            'email' => 'Correo',
             'password' => 'Contraseña',
             'password_optional' => 'Contraseña (opcional)',
-            'created_at' => 'Fecha de creación',
+            'created_at' => 'Creado el',
             'actions' => 'Acciones',
             'rolPpal' => 'Rol Principal',
             'permisos' => 'Permisos Específicos'
         ],
         'columns' => [
             'name' => 'Nombre',
-            'email' => 'Email',
-            'created_at' => 'Fecha de creación',
+            'email' => 'Correo',
+            'created_at' => 'Creado el',
             'actions' => 'Acciones',
         ],
         'gridelements' => [
@@ -290,7 +332,7 @@ return [
             'reports' => 'Reportes',
             'configurations' => 'Configuración',
         ],
-        'permisos' => [
+        'permissions' => [
             'Users' => [
                 'users' => [
                     'view' => 'Ver usuarios',
@@ -306,7 +348,6 @@ return [
                     'edit' => 'Editar productos',
                     'delete' => 'Eliminar productos'
                 ],
-
             ],
             'Reports' => [
                 'reports' => [
@@ -314,33 +355,30 @@ return [
                     'export' => 'Exportar reportes',
                     'print' => 'Imprimir reportes'
                 ],
-
             ],
             'Config' => [
                 'config' => [
-                    'access' => 'Acceso a configuración',
+                    'access' => 'Acceder a configuración',
                     'modify' => 'Modificar configuración'
                 ],
-
             ],
         ],
         'roles' => [
-            'default' => 'Selecciona un Rol',
+            'default' => 'Seleccione un Rol',
             'admin' => 'Administrador',
             'advanced' => 'Usuario Avanzado',
             'usuario' => 'Usuario Básico'
         ],
         'filters' => [
-            'search' => 'Buscar',
-            'name' => 'Nombre del usuario',
-            'email' => 'Email del usuario',
+            'name' => 'Nombre de usuario',
+            'email' => 'Correo del usuario',
         ],
         'placeholders' => [
             'name' => 'Nombre completo del usuario',
             'email' => 'correo@ejemplo.com',
             'password' => 'Contraseña segura',
             'search' => 'Buscar usuarios...',
-            'passRulings' => 'La contraseña debe tener al menos 8 caracteres, incluyendo letras y números'
+            'passRulings' => 'La contraseña debe tener al menos 8 caracteres, incluyendo números y letras'
         ],
         'tabs' => [
             'userForm' => 'Información Básica',
@@ -348,7 +386,7 @@ return [
         ],
         'cards' => [
             'title' => 'Crear Nuevo Usuario',
-            'description' => 'Ingresa la información para crear un nuevo usuario en el sistema'
+            'description' => 'Ingrese la información para crear un nuevo usuario en el sistema.'
         ],
         'buttons' => [
             'new' => 'Nuevo Usuario',
@@ -362,137 +400,335 @@ return [
             'retry' => 'Reintentar',
         ],
         'delete' => [
-            'title' => '¿Estás seguro?',
-            'description' => 'Esta acción no se puede deshacer. Se eliminará permanentemente el usuario del sistema.',
+            'title' => '¿Está seguro?',
+            'description' => 'Esta acción no se puede deshacer. El usuario será eliminado permanentemente del sistema.',
         ],
         'delete_dialog' => [
-            'title' => '¿Estás seguro?',
-            'description' => 'Esta acción no se puede deshacer. Se eliminará permanentemente el usuario del sistema.',
-            'success' => 'Eliminado correctamente ;)',
+            'title' => '¿Está seguro?',
+            'description' => 'Esta acción no se puede deshacer. El usuario será eliminado permanentemente del sistema.',
+            'success' => 'Eliminado exitosamente',
         ],
-        'deleted_error' => 'Error al eliminar el usuario',
-        'no_results' => 'No hay resultados.',
-        'error_loading' => 'Error al cargar los usuarios. Por favor, inténtalo de nuevo.',
+        'deleted_error' => 'Error al eliminar usuario',
+        'no_results' => 'Sin resultados.',
+        'error_loading' => 'Error al cargar usuarios. Por favor intente nuevamente.',
         'showing_results' => 'Mostrando :from a :to de :total resultados',
         'pagination' => [
             'previous' => 'Anterior',
             'next' => 'Siguiente',
         ],
     ],
-    'loans' => [
-        'columns' => [
-            'avaiable' => 'Disponible',
-        ],
-    ],
-    'genres' => [
-        'names' => [
-            'Science' => 'Ciencia',
-            'Romance' => 'Romance',
-            'Magical' => 'Mágico',
-        ],
-    ],
-    
-  'books' => [
-        'title' => 'Books',
-        'create' => 'Create Book',
-        'edit' => 'Edit Book',
-        'fields' => [
-            'title' => 'Title',
-            'author' => 'Author',
-            'genres' => 'Genres',
-            'publisher' => 'Publisher',
-            'editor' => 'Publisher',
-            'length' => 'Pages',
-            'bookcase' => 'Bookcase',
-            'zone' => 'Zone',
-            'floor' => 'Floor',
-            'image' => 'Image',
-            'created_at' => 'Creation at',
-            'actions' => 'Actions',
-            'selgenres' => 'Selected Genres'
-        ],
-        'utils' => [
-            'available' => 'Available',
-            'unavailable' => 'Unavailable'
-        ],
-        'columns' => [
-            'title' => 'Title',
-            'author' => 'Author',
-            'genres' => 'Genres',
-            'editor' => 'Publisher',
-            'length' => 'Pages',
-            'bookcase' => 'Bookcase',
-            'zone' => 'Zone',
-            'floor' => 'Floor',
-            'image' => 'Image',
-            'created_at' => 'Creation at',
-            'actions' => 'Actions',
-        ],
+    'floors' => [
+        'title' => 'Pisos',
         'filters' => [
-            'title' => 'Title',
-            'author' => 'Author',
-            'genres' => 'Genres',
-            'publisher' => 'Publisher',
-            'pages' => 'Pages',
-            'bookcase' => 'Bookcase',
-            'available' => 'Availability',
-            'zone' => 'Zone',
-            'floor' => 'Floor',
+            'floor_number' => 'Buscar por título',
+            'capacity' => 'Buscar por capacidad',
         ],
-        'placeholders' => [
-            'title' => 'Enter the Title...',
-            'author' => 'Enter the Author...',
-            'ISBN' => 'Enter the ISBN...',
-            'genres' => 'Enter the Genre/s...',
-            'publisher' => 'Enter the Publisher...',
-            'available' => 'Availability',
-            'pages' => 'Enter number of pages...',
-            'bookcase' => 'Enter the Bookcase...',
-            'zone' => 'Enter the Zone...',
-            'floor' => 'Enter the Floor...',
-        ],
-        'cards' => [
-            'create' => [
-                'title' => 'Create New Book',
-                'description' => 'Enter the information to create a new book in the system'
-            ],
-            'edit' => [
-                'title' => 'Edit Book',
-                'description' => 'Enter the new information to edit this book'
-            ]
+        'columns' => [
+            'floor_number' => 'Número de piso',
+            'capacity' => 'Capacidad',
+            'created_at' => 'Fecha de creación',
+            'actions' => 'Acciones',
         ],
         'buttons' => [
-            'new' => 'New Book',
-            'edit' => 'Edit',
-            'save' => 'Save',
-            'update' => 'Update',
-            'cancel' => 'Cancel',
-            'delete' => 'Delete',
-            'deleting' => 'Deleting...',
-            'saving' => 'Saving...',
-            'retry' => 'Retry',
-            'loan' => 'Lend',
-            'queue' => 'Make a reservation',
-
+            'new' => 'Crear nuevo piso',
         ],
-        'delete' => [
-            'title' => 'Are you sure?',
-            'description' => 'Esta acción no se puede deshacer. Se eliminará permanentemente el usuario del sistema.',
-        ],
-        'delete_dialog' => [
-            'title' => 'Are you sure?',
-            'description' => 'Esta acción no se puede deshacer. Se eliminará permanentemente el usuario del sistema.',
-            'success' => 'Deleted successfully ;)',
-        ],
-        'deleted_error' => 'Error trying to delete the book',
-        'no_results' => 'No results.',
-        'error_loading' => 'Error loading books. Please, try again.',
-        'showing_results' => 'showing :from to :to from :total results',
-        'pagination' => [
-            'previous' => 'Last',
-            'next' => 'Next',
+        'placeholders' => [
+            'floor_number' => 'Número de piso',
+            'capacity' => 'Cantidad de capacidad',
         ],
     ],
-
+    'floor' => [
+        'create' => 'Crear Piso',
+        'edit' => 'Editar Piso',
+        'create_description' => 'Complete el formulario para registrar un nuevo piso en el sistema',
+        'edit_description' => 'Actualice la información del piso',
+        'number' => 'Número de Piso',
+        'capacity' => 'Capacidad',
+        'createdAt' => 'Creado El',
+        'actions' => 'Acciones',
+        'validation' => [
+            'number_required' => 'El número de piso es requerido',
+            'number_integer' => 'El número de piso debe ser un entero',
+            'number_unique' => 'Este número de piso ya existe',
+            'capacity_required' => 'La capacidad es requerida',
+            'capacity_integer' => 'La capacidad debe ser un número',
+            'capacity_min' => 'La capacidad debe ser al menos :min',
+        ],
+        'messages' => [
+            'created' => 'Piso creado exitosamente',
+            'updated' => 'Piso actualizado exitosamente',
+            'deleted' => 'Piso eliminado exitosamente',
+            'error' => [
+                'create' => 'Error al crear piso',
+                'update' => 'Error al actualizar piso',
+                'delete' => 'Error al eliminar piso',
+            ],
+        ],
+        'buttons' => [
+            'create' => 'Crear Piso',
+            'save' => 'Guardar',
+            'update' => 'Actualizar',
+            'cancel' => 'Cancelar',
+            'edit' => 'Editar',
+            'delete' => 'Eliminar',
+        ],
+        'titles' => [
+            'list' => 'Lista de Pisos',
+            'management' => 'Gestión de Pisos',
+            'details' => 'Detalles del Piso',
+        ],
+        'placeholders' => [
+            'number' => 'Ingrese número de piso',
+            'capacity' => 'Ingrese capacidad',
+            'search' => 'Buscar pisos...',
+        ],
+        'filters' => [
+            'all' => 'Todos los Pisos',
+            'active' => 'Pisos Activos',
+        ],
+        'empty' => [
+            'title' => 'No se encontraron pisos',
+            'description' => 'Comience creando un nuevo piso',
+        ],
+    ],
+    'books' => [
+        'filters' => [
+            'search' => 'Buscar',
+            'title' => 'Título del libro...',
+            'author' => 'Autor del libro...',
+            'available' => 'Disponible',
+            'genres' => 'Género del libro...',
+        ],
+        'title' => 'Libros',
+        'create' => 'Crear Libro',
+        'edit' => 'Editar Libro',
+        'fields' => [
+            'title' => 'Título',
+            'email' => 'Correo',
+            'password' => 'Contraseña',
+            'password_optional' => 'Contraseña (opcional)',
+            'created_at' => 'Creado el',
+            'actions' => 'Acciones',
+            'rolPpal' => 'Rol Principal',
+            'permisos' => 'Permisos Específicos'
+        ],
+        'columns' => [
+            'title' => 'Título',
+            'author' => 'Autor',
+            'genres' => 'Géneros',
+            'editor' => 'Editorial',
+            'length' => 'Páginas',
+            'bookcase' => 'Estantería',
+            'zone' => 'Zona',
+            'floor' => 'Piso',
+            'created_at' => 'Creado el',
+            'actions' => 'Acciones',
+        ],
+        'gridelements' => [
+            'users' => 'Usuarios',
+            'products' => 'Productos',
+            'reports' => 'Reportes',
+            'configurations' => 'Configuración',
+        ],
+        'permissions' => [
+            'Users' => [
+                'users' => [
+                    'view' => 'Ver usuarios',
+                    'create' => 'Crear usuarios',
+                    'edit' => 'Editar usuarios',
+                    'delete' => 'Eliminar usuarios'
+                ],
+            ],
+            'Products' => [
+                'products' => [
+                    'view' => 'Ver productos',
+                    'create' => 'Crear productos',
+                    'edit' => 'Editar productos',
+                    'delete' => 'Eliminar productos'
+                ],
+            ],
+            'Reports' => [
+                'reports' => [
+                    'view' => 'Ver reportes',
+                    'export' => 'Exportar reportes',
+                    'print' => 'Imprimir reportes'
+                ],
+            ],
+            'Config' => [
+                'config' => [
+                    'access' => 'Acceder a configuración',
+                    'modify' => 'Modificar configuración'
+                ],
+            ],
+        ],
+        'roles' => [
+            'default' => 'Seleccione un Rol',
+            'admin' => 'Administrador',
+            'advanced' => 'Usuario Avanzado',
+            'usuario' => 'Usuario Básico'
+        ],
+        'filters' => [
+            'search' => 'Buscar',
+            'title' => 'Título del libro...',
+            'author' => 'Autor del libro...',
+            'available' => 'Disponible',
+            'genres' => 'Género del libro...',
+        ],
+        'placeholders' => [
+            'title' => 'Título...',
+            'author' => 'Autor...',
+            'password' => 'Contraseña segura',
+            'search' => 'Buscar libros...',
+            'passRulings' => 'La contraseña debe tener al menos 8 caracteres, incluyendo letras y números'
+        ],
+        'tabs' => [
+            'userForm' => 'Información Básica',
+            'permissionsForm' => 'Roles y Permisos'
+        ],
+        'cards' => [
+            'title' => 'Crear Nuevo Usuario',
+            'description' => 'Ingrese la información para crear un nuevo usuario en el sistema'
+        ],
+        'buttons' => [
+            'new' => 'Nuevo',
+            'edit' => 'Editar',
+            'save' => 'Guardar',
+            'update' => 'Actualizar',
+            'cancel' => 'Cancelar',
+            'delete' => 'Eliminar',
+            'deleting' => 'Eliminando...',
+            'saving' => 'Guardando...',
+            'retry' => 'Reintentar',
+        ],
+        'delete' => [
+            'title' => '¿Está seguro?',
+            'description' => 'Esta acción no se puede deshacer. El usuario será eliminado permanentemente del sistema.',
+        ],
+        'delete_dialog' => [
+            'title' => '¿Está seguro?',
+            'description' => 'Esta acción no se puede deshacer. El usuario será eliminado permanentemente del sistema.',
+            'success' => 'Eliminado exitosamente',
+        ],
+        'deleted_error' => 'Error al eliminar usuario',
+        'no_results' => 'Sin resultados.',
+        'error_loading' => 'Error al cargar usuarios. Por favor intente nuevamente.',
+        'showing_results' => 'Mostrando :from a :to de :total resultados',
+        'pagination' => [
+            'previous' => 'Anterior',
+            'next' => 'Siguiente',
+        ],
+    ],
+    "books" => [
+        'title' => 'Libros',
+        "tabs" => [
+            "basic" => "Información Básica",
+            "location" => "Ubicación"
+        ],
+        "cards" => [
+            "create" => [
+                "title" => "Crear libro",
+                "description" => "Complete el formulario para agregar un nuevo libro a la colección."
+            ],
+            "edit" => [
+                "title" => "Editar libro",
+                "description" => "Complete el formulario para actualizar un libro en la colección.",
+            ],
+        ],
+        'filters'=>[
+            'title'=> 'Título del libro',
+            'genres' => 'Género',
+            'author' => 'Autor',
+            'pages'=> 'Páginas',
+            'publisher' => 'Editorial',
+            'floor'=> 'Número de piso',
+            'zone' => 'Número de zona',
+            'bookcase'=> 'Número de estantería',
+        ],
+        'columns' => [
+            'title' => 'Título',
+            'genres' => 'Género',
+            'author' => 'Autor',
+            'length' => 'Páginas',
+            'editor' => 'Editorial',
+            'floor' => 'Número de Piso',
+            'zone' => 'Número de Zona',
+            'bookcase' => 'Número de Estantería',
+            'created_at' => 'Creado el',
+            'actions' => 'Acciones'
+        ],
+        "fields" => [
+            "title" => "Título",
+            "author" => "Autor",
+            "editor" => "Editorial",
+            "length" => "Número de Páginas",
+            "genres" => "Géneros",
+            "selgenres" => "Géneros seleccionados",
+            "floors" => "Piso",
+            "floor" => "Piso: ",
+            "zones" => "Zona",
+            "zone" => "Zona: ",
+            "bookcases" => "Estantería",
+            "bookcase" => "Estantería: "
+        ],
+        "placeholders" => [
+            "title" => "Ingrese el título del libro",
+            'ISBN'=> 'Ingrese el ISBN del libro',
+            'pages' => 'Ingrese el número de páginas',
+            'publisher' => 'Ingrese la editorial',
+            'floor' => 'Ingrese el número de piso',
+            'zone' => 'Ingrese el número de zona',
+            'bookcase' => 'Ingrese el número de estantería',
+            "author" => "Ingrese el nombre del autor",
+            "editor" => "Ingrese la editorial",
+            "length" => "Número de páginas",
+            "genres" => "Seleccione hasta 3 géneros"
+        ],
+        "buttons" => [
+            "cancel" => "Cancelar",
+            "save" => "Guardar",
+            "saving" => "Guardando...",
+            "update" => "Actualizar",
+            'new' => 'Nuevo Libro'
+        ],
+        "error" => [
+            "create" => "Hubo un error al crear el libro.",
+            "update" => "Hubo un error al actualizar el libro."
+        ],
+    ],
+    "genres" => [
+        "names" => [
+            "Fantasy" => "Fantasía",
+            "Drama" => "Drama",
+            "Historical" => "Histórico",
+            "Science Fiction" => "Ciencia Ficción",
+            "Horror" => "Terror",
+            "Mystery" => "Misterio",
+            "Thriller" => "Suspenso",
+            "Romance" => "Romance",
+            "Adventure" => "Aventura",
+            "Dystopian" => "Distopía",
+            "Gothic" => "Gótico",
+            "Magical Realism" => "Realismo Mágico",
+            "Satire" => "Sátira",
+            "Comedy" => "Comedia",
+            "Tragedy" => "Tragedia",
+            "Crime Fiction" => "Ficción Criminal",
+            "Mythology" => "Mitología",
+            "Western" => "Western",
+            "Cyberpunk" => "Cyberpunk",
+            "Poetry" => "Poesía",
+        ],
+    ],
+    'records' => [
+        'title' => 'Historial',
+        'description'=> 'Revisa tu actividad de préstamos y reservas de libros',
+        'loan'=>[
+            'none'=> 'No hay préstamos registrados',
+            'info'=> 'Cuando solicites un préstamo, aparecerá aquí.',
+        ],
+        'reservation'=> [
+            'none' => ''
+        ],
+    ],
 
 ];

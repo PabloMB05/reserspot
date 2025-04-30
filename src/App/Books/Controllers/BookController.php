@@ -114,7 +114,6 @@ class BookController extends Controller
 
         $genresExplosion = explode(', ', $book->genres);
 
-        $imagen = $book->getMedia('media')[0]->getUrl();
 
         // dd($imagen);
 
@@ -123,7 +122,6 @@ class BookController extends Controller
             'genres' => $genres,
             'floors' => $floors,
             'zones' => $zones,
-            'imgPreviaUrl' => $imagen,
             'bookcases' => $bookcases,
             'explosion' => $genresExplosion,
             'page' => $request->query('page'),

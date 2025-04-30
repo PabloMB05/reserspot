@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Reservation extends Model
 {
-    use HasUuids;
+    use HasUuids, softDeletes;
 
     protected $fillable = [
         'id',

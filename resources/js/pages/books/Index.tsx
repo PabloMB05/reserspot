@@ -247,11 +247,7 @@ export default function BooksIndex({floor_list, zone_list, bookcase_list}:BookIn
                     </div>
                     <div></div>
 
-                    <Accordion type="single" collapsible className="w-full">
-      <AccordionItem value="item-1">
-      <AccordionTrigger className="text-center w-full justify-center">
-      {t('ui.common.filters.trigger')}</AccordionTrigger>
-        <AccordionContent>
+                    
                     <div className="space-y-4">
                         <FiltersTable
                             filters={
@@ -321,9 +317,6 @@ export default function BooksIndex({floor_list, zone_list, bookcase_list}:BookIn
                             containerClassName="grid w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-5 lg:grid-cols-5 gap-4"
                         />
                     </div>
-        </AccordionContent>
-      </AccordionItem>
-    </Accordion>
 
                     <div className="w-full overflow-hidden">
                         {isLoading ? (
