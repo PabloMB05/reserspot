@@ -1,11 +1,11 @@
 import { DashboardCard } from '@/components/dashboard/DashboardCard';
-import { Users, User, Building2, Layers, Library, Book, HandHelping, Import } from 'lucide-react';
+import { Users, User, Building2, Layers, Library, Book, HandHelping, Import, TrendingUp } from 'lucide-react';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
 import CardFlip from "@/components/ui/card-flip";
 import { Icon } from '@/components/icon';
-
+import { useTranslations } from '@/hooks/use-translations';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -15,79 +15,69 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Dashboard() {
+    const { t } = useTranslations();
+    
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Dashboard" />
-            <div className="grid gap-4 p-4 md:grid-cols-2 lg:grid-cols-3">
-                <DashboardCard
-                    title="Usuarios"
-                    description="Gestiona los usuarios del sistema"
-                    href="/users"
-                    icon={Users}
-                />
-                <DashboardCard
-                    title="Floor"
-                    description="Gestiona los usuarios del sistema"
-                    href="/floors"
-                    icon={Building2}
-                />
-                <DashboardCard
-                    title="Zones"
-                    description="Gestiona los usuarios del sistema"
-                    href="/zones"
-                    icon={Layers}
-                />
-                <DashboardCard
-                    title="Bookcases"
-                    description="Gestiona los usuarios del sistema"
-                    href="/bookcases"
-                    icon={Library}
-                />
-                <DashboardCard
-                    title="Books"
-                    description="Gestiona los usuarios del sistema"
-                    href="/books"
-                    icon={Book}
-                />
-                <DashboardCard
-                    title="loans"
-                    description="Gestiona los usuarios del sistema"
-                    href="/loans"
-                    icon={HandHelping}
-                />
-                <DashboardCard
-                    title="reservations"
-                    description="Gestiona los usuarios del sistema"
-                    href="/reservations"
-                    icon={Import}
-                />
-                <CardFlip
-                    contentFront={
-                        <div className="flex items-center gap-4">
-                            <div className="rounded-lg bg-primary/10 p-2">
-                                <Icon iconNode={User} className="h-6 w-6 text-primary" />
-                            </div>
-                            <div>
-                                <h3 className="font-semibold">Usuario 1</h3>
-                                <p className="text-sm text-muted-foreground">descripcion de usuario</p>
-                            </div>
-                        </div>
-                    }
-                    contentBack={
-                        <div className="flex w-full h-full items-center gap-4">
-                            <div className="rounded-lg bg-primary/10 p-2">
-                                <Icon iconNode={User} className="h-6 w-6 text-primary" />
-                            </div>
-                            <div>
-                                <h3 className="font-semibold">cliente 2</h3>
-                                <p className="text-sm text-muted-foreground">descripcion de cliente</p>
+        <Head title="Dashboard" />
+  
+        <div className="grid gap-4 p-4 md:grid-cols-2 lg:grid-cols-3">
+          <DashboardCard
+            title={t('ui.dashboard.users')}
+            description={t('ui.dashboard.description.users')}
+            href="/users"
+            icon={Users}
+          />
+  
+          <DashboardCard
+            title={t('ui.dashboard.floors')}
+            description={t('ui.dashboard.description.floors')}
+            href="/floors"
+            icon={Building2}
+          />
+  
+          <DashboardCard
+            title={t('ui.dashboard.zones')}
+            description={t('ui.dashboard.description.zones')}
+            href="/zones"
+            icon={Layers}
+          />
+  
+          <DashboardCard
+            title={t('ui.dashboard.bookcases')}
+            description={t('ui.dashboard.description.bookcases')}
+            href="/bookcases"
+            icon={Library}
+          />
+  
+          <DashboardCard
+            title={t('ui.dashboard.books')}
+            description={t('ui.dashboard.description.books')}
+            href="/books"
+            icon={Book}
+          />
+  
+          <DashboardCard
+            title={t('ui.dashboard.loans')}
+            description={t('ui.dashboard.description.loans') || 'Gestionar todos los préstamos del sistema'}
+            href="/loans"
+            icon={HandHelping}
+          />
+  
+          <DashboardCard
+            title={t('ui.dashboard.reservations')}
+            description={t('ui.dashboard.description.reservations') || 'Gestionar todas las reservas del sistema'}
+            href="/reservations"
+            icon={Import}
+          />
+          <DashboardCard
+            title={t('ui.dashboard.ranking')}
+            description={t('ui.dashboard.description.ranking') || 'Ver los ranking de la biblioteca'}
+            href="/ranking"
+            icon={TrendingUp}
+          />
 
-                            </div>
-                        </div>
-                    }
-                />
-
-            </div>
-        </AppLayout>
+        </div>
+      </AppLayout>
     );
 }

@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { TableSkeleton } from "@/components/stack-table/TableSkeleton";
 import { UserLayout } from "@/layouts/users/UserLayout";
 import { User, useDeleteUser, useUsers } from "@/hooks/users/useUsers";
-import { PencilIcon, PlusIcon, TrashIcon } from "lucide-react";
+import { PencilIcon, PlusIcon, TrashIcon, ClockIcon } from "lucide-react";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useState, useMemo } from "react";
 import { Link, usePage } from "@inertiajs/react";
@@ -87,6 +87,13 @@ export default function UsersIndex() {
               <PencilIcon className="h-4 w-4" />
             </Button>
           </Link>
+            {/* Botón para ver el timeline del usuario */}
+          <Link href={`/users/${user.id}/timeline`}>
+            <Button variant="outline" size="icon" title={t("ui.users.buttons.view_timeline") || "View Timeline"}>
+              <ClockIcon className="h-4 w-4" />
+            </Button>
+          </Link>
+
           <DeleteDialog
             id={user.id}
             onDelete={handleDeleteUser}

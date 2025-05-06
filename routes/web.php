@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Rankings\Controllers\RankingController;
 use Inertia\Inertia;
 
 Route::get('/', function () {
@@ -20,6 +21,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('loans', \App\Loans\Controllers\LoanController::class);
     Route::resource('reservations', \App\Reservations\Controllers\ReservationController::class);
 });
+Route::middleware(['auth', 'verified'])->get('/ranking', [RankingController::class, 'index'])->name('ranking.index');
+Route::middleware(['auth', 'verified'])->get('/users/{user}/timeline', [UserController::class, 'showTimeline'])->name('users.timeline');
+
 
 
 require __DIR__.'/settings.php';

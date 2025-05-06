@@ -11,7 +11,8 @@ class LoanStoreAction
 {
     public function __invoke(array $data): LoanResource
     {
-        $user = User::where('email', 'like', $data['    '])->first()->id;
+        $user = User::where('email', 'like', $data['user'])->first()->id;
+
 
         $loan = Loan::create([
             'book_id' => $data['book'],  // Must secure unique in validations!!!

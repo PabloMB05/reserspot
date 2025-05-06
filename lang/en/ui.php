@@ -1,17 +1,40 @@
 <?php
 
 return [
-    'navigation' => [
-        'menu' => 'Navigation Menu',
-        'items' => [
-            'dashboard' => 'Dashboard',
-            'users' => 'Users',
-            'floors' => 'Floors',
-            'books' => 'Books',
-            'repository' => 'Repository',
-            'documentation' => 'Documentation',
+'navigation' => [
+    'menu' => 'Navigation Menu',
+    'items' => [
+        'dashboard' => 'Dashboard',
+        'users' => 'Users',
+        'floors' => 'Floors',
+        'floor' => 'Floors',
+        'zones' => 'Zones',
+        'bookcases' => 'Bookcases',
+        'loans' => 'Loans',
+        'reservations' => 'Reservations',
+        'ranking' => 'Ranking',
+        'books' => 'Books',
+        'repository' => 'Repository',
+        'documentation' => 'Documentation',
+    ],
+],
+
+    'ranking' => [
+        'book' => [
+            'title' => 'Ranking of Most Reserved and Borrowed Books',
+        ],
+        'user' => [
+            'title' => 'Most Active Users',
+        ],
+        'zone' => [
+            'title' => 'Zones with the Most Activity',
+        ],
+        'legend'=>[
+            'reservation'=> 'Reservations',
+            'loan'=> 'Loans',
         ],
     ],
+
     'reservations' => [
         'title' => 'Reservations',
         'filters' => [
@@ -19,6 +42,14 @@ return [
             'email' => 'User email',
             'queue' => 'Queue Position',
         ],
+        'utils' => [
+            'title' => 'Reservation Form',
+            'description' => 'Fill in the fields to complete the book reservation',
+            'book' => 'Book Title',
+            'email' => 'Email Address',
+            'confirm'=> 'Confirm'
+        ],
+
         'placeholders' => [
             'book' => 'Enter book title...',
             'user' => 'Enter user email...',
@@ -36,8 +67,14 @@ return [
             'description' => 'Are you sure you want to delete this reservation? This action cannot be undone.',
         ],
     ],
+    'messages'=> [
+        'loans'=> [
+            'created'=> 'Loan created succefully',
+        ],
+    ],
     'loans' => [
         'title' => 'Loans',
+
         'buttons' => [
             'new' => 'New Loan',
         ],
@@ -71,6 +108,33 @@ return [
             'days' => 'days',
             'remaining' => 'Remaining',
         ],
+        'cards' => [
+            'create'=> [
+                'title' => 'Create Loan',
+                'description' => 'Form for creating a new loan',
+                'edit' => 'Form for updating a new loan',
+            ],
+        ],
+        'fields' => [
+            'book'=> 'Book ISBN',
+            'user' => 'User Email',
+            'duedate' => 'Expiration Date'
+        ],
+        'placeholders' => [
+            'book' => 'Enter the book ISBN',
+            'user' => 'Enter the User Email',
+            'booktitle' => 'Book Title',
+            'email' => 'User Email',
+            'status'=> 'Status',
+            'start_date' => 'start_date',
+            'due_date' => 'Due Date',
+        ],
+        'buttons' => [
+            'cancel' => 'Cancel',
+            'save' => 'Save',
+            'update' => 'Update',
+            'new' => 'New Loan'
+        ],
     ],
     'common' => [
         'filters' => [
@@ -94,14 +158,21 @@ return [
         'books' => 'Books',
         'zones' => 'Zones',
         'bookcases' => 'Bookcases',
+        'loans' => 'Loans',
+        'reservations' => 'Reservations',
+        'ranking'=> 'Ranking',
         'description' => [
-            'users' => 'Manage all users in the system',
-            'floors' => 'Manage all floors and sections in the system',
+            'users' => 'Manage all system users',
+            'floors' => 'Manage all floors and sections of the system',
             'books' => 'Manage all books in the system',
             'zones' => 'Manage all zones in the system',
             'bookcases' => 'Manage all bookcases in the system',
+            'loans' => 'Manage all loans in the system',
+            'reservations' => 'Manage all reservations in the system',
+            'ranking'=> 'View rankings for books, users and zones'
         ]
     ],
+
     'user_menu' => [
         'settings' => 'Settings',
         'logout' => 'Log out',
@@ -492,6 +563,7 @@ return [
         ],
     ],
     'books' => [
+        
         'filters' => [
             'search' => 'Search',
             'title' => 'Book Title...',
@@ -581,10 +653,6 @@ return [
             'search' => 'Search books...',
             'passRulings' => 'Password must be at least 8 characters long, including letters and numbers'
         ],
-        'tabs' => [
-            'userForm' => 'Basic Information',
-            'permissionsForm' => 'Roles and Permissions'
-        ],
         'cards' => [
             'title' => 'Create New User',
             'description' => 'Enter the information to create a new user in the system'
@@ -620,9 +688,14 @@ return [
     ],
     "books" => [
         'title' => 'Books',
+        'total'=> 'Registered books',
+        'create' => 'Create book',
         "tabs" => [
             "basic" => "Basic Info",
-            "location" => "Location"
+            "location" => "Location",
+            'userForm' => 'Basic Information',
+            'permissionsForm' => 'Roles and Permissions',
+            'bookInfo' => 'Book Form',
         ],
         "cards" => [
             "create" => [
@@ -717,6 +790,29 @@ return [
             "Western" => "Western",
             "Cyberpunk" => "Cyberpunk",
             "Poetry" => "Poetry",
+        ],
+    ],
+    'records' => [
+        'title' => 'History',
+        'description' => 'Review your book loans and reservations activity',
+        'loan' => [
+            'none' => 'No loans recorded',
+            'info' => 'When you request a loan, it will appear here.',
+            'delete' => 'Loan eliminated',
+        ],
+        'reservation' => [
+            'none' => 'No reservations recorded',
+            'info' => 'When you make a reservation, it will appear here.',
+        ],
+        'info' => [
+            'duration' => 'Duration',
+            'left' => 'Left:',
+            'defeated_ago' => 'defeated_ago',
+            'days'=> 'days',
+            'hours' => 'hours',
+            'minutes' => 'minutes',
+            'reserv' => 'Reserved on:',
+            'canceled_reserv' => 'canceled reservation',
         ],
     ],
 ];

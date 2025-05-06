@@ -86,7 +86,7 @@ class BookController extends Controller
         $action($validator->validated(), $request->files);
 
         return redirect()->route('books.index')
-            ->with('success', __('messages.books.created'));
+            ->with('success', __('Book created succefully'));
     }
 
     /**

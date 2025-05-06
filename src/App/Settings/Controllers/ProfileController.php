@@ -41,9 +41,15 @@ class ProfileController extends Controller
                     $diff = $start->diff($end);
 
                     $parts = [];
-                    if ($diff->d > 0) $parts[] = $diff->d . ' días';
-                    if ($diff->h > 0) $parts[] = $diff->h . ' horas';
-                    if ($diff->i > 0) $parts[] = $diff->i . ' minutos';
+                    if ($diff->d > 0) {
+                        $parts[] = $diff->d . ' ' . trans_choice('ui.records.info.days', $diff->d);
+                    }
+                    if ($diff->h > 0) {
+                        $parts[] = $diff->h . ' ' . trans_choice('ui.records.info.hours', $diff->h);
+                    }
+                    if ($diff->i > 0) {
+                        $parts[] = $diff->i . ' ' . trans_choice('ui.records.info.minutes', $diff->i);
+                    }
 
                     return implode(' y ', $parts);
                 })()

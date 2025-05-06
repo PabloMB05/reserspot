@@ -59,7 +59,7 @@ export default function Profile() {
         <div className="space-y-6">
           <HeadingSmall
             title={t('ui.records.title')}
-            description={t('ui.rec  ords.description')}
+            description={t('ui.records.description')}
           />
 
           <Tabs defaultValue="loans" className="w-full">
@@ -130,7 +130,7 @@ export default function Profile() {
 
                             <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
                               <div className="text-xs text-gray-600 sm:text-sm">
-                                <span className="font-medium">Duración:</span> {loan.end_due ?? '—'}
+                                <span className="font-medium">{t('ui.records.info.duration')}:</span> {loan.end_due ?? '—'}
                               </div>
 
                               {loan.remaining_days !== undefined && (
@@ -142,14 +142,14 @@ export default function Profile() {
                                     <>
                                       <AlertTriangle className="mr-1 h-3 w-3 sm:h-4 sm:w-4" />
                                       <span>
-                                        Vencido hace {Math.abs(loan.remaining_days)} días
+                                        {t('ui.records.info.defeated_ago')} {Math.abs(loan.remaining_days)} {t('ui.records.info.days')} 
                                       </span>
                                     </>
                                   ) : (
                                     <>
                                       <CheckCircle className="mr-1 h-3 w-3 sm:h-4 sm:w-4" />
                                       <span>
-                                        Faltan {Math.abs(loan.remaining_days)} días
+                                        {t('ui.records.info.left')} {Math.abs(loan.remaining_days)} {t('ui.records.info.days')} 
                                       </span>
                                     </>
                                   )}
@@ -160,7 +160,7 @@ export default function Profile() {
                             {loan.deleted_at && (
                               <div className="mt-2 flex items-center text-xs text-red-500 sm:text-sm">
                                 <Trash2 className="mr-1 h-3 w-3" />
-                                Préstamo eliminado
+                                {t('ui.records.loan.delete')}
                               </div>
                             )}
                           </div>
@@ -179,8 +179,8 @@ export default function Profile() {
                   <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-gray-100">
                     <Book className="h-6 w-6 text-gray-500" />
                   </div>
-                  <h3 className="mt-2 text-sm font-medium text-gray-900">No hay reservas registradas</h3>
-                  <p className="mt-1 text-sm text-gray-500">Cuando hagas una reserva, aparecerá aquí.</p>
+                  <h3 className="mt-2 text-sm font-medium text-gray-900">{t('ui.records.reservation.none')}</h3>
+                  <p className="mt-1 text-sm text-gray-500">{t('ui.records.reservation.info')}</p>
                 </div>
               ) : (
                 <div className="overflow-hidden rounded-lg border border-gray-200 shadow-sm">
@@ -211,7 +211,7 @@ export default function Profile() {
                                   </h3>
                                   <div className="mt-1 flex items-center text-xs text-gray-600 sm:text-sm">
                                     <Calendar className="mr-1 h-3 w-3" />
-                                    <span>Reservado el: {reservation.expedit ?? 'N/A'}</span>
+                                    <span>{t('ui.records.info.reserv')} {reservation.expedit ?? 'N/A'}</span>
                                   </div>
                                 </div>
                               </div>
@@ -223,7 +223,7 @@ export default function Profile() {
                             {reservation.deleted_at && (
                               <div className="mt-2 flex items-center text-xs text-red-500 sm:text-sm">
                                 <Trash2 className="mr-1 h-3 w-3" />
-                                Reserva cancelada
+                                {t('ui.records.info.canceled_reserv')}
                               </div>
                             )}
                           </div>

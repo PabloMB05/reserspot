@@ -55,7 +55,7 @@ class ReservationController extends Controller
         $action($validator->validated());
 
         return redirect()->route('books.index')
-            ->with('success', __('messages.reservation.created'));
+            ->with('success', __('Reservation created succefully'));
     }
 
     /**

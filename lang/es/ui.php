@@ -7,9 +7,36 @@ return [
             'dashboard' => 'Panel',
             'users' => 'Usuarios',
             'floors' => 'Pisos',
+            'floor'=> 'Pisos',
+            'zones'=> 'Zonas',
+            'bookcases'=> 'Estanterías',
+            'loans'=> 'Préstamos',
+            'reservations'=> 'Reservas',
+            'ranking'=> 'Ranking',
             'books' => 'Libros',
             'repository' => 'Repositorio',
             'documentation' => 'Documentación',
+        ],
+    ],
+    'ranking' => [
+        'book' => [
+            'title' => 'Ranking de Libros Más Reservados y Prestados',
+        ],
+        'user'=> [
+            'title'=>'Usuarios Más Activos'
+        ],
+        'zone'=>[
+            'title'=> 'Zonas con Más Movimiento'
+        ],
+        'legend'=>[
+            'reservation'=> 'Reservados',
+            'loan'=> 'Prestados',
+        ],
+    ],
+
+    'messages'=> [
+        'loans'=> [
+            'created'=> 'Loan created succefully',
         ],
     ],
     'reservations' => [
@@ -18,6 +45,13 @@ return [
             'book' => 'Título del libro',
             'email' => 'Correo del usuario',
             'queue' => 'Posición en cola',
+        ],
+        'utils'=> [
+            'title' => 'Formulario de Reserva',
+            'description'=> 'Rellena los campos para completar la reserva del libro',
+            'book'=> 'Nombre del libro',
+            'email' => 'Correo electrónico',
+            'confirm'=> 'Confirmar  '
         ],
         'placeholders' => [
             'book' => 'Ingrese título del libro...',
@@ -94,12 +128,18 @@ return [
         'books' => 'Libros',
         'zones' => 'Zonas',
         'bookcases' => 'Estanterías',
+        'loans' => 'Préstamos',
+        'reservations' => 'Reservas',
+        'ranking'=> 'Ranking',
         'description' => [
             'users' => 'Gestionar todos los usuarios del sistema',
             'floors' => 'Gestionar todos los pisos y secciones del sistema',
             'books' => 'Gestionar todos los libros del sistema',
             'zones' => 'Gestionar todas las zonas del sistema',
             'bookcases' => 'Gestionar todas las estanterías del sistema',
+            'loans' => 'Gestionar todos los préstamos del sistema',
+            'reservations' => 'Gestionar todas las reservas del sistema',
+            'ranking'=> 'Ver clasificaciones de libros, usuarios y zonas',
         ]
     ],
     'user_menu' => [
@@ -492,6 +532,7 @@ return [
         ],
     ],
     'books' => [
+        'total'=> 'Libros registrados',
         'filters' => [
             'search' => 'Buscar',
             'title' => 'Título del libro...',
@@ -619,6 +660,7 @@ return [
         ],
     ],
     "books" => [
+        'total'=> 'Libros Registrados',
         'title' => 'Libros',
         "tabs" => [
             "basic" => "Información Básica",
@@ -721,13 +763,23 @@ return [
     ],
     'records' => [
         'title' => 'Historial',
-        'description'=> 'Revisa tu actividad de préstamos y reservas de libros',
-        'loan'=>[
-            'none'=> 'No hay préstamos registrados',
-            'info'=> 'Cuando solicites un préstamo, aparecerá aquí.',
+        'description' => 'Revisa tu actividad de préstamos y reservas de libros',
+        'loan' => [
+            'none' => 'No hay préstamos registrados',
+            'info' => 'Cuando solicites un préstamo, aparecerá aquí.',
+            'delete' => 'Préstamo eliminado',
         ],
-        'reservation'=> [
-            'none' => ''
+        'reservation' => [
+            'none' => 'No hay reservas registradas',
+            'info' => 'Cuando hagas una reserva, aparecerá aquí.',
+        ],
+        'info' => [
+            'duration' => 'Duración',
+            'left' => 'Faltan:',
+            'defeated_ago' => 'Vencido hace',
+            'days' => 'días',
+            'reserv' => 'Reservado el:',
+            'canceled_reserv' => 'Reserva cancelada',
         ],
     ],
 

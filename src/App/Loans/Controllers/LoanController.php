@@ -54,7 +54,7 @@ class LoanController extends Controller
         $action($validator->validated());
 
         return redirect()->route('loans.index')
-            ->with('success', __('messages.loans.created'));
+            ->with('success', __('Loan created sucefully'));
     }
 
     /**

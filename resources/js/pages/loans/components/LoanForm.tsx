@@ -99,7 +99,7 @@ export function LoanForm({ initialData, page, perPage, bookIDButton, lang, email
                 },
                 onError: (errors: Record<string, string>) => {
                     if (Object.keys(errors).length === 0) {
-                        toast.error(initialData ? t('messages.loans.error.update') : t('messages.loans.error.create'));
+                        toast.error(initialData ? t('ui.messages.loans.error.update') : t('ui.messages.loans.error.create'));
                     }
                 },
             };

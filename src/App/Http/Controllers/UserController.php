@@ -93,4 +93,13 @@ class UserController extends Controller
         return redirect()->route('users.index')
             ->with('success', __('messages.users.deleted'));
     }
+    public function show(User $user, UserTimeLineAction $action)
+    {
+        // Aquí deberías definir cómo obtener las acciones del timeline para el usuario
+        $timelineActions = $user->timelineActions()->where('action_id', $action->id)->get();
+    
+        // Puedes devolver los datos como una respuesta JSON para que el frontend los consuma
+        return response()->json($timelineActions);
+    }
+    
 }
