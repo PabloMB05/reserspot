@@ -28,6 +28,7 @@ return [
         ],
         'zone' => [
             'title' => 'Zones with the Most Activity',
+            'floor'=> 'Floor'
         ],
         'legend'=>[
             'reservation'=> 'Reservations',
@@ -803,6 +804,11 @@ return [
         'reservation' => [
             'none' => 'No reservations recorded',
             'info' => 'When you make a reservation, it will appear here.',
+        ],
+        'timeline'=>[
+            'all'=> 'All',
+            'none'=> 'No loan and reservations recorded',
+            'info'=> 'When you request a loan and reservation, it will appear here.'
         ],
         'info' => [
             'duration' => 'Duration',

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Rankings\Controllers\RankingController;
+use App\Http\Controllers\UserController;
 use Inertia\Inertia;
 
 Route::get('/', function () {
@@ -22,7 +23,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('reservations', \App\Reservations\Controllers\ReservationController::class);
 });
 Route::middleware(['auth', 'verified'])->get('/ranking', [RankingController::class, 'index'])->name('ranking.index');
-Route::middleware(['auth', 'verified'])->get('/users/{user}/timeline', [UserController::class, 'showTimeline'])->name('users.timeline');
+Route::get('/users/{user}/timeline', [UserController::class, 'show'])->name('users.timeline')->name('TimeLine{user->name}');
 
 
 

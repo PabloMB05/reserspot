@@ -88,11 +88,11 @@ export default function UsersIndex() {
             </Button>
           </Link>
             {/* Botón para ver el timeline del usuario */}
-          <Link href={`/users/${user.id}/timeline`}>
-            <Button variant="outline" size="icon" title={t("ui.users.buttons.view_timeline") || "View Timeline"}>
-              <ClockIcon className="h-4 w-4" />
-            </Button>
-          </Link>
+            <Link href={`/users/${user.id}/timeline`}>
+      <Button variant="outline" size="icon" title={t("ui.users.buttons.view_timeline") || "View Timeline"}>
+        <ClockIcon className="h-4 w-4" />
+      </Button>
+    </Link>
 
           <DeleteDialog
             id={user.id}

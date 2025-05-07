@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Domain\Loans\Models\Loan;
-
+use Domain\Reservations\Models\Reservation;
 use Spatie\Permission\Traits\HasRoles;
 
 #[ObservedBy(UserObserver::class)]
@@ -74,8 +74,11 @@ class User extends Authenticatable
     {
         return $this->hasOne(UserSetting::class, 'user_id');
     }
-    public function loan()
+    public function loans()
     {
         return $this->hasMany(Loan::class);
+    }
+    public function reservations(){
+        return $this->hasMany(Reservation::class);
     }
 }

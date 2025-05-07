@@ -9,6 +9,7 @@ use Domain\Users\Actions\UserDestroyAction;
 use Domain\Users\Actions\UserIndexAction;
 use Domain\Users\Actions\UserStoreAction;
 use Domain\Users\Actions\UserUpdateAction;
+use Domain\Users\Actions\UserHistoryAction;
 use Domain\Users\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -132,4 +133,19 @@ class UserController extends Controller
         return redirect()->route('users.index')
             ->with('success', __('messages.users.deleted'));
     }
+    
+    public function show(User $user, UserHistoryAction $action)
+    {
+        $activities = $action($user);
+        $loans = $activities[0]; // Esto obtiene todos los préstamos del usuario
+        $reservations = $activities[1]; // Esto obtiene todas las reservas del usuario
+
+        // Pasar los datos a la vista
+        return Inertia::render('users/UserHistoryTimeline', [ 
+            'loans' => $loans,
+            'reservations' => $reservations,
+        ]);
+    }
+     
+    
 }

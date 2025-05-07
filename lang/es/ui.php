@@ -26,7 +26,8 @@ return [
             'title'=>'Usuarios Más Activos'
         ],
         'zone'=>[
-            'title'=> 'Zonas con Más Movimiento'
+            'title'=> 'Zonas con Más Movimiento',
+            'floor'=> 'Piso'
         ],
         'legend'=>[
             'reservation'=> 'Reservados',
