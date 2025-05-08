@@ -190,7 +190,7 @@ export default function BookcasesIndex() {
                             initialValues={filters}
                         />
                     </div>
-
+                    <div>{t('ui.bookcases.total')}: {bookcases?.meta.total}</div>
                     <div className="w-full overflow-hidden">
                         {isLoading ? (
                             <TableSkeleton columns={10} rows={10} />

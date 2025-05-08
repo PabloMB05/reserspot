@@ -29,7 +29,7 @@ export default function EditFloor({ floor, page, perPage }: EditFloorProps) {
                         <CardTitle>
                             <div className="flex items-center gap-1">
                                 <Building className="text-blue-600" />
-                                {t('ui.floor.edit_title')}
+                                {t('ui.floor.edit')}
                             </div>
                         </CardTitle>
                         <CardDescription>{t('ui.floor.edit_description')}</CardDescription>

@@ -14,8 +14,13 @@ import { Book, CheckCircle, AlertTriangle, Calendar, Clock, Trash2 } from 'lucid
 import { cn } from '@/lib/utils';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { TimeLineSection } from '../users/components/TimeLine';
-
+import { useEffect, useState } from 'react';
+import { TimeLineLayout } from '@/layouts/timeline/timelinelayout';
 interface ProfileProps {
+  user: {
+    name:string;
+    email: string;
+  };
   loans: {
     id: number;
     book: {
@@ -40,7 +45,7 @@ interface ProfileProps {
   }[];
 }
 
-export default function Profile({loans, reservations}:ProfileProps) {
+export default function Profile({user, loans, reservations}:ProfileProps) {
   const { t } = useTranslations();
   const page = usePage<{ props: SharedData & ProfileProps }>();
 
@@ -50,7 +55,27 @@ export default function Profile({loans, reservations}:ProfileProps) {
       href: '/settings/profile',
     },
   ];
+const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
+  const filterByDateRange = <T extends { expedit: string | null }>(items: T[]) => {
+    if (!startDate && !endDate) return items;
+
+    return items.filter((item) => {
+      if (!item.expedit) return false;
+      const expDate = new Date(item.expedit);
+      const start = startDate ? new Date(startDate) : null;
+      const end = endDate ? new Date(endDate) : null;
+
+      return (
+        (!start || expDate >= start) &&
+        (!end || expDate <= end)
+      );
+    });
+  };
+
+  const filteredLoans = filterByDateRange(loans);
+  const filteredReservations = filterByDateRange(reservations);
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title={t('ui.settings.profile.title')} />
@@ -62,8 +87,31 @@ export default function Profile({loans, reservations}:ProfileProps) {
             description={t('ui.records.description')}
           />
 
-          <TimeLineSection loans={loans} reservations={reservations}></TimeLineSection>
-        </div>
+                  <div className="ml-3">
+          
+                    <div className="flex flex-wrap gap-4 mb-6">
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Desde:</label>
+                        <input
+                          type="date"
+                          value={startDate}
+                          onChange={(e) => setStartDate(e.target.value)}
+                          className="border rounded px-2 py-1"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Hasta:</label>
+                        <input
+                          type="date"
+                          value={endDate}
+                          onChange={(e) => setEndDate(e.target.value)}
+                          className="border rounded px-2 py-1"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <TimeLineSection loans={filteredLoans} reservations={filteredReservations} />
+              </div>
       </SettingsLayout>
     </AppLayout>
   );

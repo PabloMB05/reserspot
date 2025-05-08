@@ -138,7 +138,7 @@ export default function ZonesIndex() {
               initialValues={filters}
             />
           </div>
-
+          <div>{t('ui.zones.total')}: {zones?.meta.total}</div>
           <div className="w-full overflow-hidden">
             {isLoading ? (
               <TableSkeleton columns={5} rows={10} />

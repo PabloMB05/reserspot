@@ -239,12 +239,14 @@ return [
     'floors' => [
         'title' => 'Pisos',
         'create' => 'Crear Piso',
+        'edit_title' => 'Editar Piso',
         'buttons' => [
             'new' => 'Nuevo Piso',
         ],
     ],
     'bookcases' => [
         'title' => 'Estanterías',
+        'total' => 'Estanterías Registradas',
         "cards" => [
             "create" => [
                 "title" => "Crear estantería",
@@ -299,6 +301,7 @@ return [
     ],
     'zones' => [
         'title' => 'Zonas',
+        'total' => 'Zonas Registradas',
         "cards" => [
             "create" => [
                 "title" => "Crear Zona",
@@ -324,7 +327,7 @@ return [
             'number' => 'Número de zona',
             'capacity' => 'Capacidad',
             'genre' => 'Género',
-            'created_ad' => 'Creado el',
+            'created_at' => 'Creado el',
             'actions' => 'Acciones'
         ],
         'fields' => [
@@ -345,6 +348,7 @@ return [
         ],
     ],
     'users' => [
+        'total' => 'Usuarios Registrados',
         'title' => 'Usuarios',
         'create' => 'Crear Usuario',
         'edit' => 'Editar Usuario',
@@ -460,6 +464,7 @@ return [
     ],
     'floors' => [
         'title' => 'Pisos',
+        'total' => 'Pisos Registrados',
         'filters' => [
             'floor_number' => 'Buscar por título',
             'capacity' => 'Buscar por capacidad',

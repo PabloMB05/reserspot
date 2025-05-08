@@ -128,13 +128,7 @@ export default function UsersIndex() {
                   <div className="space-y-4">
                       <FiltersTable
                           filters={
-                              [
-                                  {
-                                      id: 'search',
-                                      label: t('ui.users.filters.search') || 'Buscar',
-                                      type: 'text',
-                                      placeholder: t('ui.users.placeholders.search') || 'Buscar...',
-                                  },
+                              [                                 
                                   {
                                       id: 'name',
                                       label: t('ui.users.filters.name') || 'Nombre',
@@ -153,7 +147,7 @@ export default function UsersIndex() {
                           initialValues={filters}
                       />
                   </div>
-
+                  <div>{t('ui.users.total')}: {users?.meta.total}</div>
                   <div className="w-full overflow-hidden">
                       {isLoading ? (
                           <TableSkeleton columns={4} rows={10} />

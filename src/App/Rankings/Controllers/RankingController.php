@@ -18,19 +18,20 @@ class RankingController extends Controller
 
         // Libros más reservados y prestados
         $ranking = DB::table('books')
-            ->leftJoin('reservations', 'books.id', '=', 'reservations.book_id')
-            ->leftJoin('loans', 'books.id', '=', 'loans.book_id')
-            ->whereNull('books.deleted_at')
-            ->select(
-                'books.title',
-                'books.isbn',
-                DB::raw('COUNT(DISTINCT reservations.id) as total_reservations'),
-                DB::raw('COUNT(DISTINCT loans.id) as total_loans')
-            )
-            ->groupBy('books.id', 'books.title', 'books.isbn')
-            ->orderByDesc(DB::raw('COUNT(DISTINCT loans.id)'))
-            ->limit(10)
-            ->get();
+        ->leftJoin('reservations', 'books.id', '=', 'reservations.book_id')
+        ->leftJoin('loans', 'books.id', '=', 'loans.book_id')
+        ->whereNull('books.deleted_at')
+        ->select(
+            'books.isbn',
+            DB::raw('MAX(books.title) as title'), 
+            DB::raw('COUNT(DISTINCT reservations.id) as total_reservations'),
+            DB::raw('COUNT(DISTINCT loans.id) as total_loans')
+        )
+        ->groupBy('books.isbn')
+        ->orderByDesc(DB::raw('COUNT(DISTINCT loans.id)'))
+        ->limit(10)
+        ->get();
+    
 
         // Usuarios más activos
             $userRanking = User::select('users.name')

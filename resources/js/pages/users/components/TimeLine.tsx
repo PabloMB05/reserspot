@@ -11,6 +11,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { TimeLineLayout } from '@/layouts/timeline/timelinelayout';
 
 interface ProfileProps {
+  user: {
+    name:string;
+    email: string;
+  };
   loans: {
     id: number;
     book: {

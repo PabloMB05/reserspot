@@ -98,12 +98,13 @@ class UserController extends Controller
     {
 
         $activities = $action($user);        
-
+        
         $loans = $activities[0]; // Esto obtiene todos los préstamos del usuario
         $reservations = $activities[1]; // Esto obtiene todas las reservas del usuario
         // Pasar los datos a la vista
         return Inertia::render('users/UserHistoryTimeline', [ 
             'loans' => $loans,
+            'user'=> $user,
             'reservations' => $reservations,
         ]);
         

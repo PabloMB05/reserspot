@@ -87,9 +87,11 @@ class ProfileController extends Controller
                 : null;
             return $reservation;
         })->toArray();
-
+        $user = Auth::user();
+        // dd($user);
         return Inertia::render('settings/profile', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
+            'user'=> $user,
             'status' => $request->session()->get('status'),
             'loans' => $loans,
             'reservations' => $reservations,

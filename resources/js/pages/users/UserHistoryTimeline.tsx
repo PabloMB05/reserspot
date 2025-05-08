@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
-import { usePage } from '@inertiajs/react';
 import { TimeLineSection } from '../users/components/TimeLine';
 import { TimeLineLayout } from '@/layouts/timeline/timelinelayout';
-import { Book } from 'lucide-react';
 
 interface ProfileProps {
+  user: {
+    name: string;
+    email: string;
+  };
   loans: {
     id: number;
     book: {
@@ -29,15 +31,61 @@ interface ProfileProps {
   }[];
 }
 
-export default function UserHistoryTimeline({loans, reservations}:ProfileProps) {
+export default function UserHistoryTimeline({ user, loans, reservations }: ProfileProps) {
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+
+  const filterByDateRange = <T extends { expedit: string | null }>(items: T[]) => {
+    if (!startDate && !endDate) return items;
+
+    return items.filter((item) => {
+      if (!item.expedit) return false;
+      const expDate = new Date(item.expedit);
+      const start = startDate ? new Date(startDate) : null;
+      const end = endDate ? new Date(endDate) : null;
+
+      return (
+        (!start || expDate >= start) &&
+        (!end || expDate <= end)
+      );
+    });
+  };
+
+  const filteredLoans = filterByDateRange(loans);
+  const filteredReservations = filterByDateRange(reservations);
 
   return (
     <div className="space-y-6">
-      {/* <h2 className="text-lg font-semibold text-gray-900">Historial de Usuario: {user.name}</h2> */}
+      <TimeLineLayout  title={user.name}>
+        <div className="ml-3">
+          <div className="mb-4">
+            <h1 className="text-xl font-semibold">{user.name}</h1>
+            <p>{user.email}</p>
+          </div>
 
-        <TimeLineLayout> 
-          <TimeLineSection loans={loans} reservations={reservations}></TimeLineSection>
-        </TimeLineLayout>
+          <div className="flex flex-wrap gap-4 mb-6">
+            <div>
+              <label className="block text-sm font-medium mb-1">Desde:</label>
+              <input
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                className="border rounded px-2 py-1"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Hasta:</label>
+              <input
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+                className="border rounded px-2 py-1"
+              />
+            </div>
+          </div>
+        </div>
+        <TimeLineSection loans={filteredLoans} reservations={filteredReservations} />
+      </TimeLineLayout>
     </div>
   );
 }

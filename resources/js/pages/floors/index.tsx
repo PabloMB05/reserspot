@@ -133,7 +133,7 @@ export default function FloorsIndex() {
               initialValues={filters}
             />
           </div>
-
+          <div>{t('ui.floors.total')}: {floors?.meta.total}</div>
           <div className="w-full overflow-hidden">
             {isLoading ? (
               <TableSkeleton columns={4} rows={10} />
