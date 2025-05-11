@@ -104,11 +104,36 @@ return [
             'finished' => 'Finalizado',
             'returned' => 'Devuelto el: ',
             'days' => 'días',
-            'remaining' => 'Restante',
+            'remaining' => 'Restantes',
+            'minutes'=> 'Minutos',
+            'hours' => 'Horas ',
+            'overdue'=> 'Pasadas'
+
         ],
+        'fields'=> [
+            'book'=> 'Libro',
+            'user'=> 'Email del usuario',
+            'duedate' => 'Fecha de devolución',
+        ],
+        'cards' => [
+            'create' => [
+                'title' => 'Crear préstamo',
+                'description' => 'Complete los datos para registrar un nuevo préstamo',
+            ],
+        ],
+    'placeholders' => [
+        'user' => 'Seleccionar usuario',
     ],
-    'common' => [
+    'buttons' => [
+        'cancel' => 'Cancelar',
+        'save' => 'Guardar'
+    ],
+    ],
+    'common' => [            
+
+
         'filters' => [
+
             'results' => 'Resultados',
         ],
     ],
@@ -204,6 +229,7 @@ return [
     'validation' => [
         'required' => 'El campo :attribute es obligatorio.',
         'email' => 'El campo :attribute debe ser una dirección de correo válida.',
+        'validating'=> 'Validando',
         'min' => [
             'string' => 'El campo :attribute debe tener al menos :min caracteres.',
         ],
@@ -247,6 +273,7 @@ return [
     'bookcases' => [
         'title' => 'Estanterías',
         'total' => 'Estanterías Registradas',
+        'edit'=> 'Edición de Estantería',
         "cards" => [
             "create" => [
                 "title" => "Crear estantería",
@@ -281,7 +308,7 @@ return [
         'columns' => [
             'bookcase' => 'Número de estantería',
             'capacity' => 'Capacidad',
-            'floor' => 'Número de piso',
+            'floor' => 'piso',
             'zone' => 'Número de zona',
             'zoneGenre' => 'Género',
             'created_at' => 'Creado el',
@@ -301,7 +328,13 @@ return [
     ],
     'zones' => [
         'title' => 'Zonas',
+        'number'=> 'Número de la zona',
         'total' => 'Zonas Registradas',
+        'capacity'=> 'Capacidad',
+        'floor_label'=> 'Piso',
+        'floor'=> 'Piso de la zona',
+        'genre'=> 'Género de la zona',
+
         "cards" => [
             "create" => [
                 "title" => "Crear Zona",
@@ -377,7 +410,7 @@ return [
             'reports' => 'Reportes',
             'configurations' => 'Configuración',
         ],
-        'permissions' => [
+        'permisos' => [
             'Users' => [
                 'users' => [
                     'view' => 'Ver usuarios',
@@ -408,6 +441,7 @@ return [
                 ],
             ],
         ],
+
         'roles' => [
             'default' => 'Seleccione un Rol',
             'admin' => 'Administrador',
@@ -499,6 +533,7 @@ return [
             'capacity_required' => 'La capacidad es requerida',
             'capacity_integer' => 'La capacidad debe ser un número',
             'capacity_min' => 'La capacidad debe ser al menos :min',
+            
         ],
         'messages' => [
             'created' => 'Piso creado exitosamente',
@@ -630,6 +665,7 @@ return [
         ],
         'tabs' => [
             'userForm' => 'Información Básica',
+            'bookinfo'=> 'Información del libro',
             'permissionsForm' => 'Roles y Permisos'
         ],
         'cards' => [
@@ -691,6 +727,10 @@ return [
             'floor'=> 'Número de piso',
             'zone' => 'Número de zona',
             'bookcase'=> 'Número de estantería',
+        ],
+        'tabs'=>[
+            'bookInfo'=> 'Información del libro',
+            'location'=> 'Ubicación',
         ],
         'columns' => [
             'title' => 'Título',

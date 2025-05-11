@@ -261,7 +261,7 @@ console.log(floors);
                       ) : (
                         floors.map((floor) => (
                           <SelectItem key={floor.id} value={floor.id} disabled={floor.zones_count >= floor.capacity}>
-                            {`${t('ui.floor.label')} ${floor.floor_number} `} -- {floor.zones_count}/{floor.capacity}
+                            {`${t('ui.zones.floor_label')} ${floor.floor_number} `} -- {floor.zones_count}/{floor.capacity}
                           </SelectItem>
                         ))
                       )}
@@ -330,7 +330,7 @@ console.log(floors);
               disabled={form.state.isSubmitting}
             >
               <X className="mr-2 h-4 w-4" />
-              {t('ui.common.cancel')}
+              {t('ui.buttons.cancel')}
             </Button>
 
             <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
@@ -343,8 +343,8 @@ console.log(floors);
                   {isSubmitting
                     ? t('ui.common.saving')
                     : initialData
-                      ? t('ui.common.update')
-                      : t('ui.common.save')}
+                      ? t('ui.buttons.update')
+                      : t('ui.buttons.save')}
                 </Button>
               )}
             </form.Subscribe>

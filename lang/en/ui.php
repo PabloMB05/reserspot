@@ -108,7 +108,11 @@ return [
             'returned' => 'Returned on: ',
             'days' => 'days',
             'remaining' => 'Remaining',
+            'minutes' => 'Minutes',
+            'hours' => 'Hours',
+            'overdue' => 'Overdue'
         ],
+
         'cards' => [
             'create'=> [
                 'title' => 'Create Loan',

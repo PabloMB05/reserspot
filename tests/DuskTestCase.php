@@ -15,7 +15,7 @@ abstract class DuskTestCase extends BaseTestCase
      *
      * @var string
      */
-    protected static $baseUrl = 'http://biblioteca.test';
+    protected static $baseUrl = 'http://reserspot.test';
 
     /**
      * Prepare for Dusk test execution.
