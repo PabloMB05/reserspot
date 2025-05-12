@@ -19,6 +19,7 @@ yarn-error.log
 /auth.json
 /.fleet
 /.idea
+docker/develop/pgsql/data/
 /.nova
 /.vscode
 /.zed
