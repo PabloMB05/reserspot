@@ -1,0 +1,29 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('interior_maps', function (Blueprint $table) {
+            $table->uuid('id')->primary()->unique();
+            $table->foreignId('shopping_center_id')->constrained()->onDelete('cascade'); // Relacionado con el centro comercial
+            $table->string('map_url'); // URL al mapa o archivo de imagen del mapa
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('interior_maps');
+    }
+};
