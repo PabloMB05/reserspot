@@ -30,7 +30,7 @@ export default function Dashboard() {
           />
   
           <DashboardCard
-            title={t('ui.dashboard.floors')}
+            title={t('ui.dashboard.floor')}
             description={t('ui.dashboard.description.floors')}
             href="/floors"
             icon={Building2}
