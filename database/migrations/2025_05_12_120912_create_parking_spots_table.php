@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('parking_spots', function (Blueprint $table) {
             $table->uuid('id')->primary()->unique();
-            $table->foreignId('zone_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('zone_id')->constrained()->onDelete('cascade');
             $table->string('spot_number'); // Ej: A12
             $table->boolean('is_occupied')->default(false);
             $table->timestamps();

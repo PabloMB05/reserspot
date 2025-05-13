@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('opening_hours', function (Blueprint $table) {
             $table->uuid('id')->primary()->unique();
-            $table->foreignId('shopping_center_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('shopping_center_id')->constrained()->onDelete('cascade');
             $table->enum('day_of_week', ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'])->nullable();
             $table->date('specific_date')->nullable(); // Para días festivos u horarios especiales
             $table->time('open_time');

@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('reservations', function (Blueprint $table) {
             $table->uuid('id')->primary()->unique();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('parking_spot_id')->constrained()->onDelete('cascade');
-            $table->foreignId('shopping_center_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('parking_spot_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('shopping_center_id')->constrained()->onDelete('cascade');
             $table->dateTime('reserved_at');
             $table->boolean('is_confirmed')->default(false); // Confirmación de la reserva
             $table->timestamps();

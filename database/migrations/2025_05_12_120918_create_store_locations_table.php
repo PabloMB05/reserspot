@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('store_locations', function (Blueprint $table) {
             $table->uuid('id')->primary()->unique();
-            $table->foreignId('store_id')->constrained()->onDelete('cascade');
-            $table->foreignId('floor_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('store_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('floor_id')->constrained()->onDelete('cascade');
             $table->string('zone'); // Ej: Norte, Sur, Centro
             $table->timestamps();
         });

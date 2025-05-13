@@ -7,7 +7,7 @@ export default defineConfig({
     server: {
         host: '0.0.0.0',
         hmr: {
-            host: 'reserspot.test'
+            host: 'biblioteca.test'
         },
         watch: {
             usePolling: true
