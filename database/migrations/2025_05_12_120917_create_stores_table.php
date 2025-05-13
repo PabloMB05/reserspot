@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('stores', function (Blueprint $table) {
             $table->uuid('id')->primary()->unique();
-            $table->foreignId('shopping_center_id')->constrained()->onDelete('cascade');
-            $table->foreignId('store_category_id')->constrained()->onDelete('set null')->nullable();
+            $table->foreignUuid('shopping_center_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('store_category_id')->constrained()->onDelete('set null')->nullable();
             $table->string('name');
             $table->string('website')->nullable();
             $table->string('email')->nullable();

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('zones', function (Blueprint $table) {
             $table->uuid('id')->primary()->unique();
-            $table->foreignId('floor_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('floor_id')->constrained()->onDelete('cascade');
             $table->string('name'); // Ej: Zona Norte
             $table->timestamps();
         });

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('notifications', function (Blueprint $table) {
             $table->uuid('id')->primary()->unique();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Notificación enviada a un usuario específico
+            $table->foreignUuid('user_id')->constrained()->onDelete('cascade'); // Notificación enviada a un usuario específico
             $table->string('title'); // Título de la notificación
             $table->text('message'); // Mensaje de la notificación
             $table->boolean('is_read')->default(false); // Si el usuario ha leído la notificación

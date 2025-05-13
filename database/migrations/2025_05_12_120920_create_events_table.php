@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->uuid('id')->primary()->unique();
-            $table->foreignId('shopping_center_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('shopping_center_id')->constrained()->onDelete('cascade');
             $table->string('title');
             $table->text('description')->nullable();
             $table->dateTime('start_time');

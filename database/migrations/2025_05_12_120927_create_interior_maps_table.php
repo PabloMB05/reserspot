@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('interior_maps', function (Blueprint $table) {
             $table->uuid('id')->primary()->unique();
-            $table->foreignId('shopping_center_id')->constrained()->onDelete('cascade'); // Relacionado con el centro comercial
+            $table->foreignUuid('shopping_center_id')->constrained()->onDelete('cascade'); // Relacionado con el centro comercial
             $table->string('map_url'); // URL al mapa o archivo de imagen del mapa
             $table->timestamps();
         });
