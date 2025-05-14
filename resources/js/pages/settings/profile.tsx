@@ -21,31 +21,10 @@ interface ProfileProps {
     name:string;
     email: string;
   };
-  loans: {
-    id: number;
-    book: {
-      title: string;
-    };
-    expedit: string | null;
-    return: string | null;
-    due_date: Date;
-    end_due: string | null;
-    deleted_at?: string | null;
-    remaining_days?: number;
-    remaining_hours?: number;
-    is_overdue?: boolean;
-  }[];
-  reservations: {
-    id: number;
-    book: {
-      title: string;
-    };
-    expedit: string | null;
-    deleted_at?: string | null;
-  }[];
+  
 }
 
-export default function Profile({user, loans, reservations}:ProfileProps) {
+export default function Profile({user}:ProfileProps) {
   const { t } = useTranslations();
   const page = usePage<{ props: SharedData & ProfileProps }>();
 
@@ -74,8 +53,6 @@ const [startDate, setStartDate] = useState('');
     });
   };
 
-  const filteredLoans = filterByDateRange(loans);
-  const filteredReservations = filterByDateRange(reservations);
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title={t('ui.settings.profile.title')} />
@@ -110,7 +87,6 @@ const [startDate, setStartDate] = useState('');
                       </div>
                     </div>
                   </div>
-                  <TimeLineSection loans={filteredLoans} reservations={filteredReservations} />
               </div>
       </SettingsLayout>
     </AppLayout>

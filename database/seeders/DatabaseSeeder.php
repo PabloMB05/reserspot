@@ -11,14 +11,20 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             UserSeeder::class,
-            PermissionSeeder::class,
-            RoleSeeder::class,
+            // PermissionSeeder::class,
+            // RoleSeeder::class,
+            // FloorSeeder::class,
+            // GenreSeeder::class,
+            // ZoneSeeder::class,
+            // BookcaseSeeder::class,
+            // BookSeeder::class,
+            // bookgenresSeeder::class,
+            ShoppingCenterSeeder::class,
+            OpeningHoursSeeder::class,
             FloorSeeder::class,
-            GenreSeeder::class,
             ZoneSeeder::class,
-            BookcaseSeeder::class,
-            BookSeeder::class,
-            bookgenresSeeder::class,
+            StoreCategorySeeder::class,
+            StoreSeeder::class,
         ]);
 
 

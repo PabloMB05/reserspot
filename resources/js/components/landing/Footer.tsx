@@ -18,11 +18,11 @@ export default function Footer() {
                         >
                             <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
                         </svg>
-                        <span className="text-lg font-semibold">Biblioteca 2025</span>
+                        <span className="text-lg font-semibold">Reserspot 2025</span>
                     </div>
                     <div className="mt-6 md:mt-0">
                         <p className="text-sm text-gray-500 dark:text-gray-400">
-                            &copy; {new Date().getFullYear()} Biblioteca 2025. Todos los derechos reservados.
+                            &copy; {new Date().getFullYear()} Reserspot 2025. Todos los derechos reservados.
                         </p>
                     </div>
                     <div className="mt-6 flex space-x-6 md:mt-0">

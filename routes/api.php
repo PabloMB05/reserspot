@@ -8,9 +8,12 @@ use App\Reservations\Controllers\Api\ReservationApiController;
 use App\Books\Controllers\Api\BookApiController;  
 use App\Loans\Controllers\Api\LoanApiController; 
 use Illuminate\Support\Facades\Route;
+use App\ShoppingCenter\Controllers\ShoppingCenterController;
 
 Route::middleware(['web', 'auth'])->group(function () {
 
+    // Rutas de Centros Comerciales
+    Route::get('/shopping-centers', [ShoppingCenterController::class, 'index']);
     // Rutas de Usuario
     Route::get('/users', [UserApiController::class, 'index']);
     Route::get('/users/{user}', [UserApiController::class, 'show']);
