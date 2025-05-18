@@ -18,7 +18,7 @@ export default function Welcome() {
 
     return (
         <>
-            <Head title="Biblioteca 2025 - Sistema de Gestión de Bibliotecas">
+            <Head title="Reserspot 2025 - Sistema de Gestión de Centros Comerciales">
                 <link rel="preconnect" href="https://fonts.bunny.net" />
                 <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
             </Head>
