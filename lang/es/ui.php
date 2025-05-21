@@ -1,6 +1,7 @@
 <?php
 
 return [
+    //RESERSPOT - TRADUCCIONES
     'navigation' => [
         'menu' => 'Menú de Navegación',
         'items' => [
@@ -17,7 +18,54 @@ return [
             'repository' => 'Repositorio',
             'documentation' => 'Documentación',
         ],
+    'shoppingcenter'=>[
+        'title' => 'Centros Comerciales',
+        'selectcenter'=>'Selecciona un centro comercial',
+        'selectday'=> 'Selecciona un día',
+        'schedule'=> 'Horario',
+        'open'=> 'Abierto temporalmente',
+        'close'=> 'Cerrado temporalmente',
+        'hours'=>[
+            'close'=> 'Horario no disponible',
+            'is_closed'=> 'Cerrar',
+        ], 
     ],
+    'store' => [
+        'category' => [
+            'Libros y Papelería' => 'Libros y Papelería',
+            'Hogar' => 'Hogar',
+            'Ropa' => 'Ropa',
+            'Salud y Belleza' => 'Salud y Belleza',
+            'Accesorios' => 'Accesorios',
+            'Juguetes' => 'Juguetes',
+            'Electrónica' => 'Electrónica',
+            'Deportes' => 'Deportes',
+            'Alimentos' => 'Alimentos',
+            'Tecnología' => 'Tecnología',
+        ],
+    ],
+    'stores' => 'Tiendas',
+    'storesDescription' => 'Listado de comercios',
+
+    'parking' => 'Parking',
+    'parkingDescription' => 'Consulta y reserva plazas',
+
+    'events' => 'Eventos',
+    'eventsDescription' => 'Ver actividades y promociones',
+
+    'map' => 'Mapa interior',
+    'mapDescription' => 'Visualiza la distribución del centro',
+    ],
+     'days' => [
+        'monday' => 'Lunes',
+        'tuesday' => 'Martes',
+        'wednesday' => 'Miércoles',
+        'thursday' => 'Jueves',
+        'friday' => 'Viernes',
+        'saturday' => 'Sábado',
+        'sunday' => 'Domingo',
+    ],
+    //FIN RESERSPOT TRADUCCIONES
     'ranking' => [
         'book' => [
             'title' => 'Ranking de Libros Más Reservados y Prestados',

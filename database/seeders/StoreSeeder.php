@@ -6,7 +6,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 use Domain\ShoppingCenter\Models\ShoppingCenter;
 use Domain\StoreCategory\Models\StoreCategory;
-use Domain\Store\Models\Store;
+use Domain\Stores\Models\Store;
 
 class StoreSeeder extends Seeder
 {

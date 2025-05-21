@@ -1,21 +1,20 @@
 <?php
 
-namespace Domain\Store\Models;
+namespace Domain\Stores\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Domain\ShoppingCenter\Models\ShoppingCenter;
+use Domain\StoreCategory\Models\StoreCategory;
 
 class Store extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'name',
         'website',
         'email',
         'phone',
         'shopping_center_id',
-        'store_category_id',
+        'store_category_id'
     ];
 
     public function shoppingCenter()
@@ -32,4 +31,11 @@ class Store extends Model
     {
         return $this->hasMany(StoreLocation::class);
     }
+        // En el modelo Store
+    public function scopeForShoppingCenter($query, string $ShoppingCenterID)
+    {
+        return $query->where('shopping_center_id', $ShoppingCenterID);
+    }
+
+
 }

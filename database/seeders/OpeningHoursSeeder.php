@@ -75,18 +75,18 @@ class OpeningHoursSeeder extends Seeder
      * @param bool $isClosed
      * @return void
      */
-    private function insertHoliday(string $shoppingCenterId, string $specificDate, string $openTime, string $closeTime, bool $isClosed)
+    private function insertHoliday(string $ShoppingCenterID, string $specificDate, string $openTime, string $closeTime, bool $isClosed)
     {
         // Verificamos si ya existe un registro para este festivo
         $exists = DB::table('opening_hours')
-            ->where('shopping_center_id', $shoppingCenterId)
+            ->where('shopping_center_id', $ShoppingCenterID)
             ->where('specific_date', $specificDate)
             ->exists();
 
         if (!$exists) {
             DB::table('opening_hours')->insert([
                 'id' => Str::uuid(),
-                'shopping_center_id' => $shoppingCenterId,
+                'shopping_center_id' => $ShoppingCenterID,
                 'day_of_week' => null, // Día no relevante para un festivo
                 'specific_date' => Carbon::parse($specificDate), // Fecha específica
                 'open_time' => $openTime,

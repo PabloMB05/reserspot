@@ -4,6 +4,7 @@ namespace Domain\ShoppingCenter\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Domain\Stores\Models\Store;
 use Domain\OpeningHour\Models\OpeningHour;
 use Illuminate\Support\Str;
 

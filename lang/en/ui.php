@@ -1,6 +1,7 @@
 <?php
 
 return [
+    //reserspot
 'navigation' => [
     'menu' => 'Navigation Menu',
     'items' => [
@@ -15,10 +16,66 @@ return [
         'ranking' => 'Ranking',
         'books' => 'Books',
         'repository' => 'Repository',
+        'store'=> 'Stores',
         'documentation' => 'Documentation',
     ],
 ],
+'shoppingcenter'=>[
+    'title'=> 'Shopping Centers',
+    'selectcenter'=> 'Select a shopping center',
+    'selectday'=> 'Select a day',
+    'schedule'=> 'Schedule',
+    'open'=> 'Temporarily open',
+    'close'=> 'Temporarily close',
+    'hours'=>[
+        'close'=> 'Schedule not available',
+        'is_closed'=> 'Close',
+    ], 
+],
+'store'=>[
+    'singlestore'=> 'Store',
+    'pluralstore'=> 'Stores',
+    'card'=>[
+        'centro'=> 'Center',
+        'email' => 'Email',
+        'tel'=> 'Tel',
+        'web'=> 'Web',
+        'contact'=> 'Contact',
+    ],
+    'category' => [
+            'Libros y Papelería' => 'Books & Stationery',
+            'Hogar' => 'Home',
+            'Ropa' => 'Clothing',
+            'Salud y Belleza' => 'Health & Beauty',
+            'Accesorios' => 'Accessories',
+            'Juguetes' => 'Toys',
+            'Electrónica' => 'Electronics',
+            'Deportes' => 'Sports',
+            'Alimentos' => 'Food',
+            'Tecnología' => 'Technology',
+        ],
+], 
+    'stores' => 'Stores',
+    'storesDescription' => 'List of shops',
 
+    'parking' => 'Parking',
+    'parkingDescription' => 'Check and reserve spots',
+
+    'events' => 'Events',
+    'eventsDescription' => 'See activities and promotions',
+
+    'map' => 'Indoor map',
+    'mapDescription' => 'View the center layout',
+ 'days' => [
+        'monday' => 'Monday',
+        'tuesday' => 'Tuesday',
+        'wednesday' => 'Wednesday',
+        'thursday' => 'Thursday',
+        'friday' => 'Friday',
+        'saturday' => 'Saturday',
+        'sunday' => 'Sunday',
+    ],
+//fin reserspot
     'ranking' => [
         'book' => [
             'title' => 'Ranking of Most Reserved and Borrowed Books',

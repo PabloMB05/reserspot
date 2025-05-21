@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             ZoneSeeder::class,
             StoreCategorySeeder::class,
             StoreSeeder::class,
+            ParkingSpotSeeder::class,
         ]);
 
 

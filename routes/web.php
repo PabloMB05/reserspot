@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Rankings\Controllers\RankingController;
 use App\Http\Controllers\UserController;
+use App\Store\Controllers\StoreController;
 use Inertia\Inertia;
 
 Route::get('/', function () {
@@ -21,11 +22,25 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('books', \App\Books\Controllers\BookController::class);
     Route::resource('loans', \App\Loans\Controllers\LoanController::class);
     Route::resource('reservations', \App\Reservations\Controllers\ReservationController::class);
+   
+    // Rutas para stores
+    Route::prefix('shopping-center/{shoppingCenter}')->group(function () {
+        Route::get('stores', [StoreController::class, 'index'])
+            ->name('shopping-centers.stores.index');
+    });
+    
+    Route::resource('stores', StoreController::class)->only([
+        'show', 'destroy'
+    ]);
 });
-Route::middleware(['auth', 'verified'])->get('/ranking', [RankingController::class, 'index'])->name('ranking.index');
-Route::get('/users/{user}/timeline', [UserController::class, 'show'])->name('users.timeline')->name('TimeLine{user->name}');
 
+// Ruta de ranking
+Route::middleware(['auth', 'verified'])->get('/ranking', [RankingController::class, 'index'])
+    ->name('ranking.index');
 
+// Ruta de timeline (debería estar dentro del grupo auth si requiere autenticación)
+Route::get('/users/{user}/timeline', [UserController::class, 'show'])
+    ->name('users.timeline');
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
