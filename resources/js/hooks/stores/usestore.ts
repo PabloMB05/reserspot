@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { type Store } from '@/Domain/Store/Models/Store';
+import { type Store } from '@/Domain/Stores/Models/Store';
 
 interface StoresState {
   stores: Store[];

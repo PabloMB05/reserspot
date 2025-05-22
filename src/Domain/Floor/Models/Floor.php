@@ -1,10 +1,13 @@
 <?php
 
-namespace App\Models;
+namespace Domain\Floor\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Domain\Floor\Models\Floor;
+use Domain\StoreCategory\Models\StoreCategory;
+use Domain\ShoppingCenter\Models\ShoppingCenter;
+use Domain\Stores\Models\StoreLocation;
 class Floor extends Model
 {
     use HasFactory;

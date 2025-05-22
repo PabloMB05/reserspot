@@ -5,6 +5,7 @@ use App\Rankings\Controllers\RankingController;
 use App\Http\Controllers\UserController;
 use App\Store\Controllers\StoreController;
 use Inertia\Inertia;
+use App\Events\Controllers\EventController;
 
 Route::get('/', function () {
     return Inertia::render('welcome');
@@ -41,6 +42,10 @@ Route::middleware(['auth', 'verified'])->get('/ranking', [RankingController::cla
 // Ruta de timeline (debería estar dentro del grupo auth si requiere autenticación)
 Route::get('/users/{user}/timeline', [UserController::class, 'show'])
     ->name('users.timeline');
+
+Route::get('/events', [EventController::class, 'index'])->name('events.index');
+Route::get('/events/{id}', [EventController::class, 'show'])->name('events.show');
+oute::get('/shopping-center/{id}/events', [EventController::class, 'centerEvents'])->name('shopping-center.events');
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

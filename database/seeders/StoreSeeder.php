@@ -7,36 +7,42 @@ use Illuminate\Support\Str;
 use Domain\ShoppingCenter\Models\ShoppingCenter;
 use Domain\StoreCategory\Models\StoreCategory;
 use Domain\Stores\Models\Store;
+use Faker\Factory as Faker;
 
 class StoreSeeder extends Seeder
 {
     public function run(): void
     {
-        // Obtener primer centro comercial
+        $faker = Faker::create();
+
         $shoppingCenter = ShoppingCenter::first();
         if (!$shoppingCenter) {
             $this->command->warn('No hay centros comerciales en la base de datos.');
             return;
         }
 
-        // Obtener una categoría de tienda existente
-        $category = StoreCategory::first();
-        if (!$category || !Str::isUuid($category->id)) {
-            $this->command->warn('No hay una categoría de tienda válida en la base de datos.');
+        $categories = StoreCategory::all();
+        if ($categories->isEmpty()) {
+            $this->command->warn('No hay categorías de tiendas en la base de datos.');
             return;
         }
 
-        // Crear tienda usando Eloquent
-        Store::create([
-            'id' => Str::uuid(),
-            'shopping_center_id' => $shoppingCenter->id,
-            'store_category_id' => $category->id,
-            'name' => 'Zara',
-            'website' => 'https://www.zara.com',
-            'email' => 'zara@example.com',
-            'phone' => '+34 665387581',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        for ($i = 0; $i < 10; $i++) {
+            $category = $categories->random();
+
+            Store::create([
+                'id' => Str::uuid(),
+                'shopping_center_id' => $shoppingCenter->id,
+                'store_category_id' => $category->id,
+                'name' => $faker->company,
+                'website' => $faker->url,
+                'email' => $faker->companyEmail,
+                'phone' => $faker->phoneNumber,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        $this->command->info('Se crearon 10 tiendas con éxito.');
     }
 }

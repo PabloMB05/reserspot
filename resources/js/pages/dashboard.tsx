@@ -158,6 +158,7 @@ export default function ShoppingCenterDashboard() {
             icon={CalendarCheck2}
             disabled={!selected}
           />
+
           <DashboardCard
             title={t('ui.map')}
             description={t('ui.mapDescription')}

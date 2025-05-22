@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('floors', function (Blueprint $table) {
             $table->uuid('id')->primary()->unique();
             $table->foreignUuid('shopping_center_id')->constrained()->onDelete('cascade');
-            $table->string('name'); // Ej: Planta -1
+            $table->integer('level'); // <- Aquí agregamos la columna que faltaba
+            $table->string('name');   // Ej: Planta -1
             $table->timestamps();
         });
-
     }
 
     /**

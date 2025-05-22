@@ -1,38 +1,31 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import axios from "../../lib/axios";
+import axios from "@/lib/axios";
 
-// Define a Floor type
-export interface Floor {
-  id: string;
+// Define tu modelo Store
+export interface Store {
+  id: string | number;
   name: string;
-  floor_number :number;
-  capacity: number;
-  buildingId: string;
-  created_at: string;
+  email?: string;
+  phone?: string;
+  website?: string;
+  store_category?: {
+    name: string;
+  };
+  floor?: number | string;
 }
 
-// Interface representing the actual API response structure
+// Tipo de respuesta de la API
 export interface ApiPaginatedResponse<T> {
   current_page: number;
   data: T[];
-  first_page_url: string;
   from: number;
   last_page: number;
-  last_page_url: string;
-  links: Array<{
-    url: string | null;
-    label: string;
-    active: boolean;
-  }>;
-  next_page_url: string | null;
-  path: string;
   per_page: number;
-  prev_page_url: string | null;
   to: number;
   total: number;
 }
 
-// Interface representing the expected format for the Table component
+// Tipo adaptado para el componente Table
 export interface PaginatedResponse<T> {
   data: T[];
   meta: {
@@ -45,31 +38,32 @@ export interface PaginatedResponse<T> {
   };
 }
 
-interface UseFloorsParams {
+interface UseStoresParams {
   search?: string;
   page?: number;
   perPage?: number;
-  buildingId?: string;
+  category?: string;
+  floor?: string;
 }
 
-export function useFloors({ search, page = 1, perPage = 10, buildingId }: UseFloorsParams = {}) {
+export function useStores({ search, page = 1, perPage = 10, category, floor }: UseStoresParams = {}) {
   return useQuery({
-    queryKey: ["floors", { search, page, perPage, buildingId }],
+    queryKey: ["stores", { search, page, perPage, category, floor }],
     queryFn: async () => {
-      const { data: apiResponse } = await axios.get<ApiPaginatedResponse<Floor>>("/api/floors", {
+      const { data: apiResponse } = await axios.get<ApiPaginatedResponse<Store>>("/api/stores", {
         params: {
           search,
           page,
           per_page: perPage,
-          building_id: buildingId,
+          category,
+          floor,
         },
         headers: {
-          'Accept': 'application/json',
-          'X-Requested-With': 'XMLHttpRequest',
-        }
+          Accept: "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+        },
       });
 
-      // Transform the API response to the expected format
       return {
         data: apiResponse.data,
         meta: {
@@ -80,47 +74,44 @@ export function useFloors({ search, page = 1, perPage = 10, buildingId }: UseFlo
           to: apiResponse.to,
           total: apiResponse.total,
         },
-      } as PaginatedResponse<Floor>;
+      } as PaginatedResponse<Store>;
     },
   });
 }
-
-export function useCreateFloor() {
+export function useCreateStore() {
   return useMutation({
-    mutationFn: async (data: { name: string; buildingId: string }) => {
-      const response = await axios.post("/api/floors", data, {
+    mutationFn: async (data: Partial<Store>) => {
+      const response = await axios.post("/api/stores", data, {
         headers: {
-          'Accept': 'application/json',
-          'X-Requested-With': 'XMLHttpRequest',
-        }
+          Accept: "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+        },
       });
       return response.data;
     },
   });
 }
-
-export function useUpdateFloor(floorId: string) {
+export function useUpdateStore(storeId: string | number) {
   return useMutation({
-    mutationFn: async (data: { name: string; buildingId: string }) => {
-      const response = await axios.put(`/api/floors/${floorId}`, data, {
+    mutationFn: async (data: Partial<Store>) => {
+      const response = await axios.put(`/api/stores/${storeId}`, data, {
         headers: {
-          'Accept': 'application/json',
-          'X-Requested-With': 'XMLHttpRequest',
-        }
+          Accept: "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+        },
       });
       return response.data;
     },
   });
 }
-
-export function useDeleteFloor() {
+export function useDeleteStore() {
   return useMutation({
-    mutationFn: async (floorId: string) => {
-      await axios.delete(`/api/floors/${floorId}`, {
+    mutationFn: async (storeId: string | number) => {
+      await axios.delete(`/api/stores/${storeId}`, {
         headers: {
-          'Accept': 'application/json',
-          'X-Requested-With': 'XMLHttpRequest',
-        }
+          Accept: "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+        },
       });
     },
   });

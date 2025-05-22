@@ -14,7 +14,6 @@ class FloorSeeder extends Seeder
      */
     public function run(): void
     {
-        // Obtener todos los centros comerciales
         $shoppingCenters = ShoppingCenter::all();
 
         if ($shoppingCenters->isEmpty()) {
@@ -22,20 +21,21 @@ class FloorSeeder extends Seeder
             return;
         }
 
-        // Definir algunos pisos por defecto para cada centro comercial
+        // Definimos pisos con su nombre y nivel correspondiente
         $floors = [
-            'Planta 0',
-            'Planta 1',
-            'Planta -1',
-            'Planta 2', // Si hay más plantas en algunos centros comerciales
+            ['name' => 'Planta -1', 'level' => -1],
+            ['name' => 'Planta 0',  'level' => 0],
+            ['name' => 'Planta 1',  'level' => 1],
+            ['name' => 'Planta 2',  'level' => 2],
         ];
 
         foreach ($shoppingCenters as $shoppingCenter) {
-            foreach ($floors as $floorName) {
+            foreach ($floors as $floor) {
                 DB::table('floors')->insert([
                     'id' => Str::uuid(),
                     'shopping_center_id' => $shoppingCenter->id,
-                    'name' => $floorName,
+                    'name' => $floor['name'],
+                    'level' => $floor['level'],
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);

@@ -2,24 +2,40 @@
 
 namespace Domain\Stores\Actions;
 
-use Domain\Stores\Data\Resources\StoreResource;
-use Domain\ShoppingCenter\Models\ShoppingCenter;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Domain\Stores\Models\Store;
 
 class StoreIndexAction
 {
+    /**
+     * Ejecuta la consulta para obtener tiendas filtradas y paginadas.
+     *
+     * @param string      $shoppingCenterID
+     * @param string|null $search
+     * @param string|null $category
+     * @param int         $perPage
+     * @return LengthAwarePaginator
+     */
     public function execute(
+        string $shoppingCenterID,
         ?string $search = null,
-        int $perPage = 10,
-        string $shoppingCenterID
+        ?string $category = null,
+        int $perPage = 10
     ): LengthAwarePaginator {
         return Store::query()
-            ->with('storeCategory') // Carga la relación de categoría
-            ->where('shopping_center_id', $ShoppingCenterID) // Filtra por el centro comercial
+            ->with('storeCategory')
+            ->where('shopping_center_id', $shoppingCenterID)
+            // Filtro de búsqueda (nombre, email, teléfono)
             ->when($search, function ($query, $search) {
-                $query->where('name', 'like', "%{$search}%")
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
                       ->orWhere('email', 'like', "%{$search}%")
                       ->orWhere('phone', 'like', "%{$search}%");
+                });
+            })
+            // Filtro por categoría
+            ->when($category, function ($query, $category) {
+                $query->where('store_category_id', $category);
             })
             ->orderBy('name')
             ->paginate($perPage);
