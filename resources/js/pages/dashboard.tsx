@@ -125,6 +125,7 @@ export default function ShoppingCenterDashboard() {
                   </select>
                 </div>
 
+
                 {/* Mostrar los horarios para el día seleccionado */}
                 <div>
                   <span className="font-medium">{t('ui.shoppingcenter.schedule')}</span>{' '}

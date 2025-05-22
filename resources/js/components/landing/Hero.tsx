@@ -13,11 +13,11 @@ export default function Hero({ auth }: HeroProps) {
                 <div className="grid items-center gap-12 md:grid-cols-2">
                     <div className="text-center md:text-left">
                         <h1 className="mb-6 text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl">
-                            Gestión Integral de <span className="text-primary dark:text-primary-foreground">Bibliotecas</span>
+                            Gestión Integral de <span className="text-primary dark:text-primary-foreground">Centros Comerciales</span>
                         </h1>
                         <p className="mb-8 text-lg text-gray-600 dark:text-gray-300">
-                            Una plataforma completa para administrar múltiples bibliotecas, 
-                            gestionar préstamos, catálogos y usuarios de manera eficiente.
+                            Una plataforma completa para administrar múltiples centros comerciales, 
+                            gestionar parking, reservas y usuarios de manera eficiente.
                         </p>
                         <div className="flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0 md:justify-start">
                             <Link
@@ -42,7 +42,7 @@ export default function Hero({ auth }: HeroProps) {
                                     <svg className="mb-2 h-8 w-8 text-gray-900 dark:text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                         <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
                                     </svg>
-                                    <p className="text-sm font-medium">Gestión de Libros</p>
+                                    <p className="text-sm font-medium">Gestión de Parking</p>
                                 </div>
                                 <div className="h-40 rounded-lg bg-white p-4 shadow-lg dark:bg-gray-800">
                                     <svg className="mb-2 h-8 w-8 text-gray-900 dark:text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -61,7 +61,7 @@ export default function Hero({ auth }: HeroProps) {
                                         <path d="M3 9h18" />
                                         <path d="M9 21V9" />
                                     </svg>
-                                    <p className="text-sm font-medium">Múltiples Sucursales</p>
+                                    <p className="text-sm font-medium">Múltiples Centros Comerciales</p>
                                 </div>
                                 <div className="h-32 rounded-lg bg-white p-4 shadow-lg dark:bg-gray-800">
                                     <svg className="mb-2 h-8 w-8 text-gray-900 dark:text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -69,7 +69,7 @@ export default function Hero({ auth }: HeroProps) {
                                         <path d="M21 12.1H3" />
                                         <path d="M15.1 18H3" />
                                     </svg>
-                                    <p className="text-sm font-medium">Préstamos</p>
+                                    <p className="text-sm font-medium">Reservas</p>
                                 </div>
                             </div>
                         </div>

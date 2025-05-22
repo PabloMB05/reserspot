@@ -11,7 +11,7 @@ services:
       - .:/var/www/html
       - ./docker/develop/php/develop.ini:/usr/local/etc/php/php.ini
     ports:
-      - "9001:9000"
+      - "9002:9000"
     networks:
       - biblioteca-back
   vite:
