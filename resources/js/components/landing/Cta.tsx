@@ -11,10 +11,10 @@ export default function Cta({ auth }: CtaProps) {
         <section className="bg-primary py-20 text-primary-foreground dark:bg-primary/90">
             <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
                 <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-                    Comienza a gestionar tus bibliotecas hoy mismo
+                    Comienza a gestionar tus centros comerciales hoy mismo
                 </h2>
                 <p className="mx-auto mt-4 max-w-2xl text-lg">
-                    Optimiza la administración de tus bibliotecas con nuestro sistema integral.
+                    Optimiza la administración con nuestro sistema integral.
                 </p>
                 <div className="mt-8 flex justify-center">
                     <Link
