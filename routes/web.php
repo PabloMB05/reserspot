@@ -45,7 +45,7 @@ Route::get('/users/{user}/timeline', [UserController::class, 'show'])
 
 Route::get('/events', [EventController::class, 'index'])->name('events.index');
 Route::get('/events/{id}', [EventController::class, 'show'])->name('events.show');
-oute::get('/shopping-center/{id}/events', [EventController::class, 'centerEvents'])->name('shopping-center.events');
+Route::get('/shopping-center/{id}/events', [EventController::class, 'centerEvents'])->name('shopping-center.events');
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
