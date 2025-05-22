@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useShoppingCenters } from '@/hooks/shoppingcenter/useshoppingcenter';
 import { DashboardCard } from '@/components/dashboard/DashboardCard';
 import { MapPinned, ParkingCircle, CalendarCheck2, Store } from 'lucide-react';
@@ -6,16 +6,24 @@ import AppLayout from '@/layouts/app-layout';
 import { Head } from '@inertiajs/react';
 import { type BreadcrumbItem } from '@/types';
 import { useTranslations } from '@/hooks/use-translations';
-
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from '@/components/ui/select';
 
 const breadcrumbs: BreadcrumbItem[] = [
   { title: 'Menu', href: '/shopping-center' },
 ];
 
-
-
 export default function ShoppingCenterDashboard() {
   const { t } = useTranslations();
+  const { data: centersData, loading, error } = useShoppingCenters();
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [selectedDay, setSelectedDay] = useState<string>('monday');
+
   const DAYS = [
     { value: 'monday', label: t('ui.days.monday') },
     { value: 'tuesday', label: t('ui.days.tuesday') },
@@ -25,48 +33,35 @@ export default function ShoppingCenterDashboard() {
     { value: 'saturday', label: t('ui.days.saturday') },
     { value: 'sunday', label: t('ui.days.sunday') },
   ];
-  const { data: centersData, loading, error } = useShoppingCenters();
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [selectedDay, setSelectedDay] = useState<string>('monday');
 
   const selected = centersData?.data.find((c) => c.id === selectedId) || null;
 
-  // Obtener el horario de apertura según el día seleccionado
   const getOpeningHourByDay = (openingHours, dayKey: string) => {
     if (!Array.isArray(openingHours)) return null;
     return openingHours.find((h) => h.day_of_week === dayKey) || null;
   };
 
-  // Verificar si el centro está abierto en el horario seleccionado
   const isCenterOpen = (hours) => {
-    if (!hours) return false;
-    if (hours.is_closed) return false;
-
-    // Obtener la hora actual
+    if (!hours || hours.is_closed) return false;
     const currentDate = new Date();
     const currentHour = currentDate.getHours();
     const currentMinute = currentDate.getMinutes();
 
-    // Convertir las horas de apertura y cierre a formato de 24 horas
     const [openHour, openMinute] = hours.open_time.split(':').map(Number);
     const [closeHour, closeMinute] = hours.close_time.split(':').map(Number);
 
-    // Comprobar si la hora actual está dentro del rango de apertura
-    const isOpen =
+    return (
       (currentHour > openHour || (currentHour === openHour && currentMinute >= openMinute)) &&
-      (currentHour < closeHour || (currentHour === closeHour && currentMinute <= closeMinute));
-
-    return isOpen;
+      (currentHour < closeHour || (currentHour === closeHour && currentMinute <= closeMinute))
+    );
   };
 
-  // Renderizar los horarios para el día seleccionado
   const renderSelectedDayHours = (hours) => {
     if (!hours) return t('ui.shoppingcenter.hours.close');
     if (hours.is_closed) return t('ui.shoppingcenter.hours.is_closed');
     return `${hours.open_time} - ${hours.close_time}`;
   };
 
-  // Verificar si el centro está abierto para el día seleccionado
   const selectedDayHours = getOpeningHourByDay(selected?.opening_hours, selectedDay);
   const isOpenNow = isCenterOpen(selectedDayHours);
 
@@ -75,7 +70,7 @@ export default function ShoppingCenterDashboard() {
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title="Centro Comercial" />
+      <Head title={t('ui.shoppingcenter.title')} />
 
       <div className="p-4 space-y-6">
         {/* Selector de centros comerciales */}
@@ -83,18 +78,18 @@ export default function ShoppingCenterDashboard() {
           <label className="block text-sm font-medium mb-1">
             {t('ui.shoppingcenter.selectcenter')}
           </label>
-          <select
-            className="w-full border rounded px-3 py-2"
-            value={selectedId || ''}
-            onChange={(e) => setSelectedId(e.target.value)}
-          >
-            <option value="">-- {t('ui.shoppingcenter.selectcenter')} --</option>
-            {centersData?.data.map((center) => (
-              <option key={center.id} value={center.id}>
-                {center.name}
-              </option>
-            ))}
-          </select>
+          <Select value={selectedId || ''} onValueChange={setSelectedId}>
+            <SelectTrigger>
+              <SelectValue placeholder={t('ui.shoppingcenter.selectcenter')} />
+            </SelectTrigger>
+            <SelectContent>
+              {centersData?.data.map((center) => (
+                <SelectItem key={center.id} value={center.id}>
+                  {center.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         {selected && (
@@ -109,26 +104,26 @@ export default function ShoppingCenterDashboard() {
 
             {selected.opening_hours && (
               <div className="text-sm text-gray-700 space-y-2">
-                {/* Selector de día */}
                 <div>
-                  <label className="block text-sm font-medium mb-1">{t('ui.shoppingcenter.selectday')}</label>
-                  <select
-                    className="w-full border rounded px-3 py-2"
-                    value={selectedDay}
-                    onChange={(e) => setSelectedDay(e.target.value)}
-                  >
-                    {DAYS.map((day) => (
-                      <option key={day.value} value={day.value}>
-                        {day.label}
-                      </option>
-                    ))}
-                  </select>
+                  <label className="block text-sm font-medium mb-1">
+                    {t('ui.shoppingcenter.selectday')}
+                  </label>
+                  <Select value={selectedDay} onValueChange={setSelectedDay}>
+                    <SelectTrigger>
+                      <SelectValue placeholder={t('ui.shoppingcenter.selectday')} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {DAYS.map((day) => (
+                        <SelectItem key={day.value} value={day.value}>
+                          {day.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
 
-
-                {/* Mostrar los horarios para el día seleccionado */}
                 <div>
-                  <span className="font-medium">{t('ui.shoppingcenter.schedule')}</span>{' '}
+                  <span className="font-medium">{t('ui.shoppingcenter.schedule')}:</span>{' '}
                   {renderSelectedDayHours(selectedDayHours)}
                 </div>
               </div>
@@ -139,6 +134,7 @@ export default function ShoppingCenterDashboard() {
         {/* Accesos rápidos */}
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <DashboardCard
+            className="bg-[#dcedd8] hover:bg-[#c1e1d1]"
             title={t('ui.stores')}
             description={t('ui.storesDescription')}
             href={selected ? route('shopping-centers.stores.index', selected.id) : '#'}
@@ -146,6 +142,7 @@ export default function ShoppingCenterDashboard() {
             disabled={!selected}
           />
           <DashboardCard
+            className="bg-[#dcedd8] hover:bg-[#c1e1d1]"
             title={t('ui.parking')}
             description={t('ui.parkingDescription')}
             href={selected ? `/shopping-center/${selected.id}/parking` : '#'}
@@ -153,14 +150,15 @@ export default function ShoppingCenterDashboard() {
             disabled={!selected}
           />
           <DashboardCard
+            className="bg-[#dcedd8] hover:bg-[#c1e1d1]"
             title={t('ui.events')}
             description={t('ui.eventsDescription')}
             href={selected ? `/shopping-center/${selected.id}/events` : '#'}
             icon={CalendarCheck2}
             disabled={!selected}
           />
-
           <DashboardCard
+            className="bg-[#dcedd8] hover:bg-[#c1e1d1]"
             title={t('ui.map')}
             description={t('ui.mapDescription')}
             href={selected ? `/shopping-center/${selected.id}/map` : '#'}
@@ -168,8 +166,8 @@ export default function ShoppingCenterDashboard() {
             disabled={!selected}
           />
         </div>
-
       </div>
     </AppLayout>
   );
 }
+ 
