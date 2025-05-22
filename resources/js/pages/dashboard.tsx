@@ -5,6 +5,13 @@ import { MapPinned, ParkingCircle, CalendarCheck2, Store } from 'lucide-react';
 import AppLayout from '@/layouts/app-layout';
 import { Head } from '@inertiajs/react';
 import { type BreadcrumbItem } from '@/types';
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 
 const breadcrumbs: BreadcrumbItem[] = [
   { title: 'Centro Comercial', href: '/shopping-center' },
@@ -79,17 +86,18 @@ export default function ShoppingCenterDashboard() {
           <label className="block text-sm font-medium mb-1">
             Selecciona un centro comercial
           </label>
-          <select
-            className="w-full border rounded px-3 py-2"
-            value={selectedId || ''}
-            onChange={(e) => setSelectedId(e.target.value)}
-          >
-            {centersData?.data.map((center) => (
-              <option key={center.id} value={center.id}>
-                {center.name}
-              </option>
-            ))}
-          </select>
+          <Select value={selectedId || ''} onValueChange={setSelectedId}>
+              <SelectTrigger>
+                <SelectValue placeholder="Selecciona un centro comercial" />
+              </SelectTrigger>
+              <SelectContent>
+                {centersData?.data.map((center) => (
+                  <SelectItem key={center.id} value={center.id}>
+                    {center.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+          </Select>
         </div>
 
         {selected && (
@@ -107,18 +115,21 @@ export default function ShoppingCenterDashboard() {
                 {/* Selector de día */}
                 <div>
                   <label className="block text-sm font-medium mb-1">Selecciona un día</label>
-                  <select
-                    className="w-full border rounded px-3 py-2"
-                    value={selectedDay}
-                    onChange={(e) => setSelectedDay(e.target.value)}
-                  >
-                    {DAYS.map((day) => (
-                      <option key={day.value} value={day.value}>
-                        {day.label}
-                      </option>
-                    ))}
-                  </select>
+                  <Select value={selectedDay} onValueChange={setSelectedDay}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecciona un día" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {DAYS.map((day) => (
+                        <SelectItem key={day.value} value={day.value}>
+                          {day.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
                 </div>
+
 
                 {/* Mostrar los horarios para el día seleccionado */}
                 <div>
@@ -131,26 +142,30 @@ export default function ShoppingCenterDashboard() {
         )}
 
         {/* Accesos rápidos */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <DashboardCard
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 ">
+          <DashboardCard 
+            className="bg-[#dcedd8] hover:bg-[#c1e1d1]"
             title="Tiendas"
             description="Listado de comercios"
             href={`/shopping-center/${selected?.id}/stores`}
             icon={Store}
           />
           <DashboardCard
+            className="bg-[#dcedd8] hover:bg-[#c1e1d1]"
             title="Parking"
             description="Consulta y reserva plazas"
             href={`/shopping-center/${selected?.id}/parking`}
             icon={ParkingCircle}
           />
           <DashboardCard
+            className="bg-[#dcedd8] hover:bg-[#c1e1d1]"
             title="Eventos"
             description="Ver actividades y promociones"
             href={`/shopping-center/${selected?.id}/events`}
             icon={CalendarCheck2}
           />
           <DashboardCard
+            className="bg-[#dcedd8] hover:bg-[#c1e1d1]"
             title="Mapa interior"
             description="Visualiza la distribución del centro"
             href={`/shopping-center/${selected?.id}/map`}
