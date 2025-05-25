@@ -5,7 +5,7 @@ namespace Domain\Zone\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
-
+use Domain\ParkingSpot\Models\ParkingSpot;
 class Zone extends Model
 {
     use HasFactory;
@@ -35,4 +35,5 @@ class Zone extends Model
     {
         return $this->hasMany(ParkingSpot::class);
     }
+    
 }

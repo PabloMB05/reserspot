@@ -10,8 +10,12 @@ use App\Books\Controllers\Api\BookApiController;
 use App\Loans\Controllers\Api\LoanApiController; 
 use Illuminate\Support\Facades\Route;
 use App\ShoppingCenter\Controllers\ShoppingCenterController;
+use App\ParkingReservation\Controllers\ParkingReservationController;
 
 Route::middleware(['web', 'auth'])->group(function () {
+    Route::post('/parking-reservations', [ParkingReservationController::class, 'store']);
+
+
 
     // Rutas de Centros Comerciales
     Route::get('/shopping-centers', [ShoppingCenterController::class, 'index']);
@@ -57,17 +61,13 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::put('/loans/{loan}', [LoanApiController::class, 'update']);  
     Route::delete('/loans/{loan}', [LoanApiController::class, 'destroy']); 
 
+
     //Rutas de Stores
     Route::get('/shopping-center/{ShoppingCenterID}/stores', [StoreApiController::class, 'index']); 
      
-    // Route::get('/shopping-center/{store}',[])
-    Route::middleware(['web', 'auth'])->group(function () {
-        Route::get('/reservations', [ReservationApiController::class, 'index']);
         Route::get('/reservations/{reservation}', [ReservationApiController::class, 'show']);
-        Route::post('/reservations', [ReservationApiController::class, 'store']);
         Route::put('/reservations/{reservation}', [ReservationApiController::class, 'update']);
         Route::delete('/reservations/{reservation}', [ReservationApiController::class, 'destroy']);
-    }); 
 
 
 });

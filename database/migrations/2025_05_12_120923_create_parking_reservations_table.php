@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reservations', function (Blueprint $table) {
+        Schema::create('parking_reservations', function (Blueprint $table) {
             $table->uuid('id')->primary()->unique();
             $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
             $table->foreignUuid('parking_spot_id')->constrained()->onDelete('cascade');
             $table->foreignUuid('shopping_center_id')->constrained()->onDelete('cascade');
-            $table->dateTime('reserved_at');
+            $table->date('date');       //  Fecha de la reserva
+            $table->time('time');       //  Hora de la reserva
             $table->boolean('is_confirmed')->default(false); // Confirmación de la reserva
             $table->timestamps();
         });

@@ -6,6 +6,9 @@ import AppLayout from '@/layouts/app-layout';
 import { Head } from '@inertiajs/react';
 import { type BreadcrumbItem } from '@/types';
 import { useTranslations } from '@/hooks/use-translations';
+import ParkingIndex from '@/pages/Parking/Index';
+import { router } from '@inertiajs/react';
+
 import {
   Select,
   SelectTrigger,
@@ -23,6 +26,7 @@ export default function ShoppingCenterDashboard() {
   const { data: centersData, loading, error } = useShoppingCenters();
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [selectedDay, setSelectedDay] = useState<string>('monday');
+  const [activeModule, setActiveModule] = useState<'stores' | 'parking' | 'events' | 'map' | null>(null);
 
   const DAYS = [
     { value: 'monday', label: t('ui.days.monday') },
@@ -145,9 +149,9 @@ export default function ShoppingCenterDashboard() {
             className="bg-[#dcedd8] hover:bg-[#c1e1d1]"
             title={t('ui.parking')}
             description={t('ui.parkingDescription')}
-            href={selected ? `/shopping-center/${selected.id}/parking` : '#'}
             icon={ParkingCircle}
             disabled={!selected}
+            href={selected ? route('parking.index', selected.id) : '#'}
           />
           <DashboardCard
             className="bg-[#dcedd8] hover:bg-[#c1e1d1]"
@@ -166,8 +170,10 @@ export default function ShoppingCenterDashboard() {
             disabled={!selected}
           />
         </div>
+
+
+
       </div>
     </AppLayout>
   );
 }
- 

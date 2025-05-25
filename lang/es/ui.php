@@ -16,6 +16,7 @@ return [
             'ranking'=> 'Ranking',
             'books' => 'Libros',
             'repository' => 'Repositorio',
+            'store'=> 'Tiendas',
             'documentation' => 'Documentación',
         ],
     'shoppingcenter'=>[

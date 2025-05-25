@@ -5,6 +5,7 @@ namespace Domain\Floor\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Domain\Floor\Models\Floor;
+use Domain\Zone\Models\Zone;
 use Domain\StoreCategory\Models\StoreCategory;
 use Domain\ShoppingCenter\Models\ShoppingCenter;
 use Domain\Stores\Models\StoreLocation;
@@ -12,7 +13,11 @@ class Floor extends Model
 {
     use HasFactory;
 
+    public $incrementing = false;
+    protected $keyType = 'string';
+    
     protected $fillable = [
+        
         'id',
         'shopping_center_id',
         'level', // Por ejemplo: 0, 1, 2 o -1 para sótano
@@ -32,5 +37,9 @@ class Floor extends Model
     public function parkingSpots()
     {
         return $this->hasMany(ParkingSpot::class);
+    }
+    public function zones()
+    {
+        return $this->hasMany(Zone::class);
     }
 }
