@@ -90,6 +90,7 @@ export default function StoresIndex({
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Nombre de tienda..."
               />
+              
             </div>
 
             {/* Categoría */}
