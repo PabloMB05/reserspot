@@ -1,6 +1,6 @@
 import { Car } from 'lucide-react';
 import { useState } from 'react';
-
+import { Button } from '@/components/ui/button';
 interface ParkingMapProps {
   floors: Array<{
     id: string;
@@ -32,7 +32,7 @@ export function ParkingMap({ floors, onSpotSelect }: ParkingMapProps) {
       <div className="flex items-center gap-4 mb-6 flex-wrap">
         <h3 className="font-semibold">Planta:</h3>
         {floors.map((floor) => (
-          <button
+          <Button
             key={floor.id}
             onClick={() => {
               setSelectedFloor(floor);
@@ -43,7 +43,7 @@ export function ParkingMap({ floors, onSpotSelect }: ParkingMapProps) {
             }`}
           >
             {floor.name}
-          </button>
+          </Button>
         ))}
       </div>
 
@@ -54,7 +54,7 @@ export function ParkingMap({ floors, onSpotSelect }: ParkingMapProps) {
             <h3 className="font-semibold mb-2">Zonas:</h3>
             <div className="flex flex-wrap gap-2">
               {selectedFloor.zones?.map((zone) => (
-                <button
+                <Button
                   key={zone.id}
                   onClick={() => setSelectedZone(zone)}
                   className={`px-3 py-1 rounded-md ${
@@ -62,7 +62,7 @@ export function ParkingMap({ floors, onSpotSelect }: ParkingMapProps) {
                   }`}
                 >
                   {zone.name}
-                </button>
+                </Button>
               ))}
             </div>
           </div>

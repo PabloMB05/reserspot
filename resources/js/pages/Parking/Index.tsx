@@ -2,6 +2,7 @@ import { PageProps } from '@inertiajs/core';
 import { ParkingMap } from '@/components/parking/ParkingMap';
 import { ParkingReservationForm } from '@/pages/Parking/components/ParkingReservationForm';
 import { useSelectedSpot, useParkingActions } from '@/hooks/parking/useParkingStore';
+import { ParkingLayout } from '@/layouts/parking/ParkingLayout';
 
 interface ParkingIndexProps extends PageProps {
   shoppingCenter: {
@@ -28,6 +29,7 @@ export default function ParkingIndex({ shoppingCenter }: ParkingIndexProps) {
   const { setSelectedSpot } = useParkingActions();
 
   return (
+    <ParkingLayout>
     <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
       <div className="flex flex-col lg:flex-row gap-8 overflow-auto">
         {/* Mapa de parking */}
@@ -47,5 +49,6 @@ export default function ParkingIndex({ shoppingCenter }: ParkingIndexProps) {
         </div>
       </div>
     </div>
+    </ParkingLayout>
   );
 }
