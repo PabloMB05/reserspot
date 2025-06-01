@@ -27,9 +27,10 @@ export function StoreCard({
   const { t } = useTranslations();
   return (
     <Link
-      href={href}
-      className="group border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden transition-all hover:shadow-md hover:border-primary/30 dark:hover:border-primary/50"
-    >
+  href={href}
+className="group border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden bg-[#d9f8ef] transition-colors duration-200 hover:shadow-md hover:border-primary/30 dark:hover:border-primary/50 hover:bg-[#8ddcc2]"
+>
+
       {/* Contenedor principal */}
       <div className="h-full flex flex-col">
         {/* Header - común para todos los dispositivos */}

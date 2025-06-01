@@ -32,29 +32,31 @@ return [
         'is_closed'=> 'Close',
     ], 
 ],
-'store'=>[
-    'singlestore'=> 'Store',
-    'pluralstore'=> 'Stores',
-    'card'=>[
-        'centro'=> 'Center',
+'store' => [
+    'singlestore' => 'Store',
+    'pluralstores' => 'Stores',
+    'empty' => 'No stores available.',
+    'card' => [
+        'centro' => 'Shopping Center',
         'email' => 'Email',
-        'tel'=> 'Tel',
-        'web'=> 'Web',
-        'contact'=> 'Contact',
+        'tel' => 'Phone',
+        'web' => 'Website',
+        'contact' => 'Contact',
     ],
     'category' => [
-            'Libros y Papelería' => 'Books & Stationery',
-            'Hogar' => 'Home',
-            'Ropa' => 'Clothing',
-            'Salud y Belleza' => 'Health & Beauty',
-            'Accesorios' => 'Accessories',
-            'Juguetes' => 'Toys',
-            'Electrónica' => 'Electronics',
-            'Deportes' => 'Sports',
-            'Alimentos' => 'Food',
-            'Tecnología' => 'Technology',
-        ],
-], 
+        'Libros y Papelería' => 'Books & Stationery',
+        'Hogar' => 'Home',
+        'Ropa' => 'Clothing',
+        'Salud y Belleza' => 'Health & Beauty',
+        'Accesorios' => 'Accessories',
+        'Juguetes' => 'Toys',
+        'Electrónica' => 'Electronics',
+        'Deportes' => 'Sports',
+        'Alimentos' => 'Food',
+        'Tecnología' => 'Technology',
+    ],
+],
+
     'stores' => 'Stores',
     'storesDescription' => 'List of shops',
 
@@ -199,10 +201,17 @@ return [
         ],
     ],
     'common' => [
-        'filters' => [
-            'results' => 'Results',
-        ],
+    'filters' => [
+        'title' => 'Filters',
+        'clear' => 'Clear',
+        'results' => 'Results',
+        'search_store' => 'Search store',
+        'category' => 'Category',
+        'select_category' => 'Select a category',
+        'search_category' => 'Search category...',
     ],
+],
+
     'buttons' => [
         'new' => 'New',
         'edit' => 'Edit',
@@ -406,7 +415,8 @@ return [
         ],
         'filters' => [
             'number' => 'Zone Number',
-            'capacity' => 'Capacity'
+            'capacity' => 'Capacity',
+            'all' => 'All categories'
         ],
         'placeholders' => [
             'number' => 'Enter a number...',
@@ -437,6 +447,7 @@ return [
         ],
     ],
     'users' => [
+        'total' => 'Registered users',
         'title' => 'Users',
         'create' => 'Create User',
         'edit' => 'Edit User',
@@ -882,4 +893,19 @@ return [
             'canceled_reserv' => 'canceled reservation',
         ],
     ],
+    'actions' => [
+    'filter' => 'Filter',
+    // ...other actions
+],
+'filters' => [
+    'title' => 'Filters',
+    'search' => 'Search',
+    'category' => 'Category',
+    'search_placeholder' => 'Store name...',
+    'select_category_placeholder' => 'Select a category',
+    'category_search_placeholder' => 'Search category...',
+    'no_categories_found' => 'No categories found.',
+],
+
+
 ];

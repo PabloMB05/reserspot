@@ -1,6 +1,6 @@
 import { Head, Link } from '@inertiajs/react';
-import AppLayout from '@/Layouts/AppLayout';
-import { type Store } from '@/types/stores';
+import AppLayout from '@/layouts/app-layout';
+
 import { Button } from '@/components/ui/button';
 import { useTranslations } from '@/hooks/use-translations';
 

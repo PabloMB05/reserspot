@@ -19,6 +19,7 @@ return [
             'store'=> 'Tiendas',
             'documentation' => 'Documentación',
         ],
+    ],
     'shoppingcenter'=>[
         'title' => 'Centros Comerciales',
         'selectcenter'=>'Selecciona un centro comercial',
@@ -32,19 +33,29 @@ return [
         ], 
     ],
     'store' => [
-        'category' => [
-            'Libros y Papelería' => 'Libros y Papelería',
-            'Hogar' => 'Hogar',
-            'Ropa' => 'Ropa',
-            'Salud y Belleza' => 'Salud y Belleza',
-            'Accesorios' => 'Accesorios',
-            'Juguetes' => 'Juguetes',
-            'Electrónica' => 'Electrónica',
-            'Deportes' => 'Deportes',
-            'Alimentos' => 'Alimentos',
-            'Tecnología' => 'Tecnología',
-        ],
+    'singlestore' => 'Tienda',
+    'pluralstores' => 'Tiendas',
+    'empty' => 'No hay tiendas disponibles.',
+    'card' => [
+        'centro' => 'Centro Comercial',
+        'contact' => 'Contacto',
+        'web' => 'Sitio web',
     ],
+    'category' => [
+        'Libros y Papelería' => 'Libros y Papelería',
+        'Hogar' => 'Hogar',
+        'Ropa' => 'Ropa',
+        'Salud y Belleza' => 'Salud y Belleza',
+        'Accesorios' => 'Accesorios',
+        'Juguetes' => 'Juguetes',
+        'Electrónica' => 'Electrónica',
+        'Deportes' => 'Deportes',
+        'Alimentos' => 'Alimentos',
+        'Tecnología' => 'Tecnología',
+    ],
+],
+
+    
     'stores' => 'Tiendas',
     'storesDescription' => 'Listado de comercios',
 
@@ -56,7 +67,7 @@ return [
 
     'map' => 'Mapa interior',
     'mapDescription' => 'Visualiza la distribución del centro',
-    ],
+    
      'days' => [
         'monday' => 'Lunes',
         'tuesday' => 'Martes',
@@ -178,14 +189,18 @@ return [
         'save' => 'Guardar'
     ],
     ],
-    'common' => [            
-
-
-        'filters' => [
-
-            'results' => 'Resultados',
-        ],
+    'common' => [
+    'filters' => [
+        'title' => 'Filtros',
+        'clear' => 'Limpiar',
+        'results' => 'Resultados',
+        'search_store' => 'Buscar tienda',
+        'category' => 'Categoría',
+        'select_category' => 'Selecciona una categoría',
+        'search_category' => 'Buscar categoría...',
     ],
+],
+
     'buttons' => [
         'new' => 'Nuevo',
         'edit' => 'Editar',
@@ -399,7 +414,8 @@ return [
         ],
         'filters' => [
             'number' => 'Número de zona',
-            'capacity' => 'Capacidad'
+            'capacity' => 'Capacidad',
+            'all' => 'Todas las categorías'
         ],
         'placeholders' => [
             'number' => 'Ingrese un número...',
@@ -877,5 +893,19 @@ return [
             'canceled_reserv' => 'Reserva cancelada',
         ],
     ],
+    'actions' => [
+    'filter' => 'Filtrar',
+    // ...otras acciones si ya tienes
+],
+'filters' => [
+    'title' => 'Filtros',
+    'search' => 'Buscar',
+    'category' => 'Categoría',
+    'search_placeholder' => 'Nombre de tienda...',
+    'select_category_placeholder' => 'Selecciona una categoría',
+     'category_search_placeholder' => 'Buscar categoría...',
+     'no_categories_found' => 'No se encontraron categorías.',
+],
+
 
 ];

@@ -58,6 +58,9 @@ export default function StoresIndex({
 }: StoresIndexProps) {
   const { t } = useTranslations()
 
+  
+
+
   const [search, setSearch] = useState(filters.search || '')
   const [category, setCategory] = useState<string | number>(filters.category || '')
   const [categoryOpen, setCategoryOpen] = useState(false)
@@ -73,6 +76,7 @@ export default function StoresIndex({
       preserveScroll: false,
     })
   }
+ console.log('Tiendas cargadas:', stores.data.map(store => `ID: ${store.id} | Nombre: ${store.name}`));
 
   return (
     <StoreLayout title={t('ui.navigation.items.store')} centerName={shoppingCenter.name}>
@@ -83,32 +87,39 @@ export default function StoresIndex({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Buscar */}
             <div>
-              <Label htmlFor="search">Buscar</Label>
+              <Label htmlFor="search">{t('ui.filters.search')}</Label>
               <Input
                 id="search"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Nombre de tienda..."
+                value={filters.search}
+                onChange={e => setFilters({ ...filters, search: e.target.value })}
+                placeholder={t('ui.filters.search_placeholder')}
               />
               
             </div>
 
             {/* Categoría */}
             <div>
-              <Label>Categoría</Label>
+              <Label htmlFor="category">{t('ui.filters.category')}</Label>
               <Popover open={categoryOpen} onOpenChange={setCategoryOpen}>
                 <PopoverTrigger asChild>
-                  <Button variant="outline" className="w-full justify-between">
-                    {category
-                      ? categories.find(c => c.id === category)?.name
-                      : 'Selecciona una categoría'}
-                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                  </Button>
+                  <Button
+  className="w-full justify-between rounded border bg-white text-black transition-colors 
+             border-gray-300 hover:bg-[#f0fdfa]
+             focus:outline-none focus:ring-2 focus:ring-[#20c997]/50 focus:border-[#20c997]"
+>
+
+
+  {category
+  ? categories.find(c => c.id === category)?.name
+  : t('ui.filters.select_category_placeholder')}
+  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+</Button>
+
                 </PopoverTrigger>
                 <PopoverContent className="w-full p-0">
                   <Command>
-                    <CommandInput placeholder="Buscar categoría..." />
-                    <CommandEmpty>No se encontraron categorías.</CommandEmpty>
+                    <CommandInput placeholder={t('ui.filters.category_search_placeholder')} />
+                    <CommandEmpty>{t('ui.filters.no_categories_found')}</CommandEmpty>
                     <CommandGroup>
                       <CommandItem
                         key="all-categories"
@@ -117,6 +128,10 @@ export default function StoresIndex({
                           setCategory('')
                           setCategoryOpen(false)
                         }}
+                        className="cursor-pointer text-black hover:bg-[#8ddcc2] hover:text-black !important"
+
+
+
                       >
                         {t('ui.zones.filters.all') || 'Todas las categorías'}
                       </CommandItem>
@@ -128,6 +143,10 @@ export default function StoresIndex({
                             setCategory(cat.id)
                             setCategoryOpen(false)
                           }}
+                          className="cursor-pointer text-black hover:bg-[#8ddcc2] hover:text-black !important"
+
+
+
                         >
                           <Check className={cn('mr-2 h-4 w-4', category === cat.id ? 'opacity-100' : 'opacity-0')} />
                           {cat.name}
@@ -150,7 +169,8 @@ export default function StoresIndex({
 
         {/* Resultados */}
         <section className="space-y-4">
-          <div className="flex items-center gap-3 p-3 bg-card rounded-lg shadow-sm">
+          <div className="flex items-center gap-3 p-3 bg-[#a8e6cf] rounded-lg shadow-sm">
+
             <div className="bg-primary/10 p-2 rounded-full">
               <StoreIcon className="h-5 w-5 text-primary" />
             </div>
@@ -173,7 +193,8 @@ export default function StoresIndex({
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4">
               {stores.data.map((store) => (
                 <StoreCard
-                  key={store.id}
+                  key={`store-${store.id}-${store.name}`}
+
                   id={store.id}
                   name={store.name}
                   category={
@@ -203,7 +224,8 @@ export default function StoresIndex({
             {stores.links.map((link, index) =>
               link.url ? (
                 <Link
-                  key={index}
+                  key={`${link.url ?? link.label}`}
+
                   href={link.url}
                   className={`px-3 py-1 rounded text-sm ${
                     link.active
@@ -214,7 +236,8 @@ export default function StoresIndex({
                 />
               ) : (
                 <span
-                  key={index}
+                  key={`${link.url ?? link.label}`}
+
                   className="px-3 py-1 text-muted-foreground text-sm"
                   dangerouslySetInnerHTML={{ __html: link.label }}
                 />

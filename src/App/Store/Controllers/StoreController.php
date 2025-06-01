@@ -9,6 +9,8 @@ use Domain\ShoppingCenter\Models\ShoppingCenter;
 use Domain\Stores\Actions\StoreIndexAction;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Lang;
+
 
 class StoreController extends Controller
 {
@@ -32,11 +34,15 @@ class StoreController extends Controller
 
         // Render de Inertia sin floor
         return Inertia::render('stores/index', [
-            'shoppingCenter' => $shoppingCenter,
-            'stores'         => $stores,
-            'filters'        => $request->only(['search', 'category']),
-            'categories'     => $categories,
-        ]);
+        'shoppingCenter' => $shoppingCenter,
+        'stores'         => $stores,
+        'filters'        => $request->only(['search', 'category']),
+        'categories'     => $categories,
+        'translations' => [
+        'ui' => Lang::get('ui'),
+],
+
+    ]);
     }
 
     public function show()
