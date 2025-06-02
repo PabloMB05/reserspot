@@ -25,7 +25,7 @@ export function UserMenuContent({ user }: UserMenuContentProps) {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-                <DropdownMenuItem asChild>
+                <DropdownMenuItem asChild className="cursor-pointer px-2 py-1.5 rounded-md hover:!bg-[#8ddcc2]">
                     <Link
                         className="block w-full"
                         href={route('profile.edit')}
@@ -42,7 +42,7 @@ export function UserMenuContent({ user }: UserMenuContentProps) {
                 </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
+            <DropdownMenuItem asChild className="cursor-pointer px-2 py-1.5 rounded-md hover:!bg-[#8ddcc2]">
                 <Link
                     className="block w-full"
                     method="post"

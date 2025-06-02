@@ -95,17 +95,18 @@ export function Table<TData>({
       <CardContent className="p-0">
         <div className="overflow-x-auto">
           <UITable>
-            <TableHeader>
+            <TableHeader className="hover:bg-[#a8e6cf] transition-colors">
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (
-                    <TableHead key={header.id}>
+                    <TableHead key={header.id} >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
                             header.getContext(),
                           )}
+                          
                     </TableHead>
                   ))}
                 </TableRow>
@@ -117,6 +118,7 @@ export function Table<TData>({
                   <TableRow
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
+                    className="hover:bg-[#a8e6cf] transition-colors"
                   >
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id}>

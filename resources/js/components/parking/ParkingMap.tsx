@@ -1,6 +1,7 @@
 import { Car } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
+
 interface ParkingMapProps {
   floors: Array<{
     id: string;
@@ -38,12 +39,10 @@ export function ParkingMap({ floors, onSpotSelect }: ParkingMapProps) {
               setSelectedFloor(floor);
               setSelectedZone(null);
             }}
-            className={`px-4 py-2 rounded-md ${
-              selectedFloor?.id === floor.id ? 'bg-primary text-white' : 'bg-gray-100'
-            }`}
+            variant={selectedFloor?.id === floor.id ? 'default' : 'outline'}
           >
-            {floor.name}
-          </Button>
+          {floor.name}
+        </Button>
         ))}
       </div>
 
@@ -57,12 +56,11 @@ export function ParkingMap({ floors, onSpotSelect }: ParkingMapProps) {
                 <Button
                   key={zone.id}
                   onClick={() => setSelectedZone(zone)}
-                  className={`px-3 py-1 rounded-md ${
-                    selectedZone?.id === zone.id ? 'bg-primary text-white' : 'bg-gray-100'
-                  }`}
+                  variant={selectedZone?.id === zone.id ? 'default' : 'outline'}
                 >
                   {zone.name}
                 </Button>
+
               ))}
             </div>
           </div>

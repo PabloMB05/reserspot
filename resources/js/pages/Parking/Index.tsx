@@ -4,6 +4,7 @@ import { ParkingReservationForm } from '@/pages/Parking/components/ParkingReserv
 import { useSelectedSpot, useParkingActions } from '@/hooks/parking/useParkingStore';
 import { ParkingLayout } from '@/layouts/parking/ParkingLayout';
 
+
 interface ParkingIndexProps extends PageProps {
   shoppingCenter: {
     id: string;
@@ -30,25 +31,32 @@ export default function ParkingIndex({ shoppingCenter }: ParkingIndexProps) {
 
   return (
     <ParkingLayout>
-    <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-      <div className="flex flex-col lg:flex-row gap-8 overflow-auto">
-        {/* Mapa de parking */}
-        <div className="flex-1">
-          <ParkingMap 
-            floors={shoppingCenter.floors} 
-            onSpotSelect={setSelectedSpot} 
-          />
-        </div>
+      <div className="bg-gray-50 dark:bg-zinc-950 min-h-screen">
+        <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+          {/* Título */}
+          <h1 className="text-2xl font-semibold mb-4">
+            Parking - {shoppingCenter.name}
+          </h1>
 
-        {/* Formulario de reserva */}
-        <div className="lg:w-80">
-          <ParkingReservationForm 
-            spot={selectedSpot} 
-            shoppingCenter={shoppingCenter}
-          />
+          <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 overflow-auto">
+            {/* Mapa de parking */}
+            <div className="flex-1">
+              <ParkingMap 
+                floors={shoppingCenter.floors} 
+                onSpotSelect={setSelectedSpot} 
+              />
+            </div>
+
+            {/* Formulario de reserva */}
+            <div className="lg:w-80 bg-white dark:bg-zinc-900 rounded-xl shadow-md p-4">
+              <ParkingReservationForm 
+                spot={selectedSpot} 
+                shoppingCenter={shoppingCenter}
+              />
+            </div>
+          </div>
         </div>
       </div>
-    </div>
     </ParkingLayout>
   );
 }

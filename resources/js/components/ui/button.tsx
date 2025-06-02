@@ -11,7 +11,7 @@ const buttonVariants = cva(
       variant: {
         default: "bg-[#a8e6cf] hover:bg-[#8ddcc2] text-black", // botón verde claro
         destructive: "bg-red-500 text-white hover:bg-red-600",
-        outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+        outline: "border border-[#a8e6cf] bg-white text-black hover:bg-[#e0f8f3]",
         secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",

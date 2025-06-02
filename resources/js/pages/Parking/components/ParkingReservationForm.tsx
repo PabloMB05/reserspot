@@ -61,9 +61,10 @@ export function ParkingReservationForm({ spot, shoppingCenter }: ParkingReservat
 
   if (!spot) {
     return (
-      <div className="bg-gray-50 rounded-lg p-6 text-center">
+      <div className="bg-[#e0f8f3] rounded-lg p-6 text-center">
         <p className="text-gray-500">Selecciona una plaza para reservar</p>
       </div>
+
     );
   }
 

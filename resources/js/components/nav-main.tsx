@@ -11,7 +11,7 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
             <SidebarMenu>
                 {items.map((item) => (
                     <SidebarMenuItem key={item.title}>
-                        <SidebarMenuButton asChild isActive={item.url === page.url}>
+                        <SidebarMenuButton asChild isActive={item.url === page.url} className="hover:!bg-[#8ddcc2]">
                             <Link 
                                 href={item.url} 
                                 prefetch 

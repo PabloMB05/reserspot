@@ -19,54 +19,54 @@ const mainNavItems = (t: (key: string) => string): NavItem[] => [
         url: '/users',
         icon: Users,
     },
-    {
-        title: t('ui.navigation.items.floor'),
-        url: '/floors',
-        icon: Building2,
-    },
-    {
-        title: t('ui.navigation.items.zones'),
-        url: '/zones',
-        icon: Layers,
-    },
-    {
-        title: t('ui.navigation.items.bookcases'),
-        url: '/bookcases',
-        icon: Library,
-    },
-    {
-        title: t('ui.navigation.items.books'),
-        url: '/books',
-        icon: Book,
-    },
-    {
-        title: t('ui.navigation.items.loans'),
-        url: '/loans',
-        icon: HandHelping,
-    },
-    {
-        title: t('ui.navigation.items.reservations'),
-        url: '/reservations',
-        icon: Import,
-    },
-    {
-        title: t('ui.navigation.items.ranking'),
-        url: '/ranking',
-        icon: TrendingUp,
-    },
+    // {
+    //     title: t('ui.navigation.items.floor'),
+    //     url: '/floors',
+    //     icon: Building2,
+    // },
+    // {
+    //     title: t('ui.navigation.items.zones'),
+    //     url: '/zones',
+    //     icon: Layers,
+    // },
+    // {
+    //     title: t('ui.navigation.items.bookcases'),
+    //     url: '/bookcases',
+    //     icon: Library,
+    // },
+    // {
+    //     title: t('ui.navigation.items.books'),
+    //     url: '/books',
+    //     icon: Book,
+    // },
+    // {
+    //     title: t('ui.navigation.items.loans'),
+    //     url: '/loans',
+    //     icon: HandHelping,
+    // },
+    // {
+    //     title: t('ui.navigation.items.reservations'),
+    //     url: '/reservations',
+    //     icon: Import,
+    // },
+    // {
+    //     title: t('ui.navigation.items.ranking'),
+    //     url: '/ranking',
+    //     icon: TrendingUp,
+    // },
 ];
 
 const footerNavItems = (t: (key: string) => string): NavItem[] => [
-    {
-        title: t('ui.navigation.items.repository'),
-        url: 'https://github.com/laravel/react-starter-kit',
-        icon: Folder,
-    },
-    {
-        title: t('ui.navigation.items.documentation'),
-        url: 'https://laravel.com/docs/starter-kits',
-        icon: BookOpen,
-    },
+    // {
+    //     title: t('ui.navigation.items.repository'),
+    //     url: 'https://github.com/laravel/react-starter-kit',
+    //     icon: Folder,
+    // },
+    // {
+    //     title: t('ui.navigation.items.documentation'),
+    //     url: 'https://laravel.com/docs/starter-kits',
+    //     icon: BookOpen,
+    // },
 ];
 
 export function AppSidebar() {
@@ -76,7 +76,7 @@ export function AppSidebar() {
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <SidebarMenuButton size="lg" asChild>
+                        <SidebarMenuButton size="lg" asChild >
                             <Link href="/dashboard" prefetch>
                                 <AppLogo />
                             </Link>
