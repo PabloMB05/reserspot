@@ -212,7 +212,8 @@ export default function StoresIndex({
               ))}
             </div>
           ) : (
-            <div className="bg-muted/50 rounded-lg p-6 text-center">
+            <div className="bg-[#c2f1e3] rounded-lg p-6 text-center">
+
               <p className="text-muted-foreground">{t('ui.store.empty')}</p>
             </div>
           )}

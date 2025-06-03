@@ -51,17 +51,18 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
                                 variant="ghost"
                                 asChild
                                 className={cn(
-                                    'w-full justify-start transition-colors hover:bg-muted/50',
-                                    currentPath === item.url 
-                                        ? 'bg-muted hover:bg-muted' 
-                                        : 'hover:bg-transparent'
+                                    'w-full justify-start transition-colors',
+                                    currentPath === item.url
+                                    ? 'bg-[#c2f1e3] font-semibold'
+                                    : 'hover:bg-[#8ddcc2]'
                                 )}
-                            >
+                                >
                                 <Link href={item.url} prefetch>
                                     {item.icon && <item.icon className="mr-2 h-4 w-4" />}
                                     <span className="truncate">{item.title}</span>
                                 </Link>
-                            </Button>
+                                </Button>
+
                         ))}
                     </nav>
                 </aside>

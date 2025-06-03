@@ -27,6 +27,8 @@ export default function ShoppingCenterDashboard() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [selectedDay, setSelectedDay] = useState<string>('monday');
   const [activeModule, setActiveModule] = useState<'stores' | 'parking' | 'events' | 'map' | null>(null);
+  const [showMapModal, setShowMapModal] = useState(false);
+
 
   const DAYS = [
     { value: 'monday', label: t('ui.days.monday') },
@@ -161,19 +163,53 @@ export default function ShoppingCenterDashboard() {
             icon={CalendarCheck2}
             disabled={!selected}
           />
-          <DashboardCard
+          {/* <DashboardCard
             className="bg-[#dcedd8] hover:bg-[#c1e1d1]"
             title={t('ui.map')}
             description={t('ui.mapDescription')}
             href={selected ? `/shopping-center/${selected.id}/map` : '#'}
             icon={MapPinned}
             disabled={!selected}
+          /> */}
+          <DashboardCard
+            className="bg-[#dcedd8] hover:bg-[#c1e1d1]"
+            title={t('ui.map')}
+            description={t('ui.mapDescription')}
+            icon={MapPinned}
+            disabled={!selected}
+            onClick={() => selected && setShowMapModal(true)}
           />
+
         </div>
 
 
 
       </div>
+      {showMapModal && (
+  <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div className="bg-white rounded-lg p-4 shadow-lg w-full max-w-xl relative">
+      <button
+        onClick={() => setShowMapModal(false)}
+        className="absolute top-2 right-2 text-gray-500 hover:text-black"
+      >
+        ✖
+      </button>
+      <h2 className="text-xl font-semibold mb-2">{t('ui.map')}</h2>
+      {/* <img
+        // src="/Imagenes/mapa-centro-comercial.png"
+        // alt="Mapa Interior"
+        // className="w-full rounded"
+      /> */}
+      <img
+      src={`/Imagenes/${selected.name.replace(/\s+/g, '')}.png`}
+      alt={`Mapa de ${selected.name}`}
+      className="w-full rounded"
+    />
+
+    </div>
+  </div>
+)}
+
     </AppLayout>
   );
 }

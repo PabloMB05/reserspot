@@ -6,9 +6,10 @@ import { cn } from "@/lib/utils";
 interface DashboardCardProps {
   title: string;
   description: string;
-  href: string;
+  href?: string;
   icon: LucideIcon;
-  className?: string; // ✅ añadimos esto
+  className?: string;
+  onClick?: () => void; // ✅ añadimos esto
 }
 
 export function DashboardCard({
@@ -17,14 +18,15 @@ export function DashboardCard({
   href,
   icon: Icon,
   className,
+  onClick, // ✅ lo recibimos
 }: DashboardCardProps) {
-  return (
-    <Link
-      href={href}
+  const content = (
+    <div
+      onClick={onClick}
       className={cn(
-  "border-sidebar-border/70 dark:border-sidebar-border relative overflow-hidden rounded-xl border p-6 transition-colors hover:bg-muted/50",
-  className
-)}
+        "cursor-pointer border-sidebar-border/70 dark:border-sidebar-border relative overflow-hidden rounded-xl border p-6 transition-colors hover:bg-muted/50",
+        className
+      )}
     >
       <div className="flex items-center gap-4">
         <div className="rounded-lg bg-primary/10 p-2">
@@ -35,6 +37,10 @@ export function DashboardCard({
           <p className="text-sm text-muted-foreground">{description}</p>
         </div>
       </div>
-    </Link>
+    </div>
   );
+
+  return href && !onClick ? <Link href={href}>{content}</Link> : content;
 }
+
+

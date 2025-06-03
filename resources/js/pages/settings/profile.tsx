@@ -67,25 +67,32 @@ const [startDate, setStartDate] = useState('');
                   <div className="ml-3">
           
                     <div className="flex flex-wrap gap-4 mb-6">
-                      <div>
-                        <label className="block text-sm font-medium mb-1">Desde:</label>
-                        <input
-                          type="date"
-                          value={startDate}
-                          onChange={(e) => setStartDate(e.target.value)}
-                          className="border rounded px-2 py-1"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium mb-1">Hasta:</label>
-                        <input
-                          type="date"
-                          value={endDate}
-                          onChange={(e) => setEndDate(e.target.value)}
-                          className="border rounded px-2 py-1"
-                        />
-                      </div>
-                    </div>
+  <div>
+    <label className="block text-sm font-medium mb-1">Desde:</label>
+    <input
+      type="date"
+      value={startDate}
+      onChange={(e) => setStartDate(e.target.value)}
+      className={cn(
+        "border rounded px-2 py-1 outline-none transition-all",
+        startDate && "border-[#20c997] ring-1 ring-[#20c997]/50"
+      )}
+    />
+  </div>
+    <div>
+      <label className="block text-sm font-medium mb-1">Hasta:</label>
+      <input
+        type="date"
+        value={endDate}
+        onChange={(e) => setEndDate(e.target.value)}
+        className={cn(
+          "border rounded px-2 py-1 outline-none transition-all",
+          endDate && "border-[#20c997] ring-1 ring-[#20c997]/50"
+        )}
+      />
+    </div>
+  </div>
+
                   </div>
               </div>
       </SettingsLayout>

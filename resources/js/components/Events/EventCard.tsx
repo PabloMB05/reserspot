@@ -22,7 +22,11 @@ export function EventCard({
   href,
 }: EventCardProps) {
   return (
-    <Link href={href} className="block p-4 bg-card rounded-lg shadow-sm hover:shadow transition space-y-2">
+        <Link
+      href={href}
+      className="block p-4 bg-[#c2f1e3] hover:bg-[#a8e6cf] rounded-xl shadow-sm transition space-y-2 text-black"
+    >
+
       <div className="flex items-center gap-2 text-primary">
         <CalendarIcon className="h-5 w-5" />
         <h3 className="font-semibold text-lg">{title}</h3>

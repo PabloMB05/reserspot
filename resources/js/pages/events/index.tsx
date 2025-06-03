@@ -37,7 +37,8 @@ export default function EventsIndex({ shoppingCenter, shoppingCenters }: EventsI
         <div className="space-y-8">
           {centers.map((center) => (
             <section key={center.id} className="space-y-4">
-              <div className="flex items-center gap-3 p-3 bg-card rounded-lg shadow-sm">
+              <div className="flex items-center gap-3 p-3 bg-[#a8e6cf] rounded-lg shadow-sm text-black">
+
                 <div className="bg-primary/10 p-2 rounded-full">
                   <CalendarIcon className="h-5 w-5 text-primary" />
                 </div>
