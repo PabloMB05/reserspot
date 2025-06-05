@@ -7,29 +7,19 @@ use Domain\Users\Models\User;
 
 class UserIndexAction
 {
-    public function __invoke(?string $search = null, int $perPage = 10)
+    public function __invoke(?array $search = null, int $perPage = 10)
     {
+
+        $name = $search[0];
+        $email = $search[1];
+
         $users = User::query()
-            ->when($search, function ($query, $search) {
-                // Extrae filtros con prefijo (e.g. name:juan email:gmail)
-                preg_match_all('/(\w+):([^\s]+)/', $search, $matches, PREG_SET_ORDER);
-                $usedPrefixed = false;
-
-                foreach ($matches as [, $key, $value]) {
-                    if (in_array($key, ['name', 'email'])) {
-                        $query->where($key, 'like', "%{$value}%");
-                        $usedPrefixed = true;
-                    }
-                }
-
-                // Si no se usaron prefijos, hacer búsqueda general
-                if (!$usedPrefixed) {
-                    $query->where(function ($q) use ($search) {
-                        $q->where('name', 'like', "%{$search}%")
-                          ->orWhere('email', 'like', "%{$search}%");
-                    });
-                }
-            })
+        ->when($name !== "null", function ($query) use ($name) {
+            $query->where('name', 'ILIKE', '%'.$name.'%');
+        })
+        ->when($email !== "null", function ($query) use ($email) {
+            $query->where('email', 'ILIKE', '%'.$email.'%');
+        })
             ->latest()
             ->paginate($perPage);
 

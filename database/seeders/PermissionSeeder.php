@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Domain\Permissions\Models\Permission;
+use Domain\Users\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Cache;
 
@@ -126,6 +127,9 @@ class PermissionSeeder extends Seeder
             'guard_name' => 'web',
             'parent_id' => $config_permission->id,
         ]);
+
+        User::where('email', 'like', 'admin@example.com')->first()->syncPermissions('users.view','users.edit','users.create','users.delete','products.view','products.edit','products.create','products.delete','reports.view','reports.print','reports.export','config.access','config.modify',);
+
 
         Cache::forever(key: 'permissions', value: Permission::whereNull('parent_id')->with('children')->get());
     }
