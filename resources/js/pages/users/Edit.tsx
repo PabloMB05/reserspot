@@ -14,6 +14,7 @@ interface EditUserProps extends PageProps {
     };
     page?: string;
     perPage?: string;
+    emails: string[];
     roles?: string[];
     rolesConPermisos: Record<string, string[]>;
     permisos?: string[];
@@ -21,7 +22,7 @@ interface EditUserProps extends PageProps {
     permisosDelUsuario?: string[];
 }
 
-export default function EditUser({ user, page, perPage, roles, rolesConPermisos, permisos, permisosAgrupados, permisosDelUsuario }: EditUserProps) {
+export default function EditUser({ user, page, perPage, roles, rolesConPermisos, emails, permisos, permisosAgrupados, permisosDelUsuario }: EditUserProps) {
     const { t } = useTranslations();
 
     return (
@@ -41,6 +42,7 @@ export default function EditUser({ user, page, perPage, roles, rolesConPermisos,
                     <CardContent>
                         <UserForm
                             initialData={user}
+                            emails={emails}
                             page={page}
                             perPage={perPage}
                             roles={roles}

@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { TableSkeleton } from "@/components/stack-table/TableSkeleton";
 import { UserLayout } from "@/layouts/users/UserLayout";
 import { User, useDeleteUser, useUsers } from "@/hooks/users/useUsers";
-import { PencilIcon, PlusIcon, TrashIcon, ClockIcon } from "lucide-react";
+import { Eye, PencilIcon, PlusIcon, TrashIcon } from "lucide-react";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useState, useMemo } from "react";
 import { Link, usePage } from "@inertiajs/react";
@@ -15,9 +15,18 @@ import { FiltersTable, FilterConfig } from "@/components/stack-table/FiltersTabl
 import { toast } from "sonner";
 import { ColumnDef, Row } from "@tanstack/react-table";
 
+interface PageProps {
+    auth: {
+        user: any;
+        permissions: string[];
+    };
+}
 export default function UsersIndex() {
   const { t } = useTranslations();
   const { url } = usePage();
+
+    const page = usePage<{ props: PageProps }>();
+    const auth = page.props.auth;
 
   // Obtener los parámetros de la URL actual
   const urlParams = new URLSearchParams(url.split('?')[1] || '');
@@ -30,10 +39,9 @@ export default function UsersIndex() {
   const [filters, setFilters] = useState<Record<string, any>>({});
   // Combine name and email filters into a single search string if they exist
   const combinedSearch = [
-    filters.search,
-    filters.name ? `name:${filters.name}` : null,
-    filters.email ? `email:${filters.email}` : null
-  ].filter(Boolean).join(' ');
+    filters.name ? filters.name : 'null',
+    filters.email ? filters.email : 'null'
+  ];
 
   const { data: users, isLoading, isError, refetch } = useUsers({
     search: combinedSearch,
@@ -45,6 +53,15 @@ export default function UsersIndex() {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
+
+  const handleFilterChange = (newFilters: Record<string, any>) => {
+      const filtersChanged = newFilters!==filters;
+
+      if (filtersChanged) {
+          setCurrentPage(1);
+      }
+      setFilters(newFilters);
+      };
 
   const handlePerPageChange = (newPerPage: number) => {
     setPerPage(newPerPage);
@@ -61,7 +78,7 @@ export default function UsersIndex() {
     }
   };
 
-  const columns = useMemo(() => ([
+  let columns = useMemo(() => ([
     createTextColumn<User>({
       id: "name",
       header: t("ui.users.columns.name") || "Name",
@@ -76,59 +93,63 @@ export default function UsersIndex() {
       id: "created_at",
       header: t("ui.users.columns.created_at") || "Created At",
       accessorKey: "created_at",
-    }),
-    createActionsColumn<User>({
-      id: "actions",
-      header: t("ui.users.columns.actions") || "Actions",
-      renderActions: (user) => (
-        <>
-          <Link href={`/users/${user.id}/edit?page=${currentPage}&perPage=${perPage}`}>
-            <Button variant="outline" size="icon" title={t("ui.users.buttons.edit") || "Edit user"}>
-              <PencilIcon className="h-4 w-4" />
-            </Button>
-          </Link>
-            {/* Botón para ver el timeline del usuario */}
-            <Link href={`/users/${user.id}/timeline`}>
-      <Button variant="outline" size="icon" title={t("ui.users.buttons.view_timeline") || "View Timeline"}>
-        <ClockIcon className="h-4 w-4" />
-      </Button>
-    </Link>
-
-          <DeleteDialog
-            id={user.id}
-            onDelete={handleDeleteUser}
-            title={t("ui.users.delete.title") || "Delete user"}
-            description={t("ui.users.delete.description") || "Are you sure you want to delete this user? This action cannot be undone."}
-            trigger={
-              <Button variant="outline" size="icon" className="text-destructive hover:text-destructive" title={t("ui.users.buttons.delete") || "Delete user"}>
-                <TrashIcon className="h-4 w-4" />
-              </Button>
-            }
-          />
-        </>
-      ),
-    }),
+    })
   ] as ColumnDef<User>[]), [t, handleDeleteUser]);
+              {auth.permissions.includes('users.edit') && (
 
+    columns.push(
+        createActionsColumn<User>({
+          id: "actions",
+          header: t("ui.users.columns.actions") || "Actions",
+          renderActions: (user) => (
+            <>
+                <div>
+              <Link href={`/users/${user.id}/edit?page=${currentPage}&perPage=${perPage}`}>
+                <Button variant="outline" size="icon" title={t("ui.users.buttons.edit") || "Edit user"}>
+                  <PencilIcon className="h-4 w-4" />
+                </Button>
+              </Link>
+              <DeleteDialog
+                id={user.id}
+                onDelete={handleDeleteUser}
+                title={t("ui.users.delete.title") || "Delete user"}
+                successMessage={t('messages.users.deleted')}
+                description={t("ui.users.delete.description") || "Are you sure you want to delete this user? This action cannot be undone."}
+                trigger={
+                  <Button variant="outline" size="icon" className="text-destructive hover:text-destructive" title={t("ui.users.buttons.delete") || "Delete user"}>
+                    <TrashIcon className="h-4 w-4" />
+                  </Button>
+
+                }
+              />
+
+              <Link href={`/users/${user.id}`}>
+                <Button variant="outline" size="icon" title={t("ui.users.buttons.show") || "Show user"}>
+                  <Eye className="h-4 w-4" />
+                </Button>
+              </Link> </div>
+            </>
+          ),
+        })))};
   return (
       <UserLayout title={t('ui.users.title')}>
           <div className="p-6">
               <div className="space-y-6">
                   <div className="flex items-center justify-between">
                       <h1 className="text-3xl font-bold">{t('ui.users.title')}</h1>
-                      <Link href="/users/create">
+                      {auth.permissions.includes('users.create') && (<Link href="/users/create">
                           <Button>
                               <PlusIcon className="mr-2 h-4 w-4" />
                               {t('ui.users.buttons.new')}
                           </Button>
-                      </Link>
+                      </Link>)}
                   </div>
                   <div></div>
 
                   <div className="space-y-4">
                       <FiltersTable
                           filters={
-                              [                                 
+                              [
                                   {
                                       id: 'name',
                                       label: t('ui.users.filters.name') || 'Nombre',
@@ -143,11 +164,14 @@ export default function UsersIndex() {
                                   },
                               ] as FilterConfig[]
                           }
-                          onFilterChange={setFilters}
+                          onFilterChange={handleFilterChange}
                           initialValues={filters}
                       />
                   </div>
-                  <div>{t('ui.users.total')}: {users?.meta.total}</div>
+                  <div className="text-center w-full justify-center mb-5">
+
+                  {users?.meta.total !== undefined && <h2>{t('ui.common.filters.results', {attribute: users?.meta.total})}</h2>}
+</div>
                   <div className="w-full overflow-hidden">
                       {isLoading ? (
                           <TableSkeleton columns={4} rows={10} />

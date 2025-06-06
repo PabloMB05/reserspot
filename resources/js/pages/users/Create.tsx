@@ -14,12 +14,13 @@ interface UserFormProps {
     page?: string;
     perPage?: string;
     roles?: string[];
+    emails: string[];
     rolesConPermisos: Record<string, string[]>;
     permisos?: string[];
     permisosAgrupados: Record<string, string[]>;
 }
 
-export default function CreateUser({ roles, rolesConPermisos, permisos, permisosAgrupados }: UserFormProps) {
+export default function CreateUser({ roles, rolesConPermisos, permisos, emails, permisosAgrupados }: UserFormProps) {
     const { t } = useTranslations();
 
     return (
@@ -37,7 +38,7 @@ export default function CreateUser({ roles, rolesConPermisos, permisos, permisos
                     </CardHeader>
                     <Separator />
                     <CardContent>
-                        <UserForm roles={roles} rolesConPermisos={rolesConPermisos} permisos={permisos} permisosAgrupados={permisosAgrupados} />
+                        <UserForm roles={roles} emails={emails} rolesConPermisos={rolesConPermisos} permisos={permisos} permisosAgrupados={permisosAgrupados} />
                     </CardContent>
                 </Card>
             </div>

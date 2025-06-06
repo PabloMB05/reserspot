@@ -5,16 +5,19 @@ namespace Domain\Users\Models;
 use Domain\Users\Models\UserSetting;
 
 use Database\Factories\UserFactory;
+use Domain\Loans\Models\Loan;
+use Domain\Reservations\Models\Reservation;
 use Domain\Users\Observers\UserObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Domain\Loans\Models\Loan;
-use Domain\Reservations\Models\Reservation;
+
 use Spatie\Permission\Traits\HasRoles;
 
 #[ObservedBy(UserObserver::class)]
@@ -74,11 +77,29 @@ class User extends Authenticatable
     {
         return $this->hasOne(UserSetting::class, 'user_id');
     }
-    public function loans()
+
+    public function loans(): HasMany
     {
         return $this->hasMany(Loan::class);
     }
-    public function reservations(){
+
+    public function loansWithTrashed()
+    {
+        return $this->hasMany(Loan::class)->withTrashed();
+    }
+
+    public function activeLoans(): HasMany
+    {
+        return $this->hasMany(Loan::class)->where('active', true);
+    }
+
+    public function reservations(): HasMany
+    {
         return $this->hasMany(Reservation::class);
+    }
+
+    public function reservationsWithTrashed()
+    {
+        return $this->hasMany(Reservation::class)->withTrashed();
     }
 }

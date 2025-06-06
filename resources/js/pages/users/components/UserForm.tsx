@@ -24,6 +24,7 @@ interface UserFormProps {
     page?: string;
     perPage?: string;
     roles?: string[];
+    emails: string[];
     rolesConPermisos: Record<string, string[]>;
     permisos?: string[];
     permisosAgrupados: Record<string, string[]>;
@@ -58,7 +59,7 @@ const categorias = [
 
 var permisosUsuarioFinal: string[] = [];
 
-export function UserForm({ initialData, page, perPage, roles, rolesConPermisos, permisosAgrupados, permisosDelUsuario }: UserFormProps) {
+export function UserForm({ initialData, page, perPage, roles, emails, rolesConPermisos, permisosAgrupados, permisosDelUsuario }: UserFormProps) {
     const { t } = useTranslations();
     const queryClient = useQueryClient();
     const [arrayPermisosState, setArrayPermisosState] = useState(permisosUsuarioFinal);
@@ -185,8 +186,8 @@ export function UserForm({ initialData, page, perPage, roles, rolesConPermisos, 
     const accesoPermisos = false;
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-            <div>
+        <form onSubmit={handleSubmit} noValidate>
+            <div className="space-y-4">
                 <Tabs defaultValue="userForm">
                     <TabsList className="w-full">
                         <TabsTrigger value="userForm" className="w-1/2">
@@ -197,7 +198,7 @@ export function UserForm({ initialData, page, perPage, roles, rolesConPermisos, 
                         </TabsTrigger>
                     </TabsList>
                     <Separator />
-                    <TabsContent value="userForm" className="w-full">
+                    <TabsContent value="userForm" className="w-full space-y-4">
                         {/* Name field */}
                         <div>
                             <form.Field
@@ -247,8 +248,11 @@ export function UserForm({ initialData, page, perPage, roles, rolesConPermisos, 
                                         return !value
                                             ? t('ui.validation.required', { attribute: t('ui.users.fields.email').toLowerCase() })
                                             : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
-                                              ? t('ui.validation.email', { attribute: t('ui.users.fields.email').toLowerCase() })
-                                              : undefined;
+                                            ? t('ui.validation.email', { attribute: t('ui.users.fields.email').toLowerCase() })
+                                            : emails.includes(value) && initialData?.email!=value
+                                            ? t('ui.validation.usedEmail', { attribute: t('ui.users.fields.email').toLowerCase() })
+                                            : undefined;
+
                                     },
                                 }}
                             >

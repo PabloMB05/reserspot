@@ -7,11 +7,12 @@ use Domain\Permissions\Models\Permission;
 use Domain\Roles\Models\Role;
 use Domain\Users\Actions\UserDestroyAction;
 use Domain\Users\Actions\UserIndexAction;
+use Domain\Users\Actions\UserLoanHistoryAction;
 use Domain\Users\Actions\UserStoreAction;
 use Domain\Users\Actions\UserUpdateAction;
-use Domain\Users\Actions\UserHistoryAction;
 use Domain\Users\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
@@ -19,13 +20,30 @@ use Inertia\Response;
 
 class UserController extends Controller
 {
+
     public function index()
     {
+        Gate::authorize('users.view');
+
         return Inertia::render('users/Index');
+    }
+
+    public function show(User $user, UserLoanHistoryAction $action)
+    {
+        Gate::authorize('users.edit');
+
+        $activityList = $action($user);
+
+        return Inertia::render('users/Show', [
+            'user' => $user,
+            'activityList' => $activityList,
+        ]);
     }
 
     public function create()
     {
+
+        Gate::authorize('users.create');
         $allRolesInDatabase = Role::all();
         $roles = $allRolesInDatabase->pluck('name');
 
@@ -39,11 +57,15 @@ class UserController extends Controller
             return [$role->name => $role->permissions->pluck('name')];
         });
 
-        return Inertia::render('users/Create', ['roles' => $roles, 'rolesConPermisos' => $relacionRolesPermisos, 'permisos' => $permisos, 'permisosAgrupados' => $permisosAgrupados]);
+        $emails = User::with('roles.permissions')->pluck('email');
+
+        return Inertia::render('users/Create', ['roles' => $roles, 'emails' => $emails, 'rolesConPermisos' => $relacionRolesPermisos, 'permisos' => $permisos, 'permisosAgrupados' => $permisosAgrupados]);
     }
 
     public function store(Request $request, UserStoreAction $action)
     {
+                Gate::authorize('users.create');
+
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -63,6 +85,7 @@ class UserController extends Controller
 
     public function edit(Request $request, User $user)
     {
+        Gate::authorize('users.edit');
 
         $allRolesInDatabase = Role::all();
         $roles = $allRolesInDatabase->pluck('name');
@@ -79,11 +102,14 @@ class UserController extends Controller
 
         $permisosDelUsuario = $user->getPermissionNames();
 
+        $emails = User::all()->pluck('email');
+
         return Inertia::render('users/Edit', [
             'user' => $user,
             'page' => $request->query('page'),
             'perPage' => $request->query('perPage'),
             'roles' => $roles,
+            'emails' => $emails,
             'rolesConPermisos' => $relacionRolesPermisos,
             'permisos' => $permisos,
             'permisosAgrupados' => $permisosAgrupados,
@@ -93,6 +119,8 @@ class UserController extends Controller
 
     public function update(Request $request, User $user, UserUpdateAction $action)
     {
+                Gate::authorize('users.edit');
+
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'email' => [
@@ -128,24 +156,11 @@ class UserController extends Controller
 
     public function destroy(User $user, UserDestroyAction $action)
     {
+                Gate::authorize('users.delete');
+
         $action($user);
 
         return redirect()->route('users.index')
             ->with('success', __('messages.users.deleted'));
     }
-    
-    public function show(User $user, UserHistoryAction $action)
-    {
-        $activities = $action($user);
-        $loans = $activities[0]; // Esto obtiene todos los préstamos del usuario
-        $reservations = $activities[1]; // Esto obtiene todas las reservas del usuario
-
-        // Pasar los datos a la vista
-        return Inertia::render('users/UserHistoryTimeline', [ 
-            'loans' => $loans,
-            'reservations' => $reservations,
-        ]);
-    }
-     
-    
 }
