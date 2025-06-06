@@ -95,7 +95,7 @@ export function Table<TData>({
       <CardContent className="p-0">
         <div className="overflow-x-auto">
           <UITable>
-            <TableHeader className="hover:bg-[#a8e6cf] transition-colors">
+            <TableHeader className="hover:bg-[#a8e6cf] hover:text-gray-900 dark:hover:text-gray-900 transition-colors">
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (
@@ -118,7 +118,7 @@ export function Table<TData>({
                   <TableRow
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
-                    className="hover:bg-[#a8e6cf] transition-colors"
+                    className="hover:bg-[#a8e6cf] hover:text-gray-900 dark:hover:text-gray-900 transition-colors"
                   >
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id}>

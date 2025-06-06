@@ -28,7 +28,7 @@ export function StoreCard({
   return (
     <Link
   href={href}
-className="group border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden bg-[#d9f8ef] transition-colors duration-200 hover:shadow-md hover:border-primary/30 dark:hover:border-primary/50 hover:bg-[#8ddcc2]"
+className="group border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden bg-[#d9f8ef] transition-colors duration-200 hover:shadow-md hover:border-primary/30 dark:hover:border-primary/50 hover:bg-[#8ddcc2] dark:hover:text-gray-900"
 >
 
       {/* Contenedor principal */}
@@ -36,14 +36,15 @@ className="group border border-gray-200 dark:border-gray-700 rounded-lg overflow
         {/* Header - común para todos los dispositivos */}
         <div className="p-4 pb-0 flex items-start gap-3">
           <div className="bg-primary/10 p-2 rounded-lg flex-shrink-0">
-            <Icon className="h-5 w-5 text-primary" />
+            <Icon className="h-5 w-5 text-primary dark:text-black" />
+
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-gray-900 dark:text-white truncate text-base sm:text-lg">
+            <h3 className="font-semibold text-gray-900  truncate text-base sm:text-lg">
               {name}
             </h3>
             <div className="flex flex-wrap gap-1.5 mt-1">
-              <span className="bg-gray-100 dark:bg-gray-800 text-xs px-2 py-1 rounded-full">
+              <span className="bg-gray-100  text-xs px-2 py-1 rounded-full">
                 {category}
               </span>
             </div>
@@ -54,22 +55,22 @@ className="group border border-gray-200 dark:border-gray-700 rounded-lg overflow
         <div className="p-4 pt-3 flex-1">
           {/* Móvil: Diseño vertical compacto */}
           <div className="sm:hidden space-y-2 text-sm">
-            <div className="text-gray-500 dark:text-gray-400 truncate">
+            <div className="text-gray-500 truncate">
               <span className="font-medium">{t('ui.store.card.centro')}:</span> {shoppingCenter}
             </div>
             {email && (
               <div className="truncate">
-                <span className="text-gray-500 dark:text-gray-400">✉️</span> {email}
+                <span className="text-gray-500 ">✉️</span> {email}
               </div>
             )}
             {phone && (
               <div>
-                <span className="text-gray-500 dark:text-gray-400">📞</span> {phone}
+                <span className="text-gray-500 ">📞</span> {phone}
               </div>
             )}
             {website && (
               <div className="truncate text-primary hover:underline">
-                <span className="text-gray-500 dark:text-gray-400">🌐</span>{" "}
+                <span className="text-gray-500 ">🌐</span>{" "}
                 {website.replace(/^https?:\/\//, "").split("/")[0]}
               </div>
             )}
@@ -77,23 +78,23 @@ className="group border border-gray-200 dark:border-gray-700 rounded-lg overflow
 
           {/* Tablet: 2 columnas */}
           <div className="hidden sm:block md:hidden space-y-2">
-            <div className="text-sm text-gray-600 dark:text-gray-300">
+            <div className="text-sm text-gray-600 ">
               {shoppingCenter}
             </div>
             <div className="grid grid-cols-2 gap-2 text-sm">
               {email && (
                 <div className="truncate">
-                  <span className="text-gray-500 dark:text-gray-400">{t('ui.store.card.email')}:</span> {email}
+                  <span className="text-gray-500 ">{t('ui.store.card.email')}:</span> {email}
                 </div>
               )}
               {phone && (
                 <div>
-                  <span className="text-gray-500 dark:text-gray-400">{t('ui.store.card.tel')}:</span> {phone}
+                  <span className="text-gray-500 ">{t('ui.store.card.tel')}:</span> {phone}
                 </div>
               )}
               {website && (
                 <div className="col-span-2 truncate text-primary hover:underline">
-                  <span className="text-gray-500 dark:text-gray-400">{t('ui.store.card.web')}:</span>{" "}
+                  <span className="text-gray-500 ">{t('ui.store.card.web')}:</span>{" "}
                   {website.replace(/^https?:\/\//, "").split("/")[0]}
                 </div>
               )}
@@ -103,18 +104,18 @@ className="group border border-gray-200 dark:border-gray-700 rounded-lg overflow
           {/* Ordenador: 3 columnas */}
           <div className="hidden md:block">
             <div className="grid grid-cols-3 gap-3 text-sm">
-              <div className="text-gray-600 dark:text-gray-300 truncate">
+              <div className="text-gray-600  truncate">
                 <div className="font-medium">{t('ui.store.card.centro')}</div>
                 <div className="truncate">{shoppingCenter}</div>
               </div>
               <div className="truncate">
-                <div className="font-medium text-gray-600 dark:text-gray-300">{t('ui.store.card.contact')}</div>
+                <div className="font-medium text-gray-600 ">{t('ui.store.card.contact')}</div>
                 {email && <div className="truncate">{email}</div>}
                 {phone && <div>{phone}</div>}
               </div>
               {website && (
                 <div className="truncate">
-                  <div className="font-medium text-gray-600 dark:text-gray-300">{t('ui.store.card.web')}</div>
+                  <div className="font-medium text-gray-600 ">{t('ui.store.card.web')}</div>
                   <a
                     href={website.startsWith("http") ? website : `https://${website}`}
                     target="_blank"

@@ -17,6 +17,15 @@ import {
   SelectItem,
 } from '@/components/ui/select';
 
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+
+
 const breadcrumbs: BreadcrumbItem[] = [
   { title: 'Menu', href: '/shopping-center' },
 ];
@@ -70,6 +79,7 @@ export default function ShoppingCenterDashboard() {
 
   const selectedDayHours = getOpeningHourByDay(selected?.opening_hours, selectedDay);
   const isOpenNow = isCenterOpen(selectedDayHours);
+  const centerNames = centersData?.data.map((c) => c.name.replace(/\s+/g, '')) || [];
 
   if (loading) return <div className="p-4">Cargando...</div>;
   if (error) return <div className="p-4 text-red-500">{error}</div>;
@@ -100,7 +110,7 @@ export default function ShoppingCenterDashboard() {
 
         {selected && (
           <div className="bg-white shadow p-4 rounded space-y-2">
-            <h2 className="text-xl font-semibold">{selected.name}</h2>
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-900">{selected.name}</h2>
             <p className="text-sm text-gray-600">{selected.location}</p>
             <p className="text-gray-800">{selected.description}</p>
 
@@ -109,7 +119,7 @@ export default function ShoppingCenterDashboard() {
             </div>
 
             {selected.opening_hours && (
-              <div className="text-sm text-gray-700 space-y-2">
+              <div className="text-sm text-gray-700 space-y-2 ">
                 <div>
                   <label className="block text-sm font-medium mb-1">
                     {t('ui.shoppingcenter.selectday')}
@@ -134,13 +144,14 @@ export default function ShoppingCenterDashboard() {
                 </div>
               </div>
             )}
+
           </div>
         )}
 
         {/* Accesos rápidos */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 text-gray-900 dark:text-gray-900">
           <DashboardCard
-            className="bg-[#dcedd8] hover:bg-[#c1e1d1]"
+            className="bg-[#dcedd8] hover:bg-[#c1e1d1] text-gray-900 dark:text-gray-900"
             title={t('ui.stores')}
             description={t('ui.storesDescription')}
             href={selected ? route('shopping-centers.stores.index', selected.id) : '#'}
@@ -148,7 +159,7 @@ export default function ShoppingCenterDashboard() {
             disabled={!selected}
           />
           <DashboardCard
-            className="bg-[#dcedd8] hover:bg-[#c1e1d1]"
+            className="bg-[#dcedd8] hover:bg-[#c1e1d1] text-gray-900 dark:text-gray-900"
             title={t('ui.parking')}
             description={t('ui.parkingDescription')}
             icon={ParkingCircle}
@@ -156,7 +167,7 @@ export default function ShoppingCenterDashboard() {
             href={selected ? route('parking.index', selected.id) : '#'}
           />
           <DashboardCard
-            className="bg-[#dcedd8] hover:bg-[#c1e1d1]"
+            className="bg-[#dcedd8] hover:bg-[#c1e1d1] text-900gray-900 dark:text-gray-"
             title={t('ui.events')}
             description={t('ui.eventsDescription')}
             href={selected ? `/shopping-center/${selected.id}/events` : '#'}
@@ -172,7 +183,7 @@ export default function ShoppingCenterDashboard() {
             disabled={!selected}
           /> */}
           <DashboardCard
-            className="bg-[#dcedd8] hover:bg-[#c1e1d1]"
+            className="bg-[#dcedd8] hover:bg-[#c1e1d1] text-gray-900 dark:text-gray-900"
             title={t('ui.map')}
             description={t('ui.mapDescription')}
             icon={MapPinned}
@@ -181,6 +192,41 @@ export default function ShoppingCenterDashboard() {
           />
 
         </div>
+            
+
+          {!selected && centerNames.length > 0 && (
+  <div className="bg-[#a8e6cf] shadow p-4 rounded mt-6 text-gray-900 dark:text-gray-900">
+    <h3 className="text-lg font-semibold mb-4 text-center ">Galería de Centros Comerciales</h3>
+
+    <Carousel className="w-full max-w-4xl mx-auto">
+      <CarouselContent>
+        {centerNames.map((name, index) => (
+          <CarouselItem key={index} className="flex justify-center">
+            <img
+              src={`/Imagenes/${name}.jpg`}
+              alt={`Centro ${name}`}
+              className="h-64 rounded-lg shadow"
+            />
+          </CarouselItem>
+        ))}
+      </CarouselContent>
+      <CarouselPrevious />
+      <CarouselNext />
+    </Carousel>
+  </div>
+)}
+
+{selected && (
+  <div className="bg-[#a8e6cf] shadow p-4 rounded mt-6 text-gray-900 dark:text-gray-900">
+    <h3 className="text-lg font-semibold mb-2">{selected.name}</h3>
+    <img
+      src={`/Imagenes/${selected.name.replace(/\s+/g, '')}.jpg`}
+      alt={`Foto de ${selected.name}`}
+      className="w-full max-w-4xl mx-auto rounded-lg shadow"
+    />
+  </div>
+)}
+
 
 
 
@@ -201,7 +247,7 @@ export default function ShoppingCenterDashboard() {
         // className="w-full rounded"
       /> */}
       <img
-      src={`/Imagenes/${selected.name.replace(/\s+/g, '')}.png`}
+      src={`/Imagenes/${selected.name.replace(/\s+/g, '')+'map'}.png`}
       alt={`Mapa de ${selected.name}`}
       className="w-full rounded"
     />
