@@ -30,7 +30,7 @@ export function DashboardCard({
     >
       <div className="flex items-center gap-4">
         <div className="rounded-lg bg-primary/10 p-2">
-          <Icon className="h-6 w-6 text-primary" />
+          <Icon className="h-6 w-6 text-gray-900 dark:text-gray-900" />
         </div>
         <div>
           <h3 className="font-semibold">{title}</h3>

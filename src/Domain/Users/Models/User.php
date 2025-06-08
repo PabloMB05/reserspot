@@ -24,6 +24,8 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     use HasFactory, HasRoles, Notifiable, SoftDeletes, HasUuids;
+    protected $guard_name = 'web';
+
 
     /**
      * Create a new factory instance for the model.
