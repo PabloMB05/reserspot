@@ -2,61 +2,43 @@
 
 namespace App\Notifications;
 
-use Domain\Books\Models\Book;
-use Domain\Loans\Models\Loan;
-use Domain\Users\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class confirmaciondereserva extends Notification implements ShouldQueue
+class ConfirmacionReservaParking extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public $book;
+    protected $datos;
 
-    /**
-     * Create a new notification instance.
-     */
-    public function __construct( Book $book)
+    public function __construct(array $datos)
     {
-        $this->book = $book;
+        $this->datos = $datos;
     }
 
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @return array<int, string>
-     */
     public function via(object $notifiable): array
     {
         return ['mail'];
     }
 
-    /**
-     * Get the mail representation of the notification.
-     */
     public function toMail(object $notifiable): MailMessage
     {
-
         return (new MailMessage)
-        ->line('¡Hola '.$notifiable->name.'!')
-        ->line('¡Ya puedes leer '.$this->book->title.'! Tu turno ha llegado.')
-        ->action('Reserva ahora', url('/books'))
-        ->line('¡No dejes pasar la oportunidad!');
-
+            ->subject('Confirmación de reserva de plaza')
+            ->greeting('¡Hola ' . $notifiable->name . '!')
+            ->line('Tu reserva ha sido confirmada.')
+            ->line('📍 Plaza: ' . $this->datos['plaza'])
+            ->line('🏙️ Zona: ' . $this->datos['zona'])
+            ->line('📅 Desde: ' . $this->datos['fecha_inicio'] . ' a las ' . $this->datos['hora_inicio'])
+            ->line('📅 Hasta: ' . $this->datos['fecha_fin'] . ' a las ' . $this->datos['hora_fin'])
+            ->line('✅ Gracias por usar ReserSpot Zenia.')
+            ->action('Ver mi reserva', url('/dashboard'));
     }
 
-    /**
-     * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
-     */
     public function toArray(object $notifiable): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 }

@@ -9,6 +9,7 @@ use Domain\ParkingReservation\Data\Resources\ParkingReservationResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use App\Notifications\ConfirmacionReservaParking;
 
 class ParkingReservationController extends Controller
 {
@@ -107,6 +108,16 @@ class ParkingReservationController extends Controller
         }
 
         $reservation->update(['is_confirmed' => true]);
+
+        // Enviar notificación
+        $user->notify(new ConfirmacionReservaParking([
+            'plaza' => $reservation->parking_spot_id,
+            'zona' => $reservation->shopping_center_id,
+            'fecha_inicio' => $reservation->reserved_at->format('Y-m-d'),
+            'hora_inicio' => $reservation->reserved_at->format('H:i'),
+            'fecha_fin' => $reservation->reserved_until->format('Y-m-d'),
+            'hora_fin' => $reservation->reserved_until->format('H:i'),
+        ]));
 
         return response()->json([
             'message' => 'Reserva confirmada con éxito',
