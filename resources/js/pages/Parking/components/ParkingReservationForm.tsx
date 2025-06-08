@@ -25,7 +25,7 @@ export function ParkingReservationForm({ spot, shoppingCenter }: ParkingReservat
 
   const handleReservation = async () => {
     if (!spot || !date || !time) return;
-
+    
     const payload = {
       parking_spot_id: spot.id,
       shopping_center_id: shoppingCenter.id,
@@ -34,6 +34,7 @@ export function ParkingReservationForm({ spot, shoppingCenter }: ParkingReservat
     };
 
     try {
+      console.log(payload)
       const response = await fetch('/api/parking-reservations', {
         method: 'POST',
         headers: {
@@ -44,11 +45,11 @@ export function ParkingReservationForm({ spot, shoppingCenter }: ParkingReservat
         body: JSON.stringify(payload),
       });
 
-      if (!response.ok) {
-        const text = await response.text();
-        console.error('Error response:', text);
-        throw new Error('Error al reservar plaza');
-      }
+      // if (!response.ok) {
+      //   const text = await response.text();
+      //   console.error('Error response:', text);
+      //   throw new Error('Error al reservar plaza');
+      // }
 
       const data = await response.json();
       alert('Reserva confirmada 🎉');
