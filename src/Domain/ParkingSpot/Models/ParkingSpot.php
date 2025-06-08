@@ -4,10 +4,15 @@ namespace Domain\ParkingSpot\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class ParkingSpot extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUuids;
+
+    // Indica que la clave primaria no es autoincremental y es de tipo string (UUID)
+    public $incrementing = false;
+    protected $keyType = 'string';
 
     protected $fillable = [
         'id',

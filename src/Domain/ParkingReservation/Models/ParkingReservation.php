@@ -4,16 +4,17 @@ namespace Domain\ParkingReservation\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use App\Models\User;
-use App\Models\ParkingSpot;
-use App\Models\ShoppingCenter;
+use Domain\Models\User;
+use Domain\ParkingSpot\Models\ParkingSpot;
+use Domain\ShoppingCenter\Models\ShoppingCenter;
+use Carbon\Carbon;
 
 class ParkingReservation extends Model
 {
     protected $table = 'parking_reservations';
 
-    public $incrementing = false; // Usas UUID
-    protected $keyType = 'string'; // UUID es string
+    public $incrementing = false;
+    protected $keyType = 'string';
 
     protected $fillable = [
         'id',
@@ -21,18 +22,17 @@ class ParkingReservation extends Model
         'parking_spot_id',
         'shopping_center_id',
         'reserved_at',
+        'reserved_until',
         'is_confirmed',
     ];
 
-protected $casts = [
-    'date' => 'date',
-    'time' => 'string', // o 'datetime:H:i' si quieres un cast especial (pero string está bien)
-    'is_confirmed' => 'boolean',
-];
-
+    protected $casts = [
+        'reserved_at' => 'datetime',
+        'reserved_until' => 'datetime',
+        'is_confirmed' => 'boolean',
+    ];
 
     // Relaciones
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -46,5 +46,25 @@ protected $casts = [
     public function shoppingCenter(): BelongsTo
     {
         return $this->belongsTo(ShoppingCenter::class);
+    }
+
+    // Scopes
+    public function scopeActive($query)
+    {
+        return $query->where('is_confirmed', true)
+                     ->where('reserved_until', '>=', now());
+    }
+
+    // Métodos
+    public function isExpired(): bool
+    {
+        return !$this->is_confirmed && 
+               $this->created_at->addMinutes(15)->isPast();
+    }
+
+    // Si quieres, puedes agregar método para calcular duración o precio aquí:
+    public function getDurationHours(): int
+    {
+        return $this->reserved_until->diffInHours($this->reserved_at);
     }
 }

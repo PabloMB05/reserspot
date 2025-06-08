@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { TimeLineSection } from '../users/components/TimeLine';
+import { useState } from 'react';
+import { ParkingReservationsHistory } from '../users/components/TimeLine';
 import { TimeLineLayout } from '@/layouts/timeline/timelinelayout';
 
 interface ProfileProps {
@@ -29,9 +29,15 @@ interface ProfileProps {
     expedit: string | null;
     deleted_at?: string | null;
   }[];
+  parkingReservations: {
+    id: number;
+    parkingSpot: string;
+    expedit: string | null;
+    canceled_at?: string | null;
+  }[];
 }
 
-export default function UserHistoryTimeline({ user, loans, reservations }: ProfileProps) {
+export default function UserHistoryTimeline({ user, loans, reservations, parkingReservations }: ProfileProps) {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
 
@@ -53,10 +59,11 @@ export default function UserHistoryTimeline({ user, loans, reservations }: Profi
 
   const filteredLoans = filterByDateRange(loans);
   const filteredReservations = filterByDateRange(reservations);
+  const filteredParkingReservations = filterByDateRange(parkingReservations);
 
   return (
     <div className="space-y-6">
-      <TimeLineLayout  title={user.name}>
+      <TimeLineLayout title={user.name}>
         <div className="ml-3">
           <div className="mb-4">
             <h1 className="text-xl font-semibold">{user.name}</h1>
@@ -84,7 +91,10 @@ export default function UserHistoryTimeline({ user, loans, reservations }: Profi
             </div>
           </div>
         </div>
-        <TimeLineSection loans={filteredLoans} reservations={filteredReservations} />
+
+        <ParkingReservationsHistory 
+          parkingReservations={filteredParkingReservations} 
+        />
       </TimeLineLayout>
     </div>
   );

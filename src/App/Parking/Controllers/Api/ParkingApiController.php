@@ -4,7 +4,7 @@ namespace App\Parking\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\ShoppingCenter;
+use Domain\Models\ShoppingCenter;
 
 class ParkingApiController extends Controller
 {
@@ -26,7 +26,7 @@ class ParkingApiController extends Controller
         // Aquí podrías verificar si ya está ocupada en ese horario, etc.
 
         // Marcar como ocupada (simplificado)
-        $spot = \App\Models\ParkingSpot::findOrFail($validated['parking_spot_id']);
+        $spot = \Domain\ParkingSpot\Models\ParkingSpot::findOrFail($validated['parking_spot_id']);
         $spot->is_occupied = true;
         $spot->save();
 

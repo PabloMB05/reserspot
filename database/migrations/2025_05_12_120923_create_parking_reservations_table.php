@@ -12,13 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('parking_reservations', function (Blueprint $table) {
-            $table->uuid('id')->primary()->unique();
-            $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
-            $table->foreignUuid('parking_spot_id')->constrained()->onDelete('cascade');
-            $table->foreignUuid('shopping_center_id')->constrained()->onDelete('cascade');
-            $table->date('date');       //  Fecha de la reserva
-            $table->time('time');       //  Hora de la reserva
-            $table->boolean('is_confirmed')->default(false); // Confirmación de la reserva
+            $table->uuid('id')->primary();
+            $table->uuid('user_id');
+            $table->uuid('parking_spot_id');
+            $table->uuid('shopping_center_id');
+
+            // Nuevos campos separados
+            $table->date('date');
+            $table->time('start_time');
+            $table->time('end_time');
+
+            $table->boolean('is_confirmed')->default(false);
             $table->timestamps();
         });
     }
@@ -28,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reservations');
+        Schema::dropIfExists('parking_reservations');
     }
 };
