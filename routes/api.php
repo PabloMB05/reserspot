@@ -69,5 +69,15 @@ Route::middleware(['web', 'auth'])->group(function () {
         Route::put('/reservations/{reservation}', [ReservationApiController::class, 'update']);
         Route::delete('/reservations/{reservation}', [ReservationApiController::class, 'destroy']);
 
-
+    Route::middleware('auth:sanctum')->group(function () {
+    // Reservas de parking
+    Route::prefix('parking-reservations')->group(function () {
+        Route::get('/', [ParkingReservationController::class, 'index']);
+        Route::post('/', [ParkingReservationController::class, 'store']);
+        Route::post('/check-availability', [ParkingReservationController::class, 'checkAvailability']);
+        Route::post('/{id}/confirm', [ParkingReservationController::class, 'confirm']);
+        Route::delete('/{id}', [ParkingReservationController::class, 'cancel']);
+        Route::get('/history', [ParkingReservationController::class, 'history']);
+    });
+});
 });

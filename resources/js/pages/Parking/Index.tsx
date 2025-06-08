@@ -3,7 +3,7 @@ import { ParkingMap } from '@/components/parking/ParkingMap';
 import { ParkingReservationForm } from '@/pages/Parking/components/ParkingReservationForm';
 import { useSelectedSpot, useParkingActions } from '@/hooks/parking/useParkingStore';
 import { ParkingLayout } from '@/layouts/parking/ParkingLayout';
-
+import { useTranslations } from "@/hooks/use-translations";
 
 interface ParkingIndexProps extends PageProps {
   shoppingCenter: {
@@ -28,9 +28,9 @@ interface ParkingIndexProps extends PageProps {
 export default function ParkingIndex({ shoppingCenter }: ParkingIndexProps) {
   const selectedSpot = useSelectedSpot();
   const { setSelectedSpot } = useParkingActions();
-
+  const { t } = useTranslations();
   return (
-    <ParkingLayout>
+    <ParkingLayout title={t('ui.navigation.items.parking')}>
       <div className="bg-gray-50 dark:bg-zinc-950 min-h-screen">
         <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
           {/* Título */}

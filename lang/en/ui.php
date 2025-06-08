@@ -18,6 +18,7 @@ return [
         'repository' => 'Repository',
         'store'=> 'Stores',
         'documentation' => 'Documentation',
+        'parking'=> 'Parkings'
     ],
 ],
 'shoppingcenter'=>[
@@ -476,7 +477,7 @@ return [
             'reports' => 'Reports',
             'configurations' => 'Configuration',
         ],
-        'permissions' => [
+        'permisos' => [
             'Users' => [
                 'users' => [
                     'view' => 'View users',

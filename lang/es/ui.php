@@ -18,6 +18,7 @@ return [
             'repository' => 'Repositorio',
             'store'=> 'Tiendas',
             'documentation' => 'Documentación',
+            'parking'=>'Aparcamientos'
         ],
     ],
     'shoppingcenter'=>[
