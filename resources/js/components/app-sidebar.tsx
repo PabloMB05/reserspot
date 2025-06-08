@@ -7,18 +7,20 @@ import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
 import { Book, BookOpen, Building2, Folder, Layers, LayoutGrid, Library, Users, HandHelping, Import, TrendingUp } from 'lucide-react';
 import AppLogo from './app-logo';
+import { usePage } from '@inertiajs/react';
 
-const mainNavItems = (t: (key: string) => string): NavItem[] => [
-    {
-        title: t('ui.navigation.items.dashboard'),
-        url: '/dashboard',
-        icon: LayoutGrid,
-    },
-    {
-        title: t('ui.navigation.items.users'),
-        url: '/users',
-        icon: Users,
-    },
+
+// const mainNavItems = (t: (key: string) => string): NavItem[] => [
+//     {
+//         title: t('ui.navigation.items.dashboard'),
+//         url: '/dashboard',
+//         icon: LayoutGrid,
+//     },
+//     {
+//         title: t('ui.navigation.items.users'),
+//         url: '/users',
+//         icon: Users,
+//     },
     // {
     //     title: t('ui.navigation.items.floor'),
     //     url: '/floors',
@@ -54,7 +56,27 @@ const mainNavItems = (t: (key: string) => string): NavItem[] => [
     //     url: '/ranking',
     //     icon: TrendingUp,
     // },
-];
+// ];
+const mainNavItems = (t: (key: string) => string, canViewUsers: boolean): NavItem[] => {
+    const items: NavItem[] = [
+        {
+            title: t('ui.navigation.items.dashboard'),
+            url: '/dashboard',
+            icon: LayoutGrid,
+        },
+    ];
+
+    if (canViewUsers) {
+        items.push({
+            title: t('ui.navigation.items.users'),
+            url: '/users',
+            icon: Users,
+        });
+    }
+
+    return items;
+};
+
 
 const footerNavItems = (t: (key: string) => string): NavItem[] => [
     // {
@@ -71,6 +93,12 @@ const footerNavItems = (t: (key: string) => string): NavItem[] => [
 
 export function AppSidebar() {
     const { t } = useTranslations();
+    const { props } = usePage();
+    console.log('PERMISOS:', props.auth?.permissions);
+
+    const canViewUsers = props.auth?.permissions?.some(p => p.includes('users') && p.includes('view'));
+
+
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
@@ -86,7 +114,7 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={mainNavItems(t)} />
+                <NavMain items={mainNavItems(t, canViewUsers)} />
             </SidebarContent>
 
             <SidebarFooter>

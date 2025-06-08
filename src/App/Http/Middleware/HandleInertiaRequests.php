@@ -35,24 +35,35 @@ class HandleInertiaRequests extends Middleware
      * @return array<string, mixed>
      */
     public function share(Request $request): array
-    {
-        [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
+{
+    [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
 
-        return [
-            ...parent::share($request),
-            'name' => config('app.name'),
-            'quote' => ['message' => trim($message), 'author' => trim($author)],
-            'auth' => [
-                'user' => $request->user(),
-            ],
-            'flash' => [
-                'success' => fn () => $request->session()->get('success'),
-                'error' => fn () => $request->session()->get('error'),
-            ],
-            'translations' => [
-                'ui' => trans('ui'),
-                'messages' => trans('messages'),
-            ],
-        ];
-    }
+    $user = $request->user();
+    $permissions = $user?->getAllPermissions()->pluck('name')->toArray() ?? [];
+
+    // Log para verificar que los permisos se están generando
+    logger()->info('Inertia Share - Usuario y permisos', [
+        'usuario' => $user?->email,
+        'permisos' => $permissions,
+    ]);
+
+    return [
+        ...parent::share($request),
+        'name' => config('app.name'),
+        'quote' => ['message' => trim($message), 'author' => trim($author)],
+        'auth' => [
+            'user' => $user,
+            'permissions' => $permissions,
+        ],
+        'flash' => [
+            'success' => fn () => $request->session()->get('success'),
+            'error' => fn () => $request->session()->get('error'),
+        ],
+        'translations' => [
+            'ui' => trans('ui'),
+            'messages' => trans('messages'),
+        ],
+    ];
+}
+
 }
