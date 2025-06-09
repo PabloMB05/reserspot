@@ -17,13 +17,18 @@ return new class extends Migration
             $table->uuid('parking_spot_id');
             $table->uuid('shopping_center_id');
 
-            // Nuevos campos separados
+            // Campos separados para fecha y hora
             $table->date('date');
             $table->time('start_time');
             $table->time('end_time');
 
+            // Campos necesarios para verificar conflictos
+            $table->timestamp('reserved_at')->nullable();     // <- Añadido
+            $table->timestamp('reserved_until')->nullable();
+
             $table->boolean('is_confirmed')->default(false);
             $table->timestamps();
+            $table->softDeletes(); // Por si estás usando SoftDeletes
         });
     }
 

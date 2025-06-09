@@ -42,8 +42,6 @@ class ParkingReservationController extends Controller
         $reservedAt = Carbon::parse($validated['start_date'], config('app.timezone'));
         $reservedUntil = Carbon::parse($validated['end_date'], config('app.timezone'));
 
-
-
         $activeReservations = ParkingReservation::where('user_id', $user->id)
             ->where('is_confirmed', true)
             ->where('reserved_until', '>=', now())
@@ -73,15 +71,19 @@ class ParkingReservationController extends Controller
             ], 422);
         }
 
-        $reservation = ParkingReservation::create([
-            'id' => (string) Str::uuid(),
-            'user_id' => $user->id,
-            'parking_spot_id' => $validated['parking_spot_id'],
-            'shopping_center_id' => $validated['shopping_center_id'],
-            'reserved_at' => $reservedAt,
-            'reserved_until' => $reservedUntil,
-            'is_confirmed' => false,
-        ]);
+       $reservation = ParkingReservation::create([
+    'id' => (string) Str::uuid(),
+    'user_id' => $user->id,
+    'parking_spot_id' => $validated['parking_spot_id'],
+    'shopping_center_id' => $validated['shopping_center_id'],
+    'reserved_at' => $reservedAt,
+    'reserved_until' => $reservedUntil,
+    'date' => $reservedAt->toDateString(),
+    'start_time' => $reservedAt->toTimeString(),
+    'end_time' => $reservedUntil->toTimeString(),
+    'is_confirmed' => false,
+]);
+
 
         $price = $this->calculateReservationPrice($reservedAt, $reservedUntil);
 
@@ -109,7 +111,6 @@ class ParkingReservationController extends Controller
 
         $reservation->update(['is_confirmed' => true]);
 
-        // Enviar notificación
         $user->notify(new ConfirmacionReservaParking([
             'plaza' => $reservation->parking_spot_id,
             'zona' => $reservation->shopping_center_id,
@@ -155,12 +156,11 @@ class ParkingReservationController extends Controller
     }
 
     private function calculateReservationPrice(Carbon $from, Carbon $to)
-        {
-            $hours = $from->diffInMinutes($to) / 60;
-            $hoursRounded = ceil($hours);
-            return round($hoursRounded * self::BASE_PRICE, 2);
-        }
-
+    {
+        $hours = $from->diffInMinutes($to) / 60;
+        $hoursRounded = ceil($hours);
+        return round($hoursRounded * self::BASE_PRICE, 2);
+    }
 
     public function checkAvailability(Request $request)
     {

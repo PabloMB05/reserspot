@@ -5,6 +5,7 @@ namespace Domain\ParkingSpot\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Domain\Zone\Models\Zone;
 
 class ParkingSpot extends Model
 {

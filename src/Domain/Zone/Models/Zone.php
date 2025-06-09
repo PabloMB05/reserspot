@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Domain\ParkingSpot\Models\ParkingSpot;
+use Domain\Floor\Models\Floor;
 class Zone extends Model
 {
     use HasFactory;

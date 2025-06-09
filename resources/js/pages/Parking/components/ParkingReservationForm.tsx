@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { es } from 'date-fns/locale';
-import { format, differenceInHours, parseISO } from 'date-fns';
+import { format, differenceInHours } from 'date-fns';
 import { CalendarIcon, Loader2 } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-
+import axios from 'axios';
 
 interface ParkingReservationFormProps {
   spot: {
@@ -23,24 +22,20 @@ interface ParkingReservationFormProps {
 export function ParkingReservationForm({ spot, shoppingCenter }: ParkingReservationFormProps) {
   const [startDate, setStartDate] = useState<Date | undefined>(undefined);
   const [endDate, setEndDate] = useState<Date | undefined>(undefined);
-
   const [startTime, setStartTime] = useState('12:00');
   const [endTime, setEndTime] = useState('13:00');
-
   const [isLoading, setIsLoading] = useState(false);
   const [price, setPrice] = useState(0);
   const [isAvailable, setIsAvailable] = useState(true);
   const [message, setMessage] = useState<{ text: string; isError: boolean } | null>(null);
 
-  // Función para construir ISO string combinado de fecha + hora
   const combineDateAndTime = (date: Date, time: string) => {
     const [hours, minutes] = time.split(':').map(Number);
     const combined = new Date(date);
     combined.setHours(hours, minutes, 0, 0);
-    return combined.toISOString();
+    return combined;
   };
 
-  // Calcular horas reservadas y precio (€2/hora)
   const calculatePrice = (start: Date, end: Date) => {
     const hours = differenceInHours(end, start);
     return hours > 0 ? hours * 2 : 0;
@@ -48,9 +43,8 @@ export function ParkingReservationForm({ spot, shoppingCenter }: ParkingReservat
 
   useEffect(() => {
     if (spot && startDate && endDate && startTime && endTime) {
-      // Validar que endDate + endTime es posterior a startDate + startTime
-      const startDateTime = new Date(combineDateAndTime(startDate, startTime));
-      const endDateTime = new Date(combineDateAndTime(endDate, endTime));
+      const startDateTime = combineDateAndTime(startDate, startTime);
+      const endDateTime = combineDateAndTime(endDate, endTime);
 
       if (endDateTime <= startDateTime) {
         setIsAvailable(false);
@@ -59,52 +53,31 @@ export function ParkingReservationForm({ spot, shoppingCenter }: ParkingReservat
         return;
       }
 
+      if (spot.is_occupied) {
+        setIsAvailable(false);
+        setMessage({ text: 'La plaza ya está ocupada', isError: true });
+        setPrice(0);
+        return;
+      }
+
+      // Si pasa todas las validaciones
+      setIsAvailable(true);
       setMessage(null);
-      checkAvailability(startDateTime, endDateTime);
+      setPrice(calculatePrice(startDateTime, endDateTime));
     }
   }, [spot, startDate, endDate, startTime, endTime]);
-
-  const checkAvailability = async (startDateTime: Date, endDateTime: Date) => {
-    if (!spot) return;
-
-    setIsLoading(true);
-    try {
-      const response = await axios.post('/api/parking-reservations/check-availability', {
-        parking_spot_id: spot.id,
-        start_date: startDateTime.toISOString(),
-        end_date: endDateTime.toISOString(),
-      });
-
-      setIsAvailable(response.data.available);
-      const priceCalculated = calculatePrice(startDateTime, endDateTime);
-      setPrice(priceCalculated);
-
-      if (!response.data.available) {
-        setMessage({ text: 'La plaza no está disponible en ese horario', isError: true });
-      } else {
-        setMessage(null);
-      }
-    } catch (error) {
-      console.error('Error checking availability:', error);
-      setMessage({ text: 'Error al verificar disponibilidad', isError: true });
-      setIsAvailable(false);
-      setPrice(0);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const handleReservation = async () => {
     if (!spot || !startDate || !endDate || !startTime || !endTime || !isAvailable) return;
 
-    const startDateTime = combineDateAndTime(startDate, startTime);
-    const endDateTime = combineDateAndTime(endDate, endTime);
+    const startDateTime = combineDateAndTime(startDate, startTime).toISOString();
+    const endDateTime = combineDateAndTime(endDate, endTime).toISOString();
 
     setIsLoading(true);
     setMessage(null);
 
     try {
-      const response = await axios.post('/api/parking-reservations', {
+      await axios.post('/api/parking-reservations', {
         parking_spot_id: spot.id,
         shopping_center_id: shoppingCenter.id,
         start_date: startDateTime,
@@ -116,7 +89,6 @@ export function ParkingReservationForm({ spot, shoppingCenter }: ParkingReservat
         isError: false,
       });
     } catch (error: any) {
-      console.error(error);
       setMessage({
         text: error.response?.data?.message || 'Error al crear la reserva',
         isError: true,
@@ -126,14 +98,6 @@ export function ParkingReservationForm({ spot, shoppingCenter }: ParkingReservat
     }
   };
 
-  if (!spot) {
-    return (
-      <div className="bg-[#e0f8f3] rounded-lg p-6 text-center">
-        <p className="text-gray-500">Selecciona una plaza para reservar</p>
-      </div>
-    );
-  }
-  // Generar opciones de hora en intervalos de 15 mins (00, 15, 30, 45)
   const generateTimeOptions = () => {
     const options = [];
     for (let h = 0; h < 24; h++) {
@@ -145,16 +109,20 @@ export function ParkingReservationForm({ spot, shoppingCenter }: ParkingReservat
     return options;
   };
 
+  if (!spot) {
+    return (
+      <div className="bg-[#e0f8f3] rounded-lg p-6 text-center">
+        <p className="text-gray-500">Selecciona una plaza para reservar</p>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white rounded-lg shadow-md p-6 max-h-[80vh] overflow-auto">
       <h3 className="font-semibold text-lg mb-4">Reservar Plaza</h3>
 
       {message && (
-        <div
-          className={`mb-4 p-3 rounded-md ${
-            message.isError ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
-          }`}
-        >
+        <div className={`mb-4 p-3 rounded-md ${message.isError ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}`}>
           {message.text}
         </div>
       )}
@@ -172,16 +140,11 @@ export function ParkingReservationForm({ spot, shoppingCenter }: ParkingReservat
 
         <div>
           <p className="text-sm text-gray-500">Estado:</p>
-          <p
-            className={`font-medium ${
-              !isAvailable || spot.is_occupied ? 'text-red-600' : 'text-green-600'
-            }`}
-          >
+          <p className={`font-medium ${!isAvailable || spot.is_occupied ? 'text-red-600' : 'text-green-600'}`}>
             {!isAvailable || spot.is_occupied ? 'No disponible' : 'Disponible'}
           </p>
         </div>
 
-        {/* Fecha de inicio */}
         <div>
           <p className="text-sm text-gray-500 mb-2">Fecha inicio:</p>
           <Popover>
@@ -204,23 +167,15 @@ export function ParkingReservationForm({ spot, shoppingCenter }: ParkingReservat
           </Popover>
         </div>
 
-        {/* Hora inicio */}
         <div>
           <p className="text-sm text-gray-500 mb-2">Hora inicio:</p>
-          <select
-            value={startTime}
-            onChange={(e) => setStartTime(e.target.value)}
-            className="w-full border rounded-md px-3 py-2"
-          >
-            {generateTimeOptions().map((timeOption) => (
-              <option key={timeOption} value={timeOption}>
-                {timeOption}
-              </option>
+          <select value={startTime} onChange={(e) => setStartTime(e.target.value)} className="w-full border rounded-md px-3 py-2">
+            {generateTimeOptions().map((time) => (
+              <option key={time}>{time}</option>
             ))}
           </select>
         </div>
 
-        {/* Fecha fin */}
         <div>
           <p className="text-sm text-gray-500 mb-2">Fecha fin:</p>
           <Popover>
@@ -243,29 +198,20 @@ export function ParkingReservationForm({ spot, shoppingCenter }: ParkingReservat
           </Popover>
         </div>
 
-        {/* Hora fin */}
         <div>
           <p className="text-sm text-gray-500 mb-2">Hora fin:</p>
-          <select
-            value={endTime}
-            onChange={(e) => setEndTime(e.target.value)}
-            className="w-full border rounded-md px-3 py-2"
-          >
-            {generateTimeOptions().map((timeOption) => (
-              <option key={timeOption} value={timeOption}>
-                {timeOption}
-              </option>
+          <select value={endTime} onChange={(e) => setEndTime(e.target.value)} className="w-full border rounded-md px-3 py-2">
+            {generateTimeOptions().map((time) => (
+              <option key={time}>{time}</option>
             ))}
           </select>
         </div>
 
-        {/* Precio */}
         <div className="pt-2 border-t">
           <p className="text-sm text-gray-500">Precio:</p>
           <p className="font-medium">€{price.toFixed(2)}</p>
         </div>
 
-        {/* Botón reservar */}
         <Button
           className="w-full mt-4"
           disabled={!isAvailable || spot.is_occupied || isLoading || price === 0}

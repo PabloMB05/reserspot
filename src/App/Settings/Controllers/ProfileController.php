@@ -10,9 +10,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
-use Domain\Loans\Models\Loan;
-use Domain\Reservations\Models\Reservation;
-use Carbon\carbon;
+use Domain\ParkingReservation\Models\ParkingReservation;
+use Carbon\Carbon;
+
 class ProfileController extends Controller
 {
     /**
@@ -21,11 +21,36 @@ class ProfileController extends Controller
     public function edit(Request $request): Response
     {
         $user = Auth::user();
-        // dd($user);
+
+        $parkingReservations = ParkingReservation::with([
+            'parkingSpot.zone.floor', // Asegura que relaciones estén definidas correctamente
+            'shoppingCenter',
+        ])
+        ->where('user_id', $user->id)
+        ->orderByDesc('reserved_at')
+        ->get()
+        ->map(function ($reservation) {
+            $spot = $reservation->parkingSpot;
+            $zone = $spot?->zone;
+            $floor = $zone?->floor;
+
+            return [
+                'id' => $reservation->id,
+                'parkingSpot' => $spot?->spot_number ?? 'N/A',
+                'zone' => $zone?->name ?? 'N/A',
+                'floor' => $floor?->name ?? 'N/A',
+                'shoppingCenter' => $reservation->shoppingCenter?->name ?? 'N/A',
+                'expedit' => optional($reservation->reserved_at)->toDateTimeString(),
+                'canceled_at' => null,
+                'reservationDate' => optional($reservation->reserved_at)->toDateString(),
+            ];
+        });
+
         return Inertia::render('settings/profile', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
-            'user'=> $user,
+            'user' => $user,
             'status' => $request->session()->get('status'),
+            'parkingReservations' => $parkingReservations,
         ]);
     }
 

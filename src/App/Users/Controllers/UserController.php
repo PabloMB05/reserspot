@@ -7,7 +7,7 @@ use Domain\Permissions\Models\Permission;
 use Domain\Roles\Models\Role;
 use Domain\Users\Actions\UserDestroyAction;
 use Domain\Users\Actions\UserIndexAction;
-use Domain\Users\Actions\UserLoanHistoryAction;
+use Domain\Users\Actions\UserParkingReservationHistoryAction;
 use Domain\Users\Actions\UserStoreAction;
 use Domain\Users\Actions\UserUpdateAction;
 use Domain\Users\Models\User;
@@ -28,7 +28,7 @@ class UserController extends Controller
         return Inertia::render('users/Index');
     }
 
-    public function show(User $user, UserLoanHistoryAction $action)
+    public function show(User $user, UserParkingReservationHistoryAction $action)
     {
         Gate::authorize('users.edit');
 
