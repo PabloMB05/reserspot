@@ -99,6 +99,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Reservation::class);
     }
+    public function parkingReservations()
+    {
+        return $this->hasMany(ParkingReservation::class);
+    }
 
     public function reservationsWithTrashed()
     {

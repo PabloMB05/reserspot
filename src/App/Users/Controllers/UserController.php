@@ -34,9 +34,23 @@ class UserController extends Controller
 
         $activityList = $action($user);
 
-        return Inertia::render('users/Show', [
+        return Inertia::render('users/components/TimeLine', [
             'user' => $user,
             'activityList' => $activityList,
+        ]);
+    }
+    public function parkingHistory(User $user, UserParkingReservationHistoryAction $action)
+    {
+        Gate::authorize('users.view');
+
+        $parkingReservations = $action($user);
+
+        return Inertia::render('users/ParkingHistory', [
+            'user' => [
+                'name' => $user->name,
+                'email' => $user->email,
+            ],
+            'parkingReservations' => $parkingReservations,
         ]);
     }
 

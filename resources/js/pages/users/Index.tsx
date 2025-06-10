@@ -123,11 +123,12 @@ export default function UsersIndex() {
                 }
               />
 
-              <Link href={`/users/${user.id}`}>
-                <Button variant="outline" size="icon" title={t("ui.users.buttons.show") || "Show user"}>
-                  <Eye className="h-4 w-4" />
-                </Button>
-              </Link> </div>
+  <Link href={`/users/${user.id}/parking-history`}>
+    <Button variant="outline" size="icon" title={t("ui.users.buttons.show") || "Ver historial"}>
+      <Eye className="h-4 w-4" />
+    </Button>
+  </Link>
+ </div>
             </>
           ),
         })))};

@@ -2,42 +2,24 @@ import { useState } from 'react';
 import { ParkingReservationsHistory } from '../users/components/TimeLine';
 import { TimeLineLayout } from '@/layouts/timeline/timelinelayout';
 
-interface ProfileProps {
-  user: {
-    name: string;
-    email: string;
-  };
-  loans: {
-    id: number;
-    book: {
-      title: string;
-    };
-    expedit: string | null;
-    return: string | null;
-    due_date: Date;
-    end_due: string | null;
-    deleted_at?: string | null;
-    remaining_days?: number;
-    remaining_hours?: number;
-    is_overdue?: boolean;
-  }[];
-  reservations: {
-    id: number;
-    book: {
-      title: string;
-    };
-    expedit: string | null;
-    deleted_at?: string | null;
-  }[];
-  parkingReservations: {
-    id: number;
-    parkingSpot: string;
-    expedit: string | null;
-    canceled_at?: string | null;
-  }[];
+interface User {
+  name: string;
+  email: string;
 }
 
-export default function UserHistoryTimeline({ user, loans, reservations, parkingReservations }: ProfileProps) {
+interface ParkingReservation {
+  id: number;
+  parkingSpot: string;
+  expedit: string | null;
+  canceled_at?: string | null;
+}
+
+interface Props {
+  user: User;
+  parkingReservations: ParkingReservation[];
+}
+
+export default function ParkingHistory({ user, parkingReservations }: Props) {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
 
@@ -50,15 +32,10 @@ export default function UserHistoryTimeline({ user, loans, reservations, parking
       const start = startDate ? new Date(startDate) : null;
       const end = endDate ? new Date(endDate) : null;
 
-      return (
-        (!start || expDate >= start) &&
-        (!end || expDate <= end)
-      );
+      return (!start || expDate >= start) && (!end || expDate <= end);
     });
   };
 
-  const filteredLoans = filterByDateRange(loans);
-  const filteredReservations = filterByDateRange(reservations);
   const filteredParkingReservations = filterByDateRange(parkingReservations);
 
   return (
@@ -92,9 +69,7 @@ export default function UserHistoryTimeline({ user, loans, reservations, parking
           </div>
         </div>
 
-        <ParkingReservationsHistory 
-          parkingReservations={filteredParkingReservations} 
-        />
+        <ParkingReservationsHistory parkingReservations={filteredParkingReservations} />
       </TimeLineLayout>
     </div>
   );

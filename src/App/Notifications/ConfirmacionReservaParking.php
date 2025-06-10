@@ -11,19 +11,25 @@ class ConfirmacionReservaParking extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    protected $datos;
+    protected array $datos;
 
     public function __construct(array $datos)
     {
         $this->datos = $datos;
     }
 
-    public function via(object $notifiable): array
+    /**
+     * Define los canales de notificación.
+     */
+    public function via($notifiable): array
     {
         return ['mail'];
     }
 
-    public function toMail(object $notifiable): MailMessage
+    /**
+     * Construye el mensaje de correo.
+     */
+    public function toMail($notifiable): MailMessage
     {
         return (new MailMessage)
             ->subject('Confirmación de reserva de plaza')
@@ -34,11 +40,21 @@ class ConfirmacionReservaParking extends Notification implements ShouldQueue
             ->line('📅 Desde: ' . $this->datos['fecha_inicio'] . ' a las ' . $this->datos['hora_inicio'])
             ->line('📅 Hasta: ' . $this->datos['fecha_fin'] . ' a las ' . $this->datos['hora_fin'])
             ->line('✅ Gracias por usar ReserSpot Zenia.')
-            ->action('Ver mi reserva', url('/dashboard'));
+            ->action('Ver mi reserva', url('/dashboard'))
+            ->salutation('Saludos, ReserSpot Zenia');
     }
 
-    public function toArray(object $notifiable): array
+    /**
+     * Representación de la notificación como array (opcional).
+     */
+    public function toArray($notifiable): array
     {
-        return [];
+        return [
+            'tipo' => 'confirmacion_reserva',
+            'plaza' => $this->datos['plaza'],
+            'zona' => $this->datos['zona'],
+            'inicio' => $this->datos['fecha_inicio'] . ' ' . $this->datos['hora_inicio'],
+            'fin' => $this->datos['fecha_fin'] . ' ' . $this->datos['hora_fin'],
+        ];
     }
 }

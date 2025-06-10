@@ -17,7 +17,6 @@ interface ParkingReservation {
   reservationDate: string;
   canceled_at?: string | null;
 }
-
 interface Props {
   parkingReservations: ParkingReservation[];
 }

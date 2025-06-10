@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-use App\Http\Controllers\UserController;
+use App\Users\Controllers\UserController;
 use App\Store\Controllers\StoreController;
 use App\Parking\Controllers\ParkingController;
 use App\ParkingReservation\Controllers\ParkingReservationController;
@@ -50,6 +50,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     
     // Ranking
     Route::get('/ranking', [RankingController::class, 'index'])->name('ranking.index');
+    Route::get('/users/{user}/parking-history', [UserController::class, 'parkingHistory'])->name('users.parking-history');
+
 });
 
 // Otros archivos de rutas
