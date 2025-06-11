@@ -907,6 +907,15 @@ return [
     'category_search_placeholder' => 'Search category...',
     'no_categories_found' => 'No categories found.',
 ],
+'history' => [
+    'parking' => [
+        'spot' => 'Spot',
+        'zone' => 'Zone',
+        'floor' => 'Floor',
+        'center' => 'Shopping Center',
+    ],
+],
+
 
 
 ];

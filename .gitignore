@@ -31,3 +31,4 @@ docker/develop/pgsql/data/
 /docker/staging/pgsql/data/*
 /docker/develop/pgadmin
 /docker/staging/pgadmin
+*.Identifier

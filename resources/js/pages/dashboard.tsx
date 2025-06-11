@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useShoppingCenters } from '@/hooks/shoppingcenter/useshoppingcenter';
 import { DashboardCard } from '@/components/dashboard/DashboardCard';
 import { MapPinned, ParkingCircle, CalendarCheck2, Store } from 'lucide-react';
@@ -6,6 +6,7 @@ import AppLayout from '@/layouts/app-layout';
 import { Head } from '@inertiajs/react';
 import { type BreadcrumbItem } from '@/types';
 import { useTranslations } from '@/hooks/use-translations';
+import type { CarouselApi } from "@/components/ui/carousel";
 import ParkingIndex from '@/pages/Parking/Index';
 import { router } from '@inertiajs/react';
 
@@ -35,6 +36,7 @@ export default function ShoppingCenterDashboard() {
   const { data: centersData, loading, error } = useShoppingCenters();
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [selectedDay, setSelectedDay] = useState<string>('monday');
+  const [carouselApi, setCarouselApi] = useState<CarouselApi | null>(null);
   const [activeModule, setActiveModule] = useState<'stores' | 'parking' | 'events' | 'map' | null>(null);
   const [showMapModal, setShowMapModal] = useState(false);
 
@@ -80,6 +82,19 @@ export default function ShoppingCenterDashboard() {
   const selectedDayHours = getOpeningHourByDay(selected?.opening_hours, selectedDay);
   const isOpenNow = isCenterOpen(selectedDayHours);
   const centerNames = centersData?.data.map((c) => c.name.replace(/\s+/g, '')) || [];
+
+  useEffect(() => {
+    if (!carouselApi) return;
+
+    const interval = setInterval(() => {
+      carouselApi.scrollNext();
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [carouselApi]);
+
+
+  
 
   if (loading) return <div className="p-4">Cargando...</div>;
   if (error) return <div className="p-4 text-red-500">{error}</div>;
@@ -198,7 +213,8 @@ export default function ShoppingCenterDashboard() {
   <div className="bg-[#a8e6cf] shadow p-4 rounded mt-6 text-gray-900 dark:text-gray-900">
     <h3 className="text-lg font-semibold mb-4 text-center ">Galería de Centros Comerciales</h3>
 
-    <Carousel className="w-full max-w-4xl mx-auto">
+    <Carousel className="w-full max-w-4xl mx-auto" setApi={setCarouselApi}>
+
       <CarouselContent>
         {centerNames.map((name, index) => (
           <CarouselItem key={index} className="flex justify-center">

@@ -29,71 +29,81 @@ class ParkingReservationController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $user = Auth::user();
+{
+    $user = Auth::user();
 
-        $validated = $request->validate([
-            'parking_spot_id' => 'required|uuid|exists:parking_spots,id',
-            'shopping_center_id' => 'required|uuid|exists:shopping_centers,id',
-            'start_date' => 'required|date|after_or_equal:now',
-            'end_date' => 'required|date|after:start_date',
-        ]);
+    $validated = $request->validate([
+        'parking_spot_id' => 'required|uuid|exists:parking_spots,id',
+        'shopping_center_id' => 'required|uuid|exists:shopping_centers,id',
+        'start_date' => 'required|date|after_or_equal:now',
+        'end_date' => 'required|date|after:start_date',
+    ]);
 
-        $reservedAt = Carbon::parse($validated['start_date'], config('app.timezone'));
-        $reservedUntil = Carbon::parse($validated['end_date'], config('app.timezone'));
+    $reservedAt = Carbon::parse($validated['start_date'], config('app.timezone'));
+    $reservedUntil = Carbon::parse($validated['end_date'], config('app.timezone'));
 
-        $activeReservations = ParkingReservation::where('user_id', $user->id)
-            ->where('is_confirmed', true)
-            ->where('reserved_until', '>=', now())
-            ->count();
+    $activeReservations = ParkingReservation::where('user_id', $user->id)
+        ->where('is_confirmed', true)
+        ->where('reserved_until', '>=', now())
+        ->count();
 
-        if ($activeReservations >= self::MAX_ACTIVE_RESERVATIONS) {
-            return response()->json([
-                'message' => 'Ya tienes una reserva activa. No puedes hacer más reservas.',
-            ], 422);
-        }
-
-        $conflict = ParkingReservation::where('parking_spot_id', $validated['parking_spot_id'])
-            ->where('is_confirmed', true)
-            ->where(function ($q) use ($reservedAt, $reservedUntil) {
-                $q->whereBetween('reserved_at', [$reservedAt, $reservedUntil])
-                  ->orWhereBetween('reserved_until', [$reservedAt, $reservedUntil])
-                  ->orWhere(function ($q2) use ($reservedAt, $reservedUntil) {
-                      $q2->where('reserved_at', '<=', $reservedAt)
-                         ->where('reserved_until', '>=', $reservedUntil);
-                  });
-            })
-            ->exists();
-
-        if ($conflict) {
-            return response()->json([
-                'message' => 'La plaza ya está reservada durante ese período.',
-            ], 422);
-        }
-
-       $reservation = ParkingReservation::create([
-    'id' => (string) Str::uuid(),
-    'user_id' => $user->id,
-    'parking_spot_id' => $validated['parking_spot_id'],
-    'shopping_center_id' => $validated['shopping_center_id'],
-    'reserved_at' => $reservedAt,
-    'reserved_until' => $reservedUntil,
-    'date' => $reservedAt->toDateString(),
-    'start_time' => $reservedAt->toTimeString(),
-    'end_time' => $reservedUntil->toTimeString(),
-    'is_confirmed' => false,
-]);
-
-
-        $price = $this->calculateReservationPrice($reservedAt, $reservedUntil);
-
+    if ($activeReservations >= self::MAX_ACTIVE_RESERVATIONS) {
         return response()->json([
-            'message' => 'Reserva creada. Por favor, confirma el pago.',
-            'reservation' => new ParkingReservationResource($reservation),
-            'price' => $price,
-            'expires_at' => now()->addMinutes(self::RESERVATION_EXPIRATION_MINUTES)->toDateTimeString(),
-        ], 201);
+            'message' => 'Ya tienes una reserva activa. No puedes hacer más reservas.',
+        ], 422);
     }
+
+    $conflict = ParkingReservation::where('parking_spot_id', $validated['parking_spot_id'])
+        ->where('is_confirmed', true)
+        ->where(function ($q) use ($reservedAt, $reservedUntil) {
+            $q->whereBetween('reserved_at', [$reservedAt, $reservedUntil])
+              ->orWhereBetween('reserved_until', [$reservedAt, $reservedUntil])
+              ->orWhere(function ($q2) use ($reservedAt, $reservedUntil) {
+                  $q2->where('reserved_at', '<=', $reservedAt)
+                     ->where('reserved_until', '>=', $reservedUntil);
+              });
+        })
+        ->exists();
+
+    if ($conflict) {
+        return response()->json([
+            'message' => 'La plaza ya está reservada durante ese período.',
+        ], 422);
+    }
+
+    $reservation = ParkingReservation::create([
+        'id' => (string) Str::uuid(),
+        'user_id' => $user->id,
+        'parking_spot_id' => $validated['parking_spot_id'],
+        'shopping_center_id' => $validated['shopping_center_id'],
+        'reserved_at' => $reservedAt,
+        'reserved_until' => $reservedUntil,
+        'date' => $reservedAt->toDateString(),
+        'start_time' => $reservedAt->toTimeString(),
+        'end_time' => $reservedUntil->toTimeString(),
+        'is_confirmed' => true, // ⬅️ confirmamos directamente
+    ]);
+
+    // ⬇️ ENVÍO DEL EMAIL AQUÍ MISMO
+    $user->notify(new ConfirmacionReservaParking([
+        'plaza' => $reservation->parking_spot_id,
+        'zona' => $reservation->shopping_center_id,
+        'fecha_inicio' => $reservation->reserved_at->format('Y-m-d'),
+        'hora_inicio' => $reservation->reserved_at->format('H:i'),
+        'fecha_fin' => $reservation->reserved_until->format('Y-m-d'),
+        'hora_fin' => $reservation->reserved_until->format('H:i'),
+    ]));
+
+    $price = $this->calculateReservationPrice($reservedAt, $reservedUntil);
+
+    return response()->json([
+        'message' => 'Reserva creada y confirmada.',
+        'reservation' => new ParkingReservationResource($reservation),
+        'price' => $price,
+        'expires_at' => now()->addMinutes(self::RESERVATION_EXPIRATION_MINUTES)->toDateTimeString(),
+    ], 201);
+}
+
 
     public function confirm($id)
     {

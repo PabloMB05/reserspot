@@ -6,6 +6,7 @@ import { format, differenceInHours } from 'date-fns';
 import { CalendarIcon, Loader2 } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import axios from 'axios';
+import { AlertModal } from "@/components/ui/AlertModal";
 
 interface ParkingReservationFormProps {
   spot: {
@@ -28,6 +29,12 @@ export function ParkingReservationForm({ spot, shoppingCenter }: ParkingReservat
   const [price, setPrice] = useState(0);
   const [isAvailable, setIsAvailable] = useState(true);
   const [message, setMessage] = useState<{ text: string; isError: boolean } | null>(null);
+
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [isSuccessModal, setIsSuccessModal] = useState(false);
+
+
 
   const combineDateAndTime = (date: Date, time: string) => {
     const [hours, minutes] = time.split(':').map(Number);
@@ -84,15 +91,18 @@ export function ParkingReservationForm({ spot, shoppingCenter }: ParkingReservat
         end_date: endDateTime,
       });
 
-      setMessage({
-        text: `¡Reserva creada! Por favor, confirma el pago de €${price.toFixed(2)}`,
-        isError: false,
-      });
+      // setMessage({
+      //   text: `¡Reserva creada! Por favor, confirma el pago de €${price.toFixed(2)}`,
+      //   isError: false,
+      // });
+      setModalMessage('¡Reserva realizada con éxito! Te hemos enviado un correo con los detalles.');
+      setIsSuccessModal(true); // indicamos que es un mensaje de éxito
+      setShowModal(true);
     } catch (error: any) {
-      setMessage({
-        text: error.response?.data?.message || 'Error al crear la reserva',
-        isError: true,
-      });
+      const msg = error.response?.data?.message || 'Error al crear la reserva';
+      setModalMessage(msg);
+      setShowModal(true);
+
     } finally {
       setIsLoading(false);
     }
@@ -225,6 +235,12 @@ export function ParkingReservationForm({ spot, shoppingCenter }: ParkingReservat
           La plaza se reservará por 15 minutos. Si no confirmas el pago, se cancelará automáticamente.
         </p>
       </div>
+      <AlertModal 
+      open={showModal} 
+      onClose={() => setShowModal(false)} 
+      message={modalMessage}/>
     </div>
+    
   );
+  
 }

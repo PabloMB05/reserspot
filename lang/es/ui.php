@@ -907,6 +907,15 @@ return [
      'category_search_placeholder' => 'Buscar categoría...',
      'no_categories_found' => 'No se encontraron categorías.',
 ],
+'history' => [
+    'parking' => [
+        'spot' => 'Plaza',
+        'zone' => 'Zona',
+        'floor' => 'Planta',
+        'center' => 'Centro Comercial',
+    ],
+],
+
 
 
 ];

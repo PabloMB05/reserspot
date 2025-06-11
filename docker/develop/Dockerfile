@@ -23,10 +23,17 @@ RUN apk add --no-cache jpegoptim optipng pngquant gifsicle libavif ffmpeg
 RUN apk add --no-cache postgresql-dev  # Dependencia necesaria para pgsql
 RUN npm install -g svgo
 
-
+# Ruta del proyecto
 WORKDIR /var/www/html
 
+# Usuario Laravel
 RUN addgroup -g 1000 -S laravel && \
     adduser -u 1000 -S laravel -G laravel
 
+# Copiar package.json y preparar Vite
+COPY package*.json ./
+RUN npm install
+
 USER laravel
+
+
