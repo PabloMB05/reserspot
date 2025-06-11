@@ -8,7 +8,7 @@ return [
             'dashboard' => 'Panel',
             'users' => 'Usuarios',
             'floors' => 'Pisos',
-            'floor'=> 'Pisos',
+            'floor'=> 'Piso',
             'zones'=> 'Zonas',
             'bookcases'=> 'Estanterías',
             'loans'=> 'Préstamos',
@@ -18,7 +18,8 @@ return [
             'repository' => 'Repositorio',
             'store'=> 'Tiendas',
             'documentation' => 'Documentación',
-            'parking'=>'Aparcamientos'
+            'parking'=>'Aparcamientos',
+            'event' => 'Eventos',
         ],
     ],
     'shoppingcenter'=>[
@@ -200,7 +201,27 @@ return [
         'select_category' => 'Selecciona una categoría',
         'search_category' => 'Buscar categoría...',
     ],
+    'from' => 'Desde',
+    'to' => 'Hasta',
+    'buttons' => [
+        'cancel' => 'Cancelar',
+        'delete' => 'Eliminar',
+        'close' => 'Cerrar',
+    ],
+    'delete_dialog' => [
+        'success' => 'Usuario eliminado exitosamente',
+    ],
+    'showing_results' => 'Mostrando :from a :to de :total resultados',
+    'pagination' => [
+        'previous' => 'Anterior',
+        'next' => 'Siguiente',
+        'first' => 'Primero',
+        'last' => 'Último',
+    ],
+    'per_page' => 'Por página',
+    'no_results' => 'Sin resultados',
 ],
+
 
     'buttons' => [
         'new' => 'Nuevo',
@@ -304,29 +325,7 @@ return [
         'unique' => 'El :attribute ya ha sido tomado.',
         'confirmed' => 'La confirmación de :attribute no coincide.',
     ],
-    'common' => [
-        'buttons' => [
-            'cancel' => 'Cancelar',
-            'delete' => 'Eliminar',
-            'close' => 'Cerrar',
-        ],
-        'filters' => [
-            'title' => 'Filtros',
-            'clear' => 'Limpiar',
-        ],
-        'delete_dialog' => [
-            'success' => 'Usuario eliminado exitosamente',
-        ],
-        'showing_results' => 'Mostrando :from a :to de :total resultados',
-        'pagination' => [
-            'previous' => 'Anterior',
-            'next' => 'Siguiente',
-            'first' => 'Primero',
-            'last' => 'Último',
-        ],
-        'per_page' => 'Por página',
-        'no_results' => 'Sin resultados',
-    ],
+    
     'floors' => [
         'title' => 'Pisos',
         'create' => 'Crear Piso',
@@ -875,7 +874,7 @@ return [
     ],
     'records' => [
         'title' => 'Historial',
-        'description' => 'Revisa tu actividad de préstamos y reservas de libros',
+        'description' => 'Revisa tu actividad de reservas',
         'loan' => [
             'none' => 'No hay préstamos registrados',
             'info' => 'Cuando solicites un préstamo, aparecerá aquí.',
@@ -915,7 +914,11 @@ return [
         'center' => 'Centro Comercial',
     ],
 ],
-
+'event' =>[
+    'plural' => 'Eventos',
+    'singular' => 'Evento',
+    'empty' => 'No hay eventos disponibles.',
+]
 
 
 ];

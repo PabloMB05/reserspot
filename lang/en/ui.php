@@ -8,7 +8,7 @@ return [
         'dashboard' => 'Dashboard',
         'users' => 'Users',
         'floors' => 'Floors',
-        'floor' => 'Floors',
+        'floor' => 'Floor',
         'zones' => 'Zones',
         'bookcases' => 'Bookcases',
         'loans' => 'Loans',
@@ -18,7 +18,8 @@ return [
         'repository' => 'Repository',
         'store'=> 'Stores',
         'documentation' => 'Documentation',
-        'parking'=> 'Parkings'
+        'parking'=> 'Parkings',
+        'event' => 'Events',
     ],
 ],
 'shoppingcenter'=>[
@@ -201,17 +202,7 @@ return [
             'new' => 'New Loan'
         ],
     ],
-    'common' => [
-    'filters' => [
-        'title' => 'Filters',
-        'clear' => 'Clear',
-        'results' => 'Results',
-        'search_store' => 'Search store',
-        'category' => 'Category',
-        'select_category' => 'Select a category',
-        'search_category' => 'Search category...',
-    ],
-],
+    
 
     'buttons' => [
         'new' => 'New',
@@ -316,28 +307,36 @@ return [
         'confirmed' => 'The :attribute confirmation does not match.',
     ],
     'common' => [
-        'buttons' => [
-            'cancel' => 'Cancel',
-            'delete' => 'Delete',
-            'close' => 'Close',
-        ],
-        'filters' => [
-            'title' => 'Filters',
-            'clear' => 'Clear',
-        ],
-        'delete_dialog' => [
-            'success' => 'User deleted successfully',
-        ],
-        'showing_results' => 'Showing :from to :to of :total results',
-        'pagination' => [
-            'previous' => 'Previous',
-            'next' => 'Next',
-            'first' => 'First',
-            'last' => 'Last',
-        ],
-        'per_page' => 'Per page',
-        'no_results' => 'No results',
+    'filters' => [
+        'title' => 'Filters',
+        'clear' => 'Clear',
+        'results' => 'Results',
+        'search_store' => 'Search store',
+        'category' => 'Category',
+        'select_category' => 'Select a category',
+        'search_category' => 'Search category...',
     ],
+    'from' => 'From',
+    'to' => 'To',
+    'buttons' => [
+        'cancel' => 'Cancel',
+        'delete' => 'Delete',
+        'close' => 'Close',
+    ],
+    'delete_dialog' => [
+        'success' => 'User deleted successfully',
+    ],
+    'showing_results' => 'Showing :from to :to of :total results',
+    'pagination' => [
+        'previous' => 'Previous',
+        'next' => 'Next',
+        'first' => 'First',
+        'last' => 'Last',
+    ],
+    'per_page' => 'Per page',
+    'no_results' => 'No results',
+],
+
     'floors' => [
         'title' => 'Floors',
         'create' => 'Create Floor',
@@ -868,7 +867,7 @@ return [
     ],
     'records' => [
         'title' => 'History',
-        'description' => 'Review your book loans and reservations activity',
+        'description' => 'Review your reservations activity',
         'loan' => [
             'none' => 'No loans recorded',
             'info' => 'When you request a loan, it will appear here.',
@@ -915,7 +914,11 @@ return [
         'center' => 'Shopping Center',
     ],
 ],
-
+'event' => [
+    'plural' => 'Events',
+    'singular' => 'Event',
+    'empty' => 'No events available.',
+],
 
 
 ];
