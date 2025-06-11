@@ -25,20 +25,37 @@ class ConfirmacionReservaParking extends Notification
     /**
      * Construye el mensaje de correo.
      */
-    public function toMail($notifiable): MailMessage
+    // public function toMail($notifiable): MailMessage
+    // {
+    //     return (new MailMessage)
+    //         ->subject('Confirmación de reserva de plaza')
+    //         ->greeting('¡Hola ' . $notifiable->name . '!')
+    //         ->line('Tu reserva ha sido confirmada.')
+    //         ->line('📍 Plaza: ' . $this->datos['plaza'])
+    //         ->line('🏙️ Zona: ' . $this->datos['zona'])
+    //         ->line('📅 Desde: ' . $this->datos['fecha_inicio'] . ' a las ' . $this->datos['hora_inicio'])
+    //         ->line('📅 Hasta: ' . $this->datos['fecha_fin'] . ' a las ' . $this->datos['hora_fin'])
+    //         ->line('✅ Gracias por usar ReserSpot Zenia.')
+    //         ->action('Ver mi reserva', url('/dashboard'))
+    //         ->salutation('Saludos, ReserSpot Zenia');
+    // }
+    public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('Confirmación de reserva de plaza')
-            ->greeting('¡Hola ' . $notifiable->name . '!')
-            ->line('Tu reserva ha sido confirmada.')
-            ->line('📍 Plaza: ' . $this->datos['plaza'])
-            ->line('🏙️ Zona: ' . $this->datos['zona'])
-            ->line('📅 Desde: ' . $this->datos['fecha_inicio'] . ' a las ' . $this->datos['hora_inicio'])
-            ->line('📅 Hasta: ' . $this->datos['fecha_fin'] . ' a las ' . $this->datos['hora_fin'])
-            ->line('✅ Gracias por usar ReserSpot Zenia.')
+            ->subject('Confirmación de Reserva de Parking')
+            ->greeting('Hola ' . $notifiable->name)
+            ->line('Tu reserva ha sido confirmada con éxito.')
+            ->line('Centro comercial: ' . $this->datos['centro_comercial'])
+            ->line('Zona: ' . $this->datos['zona'])
+            ->line('Piso: ' . $this->datos['piso'])
+            ->line('Inicio: ' . $this->datos['fecha_inicio'] . ' a las ' . $this->datos['hora_inicio'])
+            ->line('Fin: ' . $this->datos['fecha_fin'] . ' a las ' . $this->datos['hora_fin'])
+            ->line('Gracias por utilizar ReserSpot')
             ->action('Ver mi reserva', url('/dashboard'))
-            ->salutation('Saludos, ReserSpot Zenia');
+            ->salutation('Saludos, ReserSpot');
     }
+
+
 
     /**
      * Representación de la notificación como array (opcional).

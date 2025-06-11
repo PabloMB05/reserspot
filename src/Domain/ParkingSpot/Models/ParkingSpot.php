@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Domain\Zone\Models\Zone;
+use Domain\Floor\Models\Floor;
+use Domain\Reservation\Models\Reservation;
 
 class ParkingSpot extends Model
 {
@@ -35,4 +37,9 @@ class ParkingSpot extends Model
     {
         return $this->hasOne(Reservation::class);
     }
+    public function floor()
+    {
+        return $this->belongsTo(Floor::class);
+    }
+
 }
