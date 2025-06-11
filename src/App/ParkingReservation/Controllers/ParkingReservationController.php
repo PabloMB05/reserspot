@@ -15,7 +15,7 @@ class ParkingReservationController extends Controller
 {
     const BASE_PRICE = 2.00;
     const MINUTES_PER_SLOT = 15;
-    const MAX_ACTIVE_RESERVATIONS = 1;
+    const MAX_ACTIVE_RESERVATIONS = 101;
     const RESERVATION_EXPIRATION_MINUTES = 15;
 
     public function index()
@@ -31,6 +31,8 @@ class ParkingReservationController extends Controller
     public function store(Request $request)
 {
     $user = Auth::user();
+    
+
 
     $validated = $request->validate([
         'parking_spot_id' => 'required|uuid|exists:parking_spots,id',
@@ -84,15 +86,19 @@ class ParkingReservationController extends Controller
         'is_confirmed' => true, // ⬅️ confirmamos directamente
     ]);
 
+    $reservation->load('parkingSpot.zone.floor', 'shoppingCenter');
+
+
     // ⬇️ ENVÍO DEL EMAIL AQUÍ MISMO
     $user->notify(new ConfirmacionReservaParking([
-        'plaza' => $reservation->parking_spot_id,
-        'zona' => $reservation->shopping_center_id,
-        'fecha_inicio' => $reservation->reserved_at->format('Y-m-d'),
-        'hora_inicio' => $reservation->reserved_at->format('H:i'),
-        'fecha_fin' => $reservation->reserved_until->format('Y-m-d'),
-        'hora_fin' => $reservation->reserved_until->format('H:i'),
-    ]));
+    'centro_comercial' => $reservation->shoppingCenter->name ?? 'N/A',
+    'zona' => $reservation->parkingSpot->zone->name ?? 'N/A',
+    'piso' => $reservation->parkingSpot->zone->floor->level ?? 'N/A',
+    'fecha_inicio' => $reservation->reserved_at->format('Y-m-d'),
+    'hora_inicio' => $reservation->reserved_at->format('H:i'),
+    'fecha_fin' => $reservation->reserved_until->format('Y-m-d'),
+    'hora_fin' => $reservation->reserved_until->format('H:i'),
+]));
 
     $price = $this->calculateReservationPrice($reservedAt, $reservedUntil);
 
@@ -200,4 +206,27 @@ class ParkingReservationController extends Controller
             'price' => $this->calculateReservationPrice($reservedAt, $reservedUntil),
         ]);
     }
+    public function show(string $id)
+{
+    $user = Auth::user();
+
+    $reservation = ParkingReservation::with(['parkingSpot.floor', 'shoppingCenter'])
+        ->where('id', $id)
+        ->where('user_id', $user->id)
+        ->firstOrFail();
+
+    return inertia('Reservations/Show', [
+        'reservation' => [
+            'id' => $reservation->id,
+            'centro_comercial' => $reservation->shoppingCenter->name,
+            'zona' => $reservation->parkingSpot->floor->zone,
+            'piso' => $reservation->parkingSpot->floor->level,
+            'fecha_inicio' => $reservation->reserved_at->format('Y-m-d'),
+            'hora_inicio' => $reservation->reserved_at->format('H:i'),
+            'fecha_fin' => $reservation->reserved_until->format('Y-m-d'),
+            'hora_fin' => $reservation->reserved_until->format('H:i'),
+        ],
+    ]);
+}
+
 }

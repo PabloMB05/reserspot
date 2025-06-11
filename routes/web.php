@@ -52,6 +52,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/ranking', [RankingController::class, 'index'])->name('ranking.index');
     Route::get('/users/{user}/parking-history', [UserController::class, 'parkingHistory'])->name('users.parking-history');
 
+    Route::get('/dashboard/reservas/{id}', [\App\ParkingReservation\Controllers\ParkingReservationController::class, 'show'])
+    ->middleware(['auth'])
+    ->name('reservas.show');
+
 });
 
 // Otros archivos de rutas
