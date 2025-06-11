@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Domain\ParkingReservation\Models\ParkingReservation;
 use Domain\ParkingReservation\Data\Resources\ParkingReservationResource;
+use Domain\ShoppingCenter\Models\ShoppingCenter;
+use Domain\ParkingSpot\Models\ParkingSpot;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -15,7 +17,9 @@ class ParkingReservationController extends Controller
 {
     const BASE_PRICE = 2.00;
     const MINUTES_PER_SLOT = 15;
+
     const MAX_ACTIVE_RESERVATIONS = 101;
+
     const RESERVATION_EXPIRATION_MINUTES = 15;
 
     public function index()
@@ -90,7 +94,12 @@ class ParkingReservationController extends Controller
 
 
     // ⬇️ ENVÍO DEL EMAIL AQUÍ MISMO
+    $centroreserva= ShoppingCenter::find($reservation->shopping_center_id)->name;
+    
+    $plazareserva = ParkingSpot::find($reservation->parking_spot_id)->spot_number;
+
     $user->notify(new ConfirmacionReservaParking([
+
     'centro_comercial' => $reservation->shoppingCenter->name ?? 'N/A',
     'zona' => $reservation->parkingSpot->zone->name ?? 'N/A',
     'piso' => $reservation->parkingSpot->zone->floor->level ?? 'N/A',
@@ -99,6 +108,7 @@ class ParkingReservationController extends Controller
     'fecha_fin' => $reservation->reserved_until->format('Y-m-d'),
     'hora_fin' => $reservation->reserved_until->format('H:i'),
 ]));
+
 
     $price = $this->calculateReservationPrice($reservedAt, $reservedUntil);
 
@@ -206,6 +216,7 @@ class ParkingReservationController extends Controller
             'price' => $this->calculateReservationPrice($reservedAt, $reservedUntil),
         ]);
     }
+
     public function show(string $id)
 {
     $user = Auth::user();
@@ -229,4 +240,31 @@ class ParkingReservationController extends Controller
     ]);
 }
 
+
+    public function destroy($id)
+    {
+        try {
+            $reservation = ParkingReservation::where('id', $id)->firstOrFail();
+            
+            // Verificar autorización
+            if (auth()->id() !== $reservation->user_id) {
+                return response()->json([
+                    'message' => 'Unauthorized'
+                ], 403);
+            }
+
+            $reservation->delete();
+
+            return response()->noContent(); // HTTP 204
+        } catch (\Exception $e) {
+            Log::error("Error deleting parking reservation: " . $e->getMessage());
+            
+            return response()->json([
+                'message' => 'Error deleting reservation',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
 }
+

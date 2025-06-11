@@ -29,6 +29,10 @@ class ParkingSpot extends Model
         return $this->belongsTo(Zone::class);
     }
 
+    public function floor()
+    {
+        return $this->belongsTo(Floor::class, 'level', 'level'); // si level es clave
+    }
     public function reservation()
     {
         return $this->hasOne(Reservation::class);

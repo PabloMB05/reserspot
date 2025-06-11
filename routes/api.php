@@ -12,72 +12,48 @@ use Illuminate\Support\Facades\Route;
 use App\ShoppingCenter\Controllers\ShoppingCenterController;
 use App\ParkingReservation\Controllers\ParkingReservationController;
 
+// Rutas que requieren autenticación web tradicional
 Route::middleware(['web', 'auth'])->group(function () {
-    Route::post('/parking-reservations', [ParkingReservationController::class, 'store']);
-
-
-
     // Rutas de Centros Comerciales
     Route::get('/shopping-centers', [ShoppingCenterController::class, 'index']);
+    
     // Rutas de Usuario
-    Route::get('/users', [UserApiController::class, 'index']);
-    Route::get('/users/{user}', [UserApiController::class, 'show']);
-    Route::post('/users', [UserApiController::class, 'store']);
-    Route::put('/users/{user}', [UserApiController::class, 'update']);
-    Route::delete('/users/{user}', [UserApiController::class, 'destroy']);
+    Route::apiResource('users', UserApiController::class)->except(['create', 'edit']);
     
     // Rutas de Piso
-    Route::get('/floors', [FloorApiController::class, 'index']);  
-    Route::get('/floors/{floor}', [FloorApiController::class, 'show']); 
-    Route::post('/floors', [FloorApiController::class, 'store']);  
-    Route::put('/floors/{floor}', [FloorApiController::class, 'update']);  
-    Route::delete('/floors/{floor}', [FloorApiController::class, 'destroy']); 
-
-    // Rutas de Zona
-    Route::get('/zones', [ZoneApiController::class, 'index']);  
-    Route::get('/zones/{zone}', [ZoneApiController::class, 'show']); 
-    Route::post('/zones', [ZoneApiController::class, 'store']);  
-    Route::put('/zones/{zone}', [ZoneApiController::class, 'update']);  
-    Route::delete('/zones/{zone}', [ZoneApiController::class, 'destroy']); 
-
-    // Rutas de Estanterias
-    Route::get('/bookcases', [BookcaseApiController::class, 'index']);  
-    Route::get('/bookcases/{bookcase}', [BookcaseApiController::class, 'show']); 
-    Route::post('/bookcases', [BookcaseApiController::class, 'store']);  
-    Route::put('/bookcases/{bookcase}', [BookcaseApiController::class, 'update']);  
-    Route::delete('/bookcases/{bookcase}', [BookcaseApiController::class, 'destroy']); 
-
-    // Rutas de Libros
-    Route::get('/books', [BookApiController::class, 'index']);  
-    Route::get('/books/{book}', [BookApiController::class, 'show']); 
-    Route::post('/books', [BookApiController::class, 'store']);  
-    Route::put('/books/{book}', [BookApiController::class, 'update']);  
-    Route::delete('/books/{book}', [BookApiController::class, 'destroy']); 
+    Route::apiResource('floors', FloorApiController::class)->except(['create', 'edit']);
     
-    // Rutas de loans
-    Route::get('/loans', [LoanApiController::class, 'index']);  
-    Route::get('/loans/{loan}', [LoanApiController::class, 'show']); 
-    Route::post('/loans', [LoanApiController::class, 'store']);  
-    Route::put('/loans/{loan}', [LoanApiController::class, 'update']);  
-    Route::delete('/loans/{loan}', [LoanApiController::class, 'destroy']); 
-
-
-    //Rutas de Stores
-    Route::get('/shopping-center/{ShoppingCenterID}/stores', [StoreApiController::class, 'index']); 
-     
-        Route::get('/reservations/{reservation}', [ReservationApiController::class, 'show']);
-        Route::put('/reservations/{reservation}', [ReservationApiController::class, 'update']);
-        Route::delete('/reservations/{reservation}', [ReservationApiController::class, 'destroy']);
-
-    Route::middleware('auth:sanctum')->group(function () {
-    // Reservas de parking
-    Route::prefix('parking-reservations')->group(function () {
-        Route::get('/', [ParkingReservationController::class, 'index']);
-        Route::post('/', [ParkingReservationController::class, 'store']);
-        Route::post('/check-availability', [ParkingReservationController::class, 'checkAvailability']);
-        Route::post('/{id}/confirm', [ParkingReservationController::class, 'confirm']);
-        Route::delete('/{id}', [ParkingReservationController::class, 'cancel']);
-        Route::get('/history', [ParkingReservationController::class, 'history']);
-    });
+    // Rutas de Zona
+    Route::apiResource('zones', ZoneApiController::class)->except(['create', 'edit']);
+    
+    // Rutas de Estanterías
+    Route::apiResource('bookcases', BookcaseApiController::class)->except(['create', 'edit']);
+    
+    // Rutas de Libros
+    Route::apiResource('books', BookApiController::class)->except(['create', 'edit']);
+    
+    // Rutas de Préstamos
+    Route::apiResource('loans', LoanApiController::class)->except(['create', 'edit']);
+    
+    // Rutas de Tiendas
+    Route::get('/shopping-center/{shoppingCenter}/stores', [StoreApiController::class, 'index']);
+    
+    // Rutas de Reservaciones
+    Route::apiResource('reservations', ReservationApiController::class)->only(['show', 'update', 'destroy']);
 });
+
+// Rutas API que requieren autenticación Sanctum
+Route::middleware(['web', 'auth'])->group(function () {
+    // Rutas para reservas de parking
+    Route::prefix('parking-reservations')->name('parking-reservations.')->group(function () {
+        Route::get('/', [ParkingReservationController::class, 'index'])->name('index');
+        Route::post('/', [ParkingReservationController::class, 'store'])->name('store');
+        Route::post('/check-availability', [ParkingReservationController::class, 'checkAvailability'])->name('check-availability');
+        Route::post('/{reservation}/confirm', [ParkingReservationController::class, 'confirm'])->name('confirm');
+        Route::delete('/{reservation}', [ParkingReservationController::class, 'cancel'])->name('cancel');
+        Route::get('/history', [ParkingReservationController::class, 'history'])->name('history');
+        Route::delete('/{reservation}/destroy', [ParkingReservationController::class, 'destroy'])
+            ->name('destroy')
+            ->where('reservation', '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}');
+    });
 });
