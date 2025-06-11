@@ -4,8 +4,9 @@ import TimelineSeparator from '@mui/lab/TimelineSeparator';
 import TimelineConnector from '@mui/lab/TimelineConnector';
 import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
-import { Calendar, MapPin, Building2, Layers3 } from 'lucide-react';
+import { Calendar, MapPin, Building2, Layers3, Trash2 } from 'lucide-react';
 import { useTranslations } from '@/hooks/use-translations';
+import { Button } from '@/components/ui/button';
 
 interface ParkingReservation {
   id: number;
@@ -17,12 +18,20 @@ interface ParkingReservation {
   reservationDate: string;
   canceled_at?: string | null;
 }
+
 interface Props {
   parkingReservations: ParkingReservation[];
+  onDeleteReservation?: (id: number) => Promise<void>;
 }
 
-export function ParkingReservationsHistory({ parkingReservations }: Props) {
+export function ParkingReservationsHistory({ parkingReservations, onDeleteReservation }: Props) {
   const { t } = useTranslations();
+
+  const handleDelete = async (id: number) => {
+    if (onDeleteReservation && window.confirm(t('ui.history.parking.confirm_delete'))) {
+      await onDeleteReservation(id);
+    }
+  };
 
   return (
     <Timeline position="right" className="mt-4">
@@ -34,8 +43,22 @@ export function ParkingReservationsHistory({ parkingReservations }: Props) {
           </TimelineSeparator>
 
           <TimelineContent className="pb-4">
-            <div className="bg-white shadow-md rounded-lg p-4 border border-gray-200">
-              <p className="text-sm font-semibold text-gray-800 flex items-center gap-2 mb-1">
+            <div className="bg-white shadow-md rounded-lg p-4 border border-gray-200 relative">
+              {/* Botón de eliminar - Posicionado absolutamente */}
+              {!reservation.canceled_at && onDeleteReservation && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="absolute top-2 right-2 text-red-600 hover:text-red-800 p-2"
+                  onClick={() => handleDelete(reservation.id)}
+                  aria-label={t('ui.history.parking.delete')}
+                  title={t('ui.history.parking.delete')}
+                >
+                  <Trash2 className="w-4 h-4" />
+                </Button>
+              )}
+
+              <p className="text-sm font-semibold text-gray-800 flex items-center gap-2 mb-1 pr-6">
                 <Calendar className="w-4 h-4" />
                 {reservation.reservationDate}
               </p>
@@ -71,4 +94,3 @@ export function ParkingReservationsHistory({ parkingReservations }: Props) {
     </Timeline>
   );
 }
-
