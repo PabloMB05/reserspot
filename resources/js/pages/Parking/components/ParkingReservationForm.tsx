@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { es } from 'date-fns/locale';
+import { formatISO } from 'date-fns';
 import { format, differenceInHours } from 'date-fns';
 import { CalendarIcon, Loader2 } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -36,12 +37,20 @@ export function ParkingReservationForm({ spot, shoppingCenter }: ParkingReservat
 
 
 
-  const combineDateAndTime = (date: Date, time: string) => {
-    const [hours, minutes] = time.split(':').map(Number);
-    const combined = new Date(date);
-    combined.setHours(hours, minutes, 0, 0);
-    return combined;
-  };
+const combineDateAndTime = (date: Date, time: string) => {
+  const [hours, minutes] = time.split(':').map(Number);
+  const combined = new Date(date);
+  
+  // Asegurar que usamos la hora local
+  return new Date(
+    combined.getFullYear(),
+    combined.getMonth(),
+    combined.getDate(),
+    hours,
+    minutes,
+    0
+  );
+};
 
   const calculatePrice = (start: Date, end: Date) => {
     const hours = differenceInHours(end, start);
@@ -75,38 +84,38 @@ export function ParkingReservationForm({ spot, shoppingCenter }: ParkingReservat
   }, [spot, startDate, endDate, startTime, endTime]);
 
   const handleReservation = async () => {
-    if (!spot || !startDate || !endDate || !startTime || !endTime || !isAvailable) return;
+  if (!spot || !startDate || !endDate || !startTime || !endTime || !isAvailable) return;
 
-    const startDateTime = combineDateAndTime(startDate, startTime).toISOString();
-    const endDateTime = combineDateAndTime(endDate, endTime).toISOString();
+  const startDateTime = combineDateAndTime(startDate, startTime);
+  const endDateTime = combineDateAndTime(endDate, endTime);
 
-    setIsLoading(true);
-    setMessage(null);
+  // Convertir a formato ISO sin ajuste de zona horaria
+  const startDateTimeISO = formatISO(startDateTime, { representation: 'complete' });
+  const endDateTimeISO = formatISO(endDateTime, { representation: 'complete' });
 
-    try {
-      await axios.post('/api/parking-reservations', {
-        parking_spot_id: spot.id,
-        shopping_center_id: shoppingCenter.id,
-        start_date: startDateTime,
-        end_date: endDateTime,
-      });
+  setIsLoading(true);
+  setMessage(null);
 
-      // setMessage({
-      //   text: `¡Reserva creada! Por favor, confirma el pago de €${price.toFixed(2)}`,
-      //   isError: false,
-      // });
-      setModalMessage('¡Reserva realizada con éxito! Te hemos enviado un correo con los detalles.');
-      setIsSuccessModal(true); // indicamos que es un mensaje de éxito
-      setShowModal(true);
-    } catch (error: any) {
-      const msg = error.response?.data?.message || 'Error al crear la reserva';
-      setModalMessage(msg);
-      setShowModal(true);
+  try {
+    await axios.post('/api/parking-reservations', {
+      parking_spot_id: spot.id,
+      shopping_center_id: shoppingCenter.id,
+      start_date: startDateTimeISO,
+      end_date: endDateTimeISO,
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone // Envía la zona horaria del cliente
+    });
 
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    setModalMessage('¡Reserva realizada con éxito! Te hemos enviado un correo con los detalles.');
+    setIsSuccessModal(true);
+    setShowModal(true);
+  } catch (error: any) {
+    const msg = error.response?.data?.message || 'Error al crear la reserva';
+    setModalMessage(msg);
+    setShowModal(true);
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   const generateTimeOptions = () => {
     const options = [];

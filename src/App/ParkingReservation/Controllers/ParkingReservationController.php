@@ -121,34 +121,44 @@ class ParkingReservationController extends Controller
 }
 
 
-    public function confirm($id)
+    public function confirm(Request $request, $id)
     {
-        $user = Auth::user();
-        $reservation = ParkingReservation::findOrFail($id);
+        $reservation = ParkingReservation::with(['user', 'parkingSpot', 'shoppingCenter'])
+                            ->findOrFail($id);
 
-        if ($reservation->user_id !== $user->id) {
-            return response()->json(['message' => 'No autorizado'], 403);
+        // Verificar si ya está confirmada
+        if ($reservation->is_confirmed) {
+            return response()->json([
+                'message' => 'La reserva ya está confirmada'
+            ], 400);
         }
 
-        if (Carbon::parse($reservation->created_at)->addMinutes(self::RESERVATION_EXPIRATION_MINUTES)->isPast()) {
-            $reservation->delete();
-            return response()->json(['message' => 'La reserva ha expirado'], 410);
-        }
+        // Actualizar el estado de confirmación
+        $reservation->update([
+            'is_confirmed' => true,
+            'confirmed_at' => now()
+        ]);
 
-        $reservation->update(['is_confirmed' => true]);
+        // Preparar datos para la notificación
+        $datosNotificacion = [
+            'centro_comercial' => $reservation->shoppingCenter->name,
+            'zona' => $reservation->parkingSpot->zone,
+            'piso' => $reservation->parkingSpot->floor,
+            'fecha_inicio' => $reservation->date->format('d/m/Y'),
+            'hora_inicio' => $reservation->start_time,
+            'fecha_fin' => $reservation->date->format('d/m/Y'), // o usa reserved_until si es diferente
+            'hora_fin' => $reservation->end_time,
+            'plaza' => $reservation->parkingSpot->code
+        ];
 
-        $user->notify(new ConfirmacionReservaParking([
-            'plaza' => $reservation->parking_spot_id,
-            'zona' => $reservation->shopping_center_id,
-            'fecha_inicio' => $reservation->reserved_at->format('Y-m-d'),
-            'hora_inicio' => $reservation->reserved_at->format('H:i'),
-            'fecha_fin' => $reservation->reserved_until->format('Y-m-d'),
-            'hora_fin' => $reservation->reserved_until->format('H:i'),
-        ]));
+        // Enviar notificación
+        $reservation->user->notify(
+            (new ConfirmacionReservaParking($datosNotificacion))->delay(now()->addSeconds(5))
+        );
 
         return response()->json([
-            'message' => 'Reserva confirmada con éxito',
-            'reservation' => new ParkingReservationResource($reservation),
+            'message' => 'Reserva confirmada exitosamente',
+            'data' => $reservation->fresh()
         ]);
     }
 
